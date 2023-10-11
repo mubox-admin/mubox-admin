@@ -1,0 +1,31 @@
+{
+  "name": "@mubox/utils",
+  "author": "EvilMoOd",
+  "version": "0.0.1",
+  "description": "木盒子函数库",
+  "keywords": [
+    "utils"
+  ],
+  "license": "ISC",
+  "main": "dist/cjs.js",
+  "module": "dist/index.mjs",
+  "unpkg": "dist/index.global.js",
+  "jsdelivr": "dist/index.global.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/cjs.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "tsup": "^7.2.0"
+  }
+}

@@ -12,6 +12,7 @@
   "keywords": [],
   "license": "ISC",
   "dependencies": {
+    "@mubox/utils":"workspace:*",
     "ant-design-vue": "^4.0.3",
     "vue": "^3.3.4"
   },
@@ -19,7 +20,6 @@
     "@mubox/eslint-config-vue": "^1.0.0",
     "@mubox/ts-config": "^1.0.0",
     "@vitejs/plugin-vue": "^4.4.0",
-    "antdv-component-resolver": "^1.0.4",
     "eslint": "^8.51.0",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
