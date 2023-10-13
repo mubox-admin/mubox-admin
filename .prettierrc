@@ -1,6 +1,5 @@
 {
   "printWidth": 100,
-  "singleQuote": true,
   "proseWrap": "never",
   "htmlWhitespaceSensitivity": "ignore",
   "endOfLine": "auto"

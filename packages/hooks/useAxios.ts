@@ -1,7 +1,7 @@
-import { computed, ref, shallowRef, unref, watchEffect } from 'vue';
-import axios from 'axios';
-import { debounce, throttle } from '@mubox/utils';
-import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { computed, ref, shallowRef, unref, watchEffect } from "vue";
+import axios from "axios";
+import { debounce, throttle } from "@mubox/utils";
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export function createAxios(config: AxiosRequestConfig) {
   const instance = axios.create(config);
@@ -30,7 +30,6 @@ export function createAxios(config: AxiosRequestConfig) {
     // 中断函数
     const abort = (message?: string) => {
       if (isFinished.value || !isLoading.value) return;
-
       // cancelToken.cancel(message)
       controller.abort();
       isAborted.value = true;
@@ -44,7 +43,7 @@ export function createAxios(config: AxiosRequestConfig) {
     const errorData = ref<T>(); // axios 错误响应数据
 
     // 普通请求
-    const request = ({ params, data }: AxiosRequestConfig) => {
+    function request({ params, data }: AxiosRequestConfig) {
       return instance
         .request({
           ...config,
@@ -58,10 +57,10 @@ export function createAxios(config: AxiosRequestConfig) {
         })
         .catch((e: AxiosError) => {
           error.value = e;
-          errorData.value = e.response ? e.response.data : '';
+          errorData.value = e.response ? e.response.data : "";
           loading(false);
         });
-    };
+    }
 
     // 防抖请求
     const debounceRequest = debounce(request, delay);
@@ -69,7 +68,7 @@ export function createAxios(config: AxiosRequestConfig) {
     const throttleRequest = throttle(request, delay);
     // 手动请求
     const execute = (
-      config: Pick<AxiosRequestConfig, 'params' | 'data'> = {
+      config: Pick<AxiosRequestConfig, "params" | "data"> = {
         params: {},
         data: {},
       },
@@ -104,7 +103,7 @@ export function createAxios(config: AxiosRequestConfig) {
         {
           url,
           params,
-          method: 'get',
+          method: "get",
         },
         options,
       );
@@ -136,7 +135,7 @@ export function createAxios(config: AxiosRequestConfig) {
       {
         url,
         data,
-        method: 'post',
+        method: "post",
       },
       options,
     );
@@ -155,7 +154,7 @@ export function createAxios(config: AxiosRequestConfig) {
 
   // 流文件转化为下载函数
   function useBlobDownload<T>(config: AxiosRequestConfig, options?: DownLoadRequestOptions) {
-    const request = useRequest<T>({ ...config, responseType: 'blob' }, options);
+    const request = useRequest<T>({ ...config, responseType: "blob" }, options);
     const { isFinished, download } = useResponseBlobDownLoad(options);
     // 全部下载完成标值
     const downLoadFinished = computed(() => unref(request.isFinished) && unref(isFinished));
@@ -187,19 +186,19 @@ interface DownLoadRequestOptions extends RequestOptions {
   cbData?: (res: AxiosResponse) => any; // 返回值处理，默认取 response.data
 }
 
-const isServer = typeof window === 'undefined';
+const isServer = typeof window === "undefined";
 
 export type contentTypeStr =
-  | 'application/*'
-  | 'application/msword'
-  | 'application/vnd.ms-excel'
-  | 'application/pdf'
-  | 'text/plain'
-  | 'application/vnd.ms-powerpoint';
+  | "application/*"
+  | "application/msword"
+  | "application/vnd.ms-excel"
+  | "application/pdf"
+  | "text/plain"
+  | "application/vnd.ms-powerpoint";
 
 export function createLocalURL(
   file: BlobPart,
-  contentType: contentTypeStr | string = 'application/*',
+  contentType: contentTypeStr | string = "application/*",
 ) {
   const blob = new Blob([file], {
     type: contentType, //这个是Content-Typele的type类型（https://tool.oschina.net/commons）
@@ -210,12 +209,12 @@ export function createLocalURL(
 export function saveFileFromBlob(
   file: BlobPart,
   fileName: string,
-  contentType: contentTypeStr | string = 'application/*',
+  contentType: contentTypeStr | string = "application/*",
 ) {
   if (isServer) {
-    throw new Error('saveFileFromBlob methods is running in browser');
+    throw new Error("saveFileFromBlob methods is running in browser");
   }
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   const url = (link.href = createLocalURL(file, contentType));
   link.download = fileName;
   link.click();
@@ -226,18 +225,18 @@ export function saveFileFromBlob(
 export function useResponseBlobDownLoad(options?: DownLoadRequestOptions) {
   const isFinished = shallowRef(false); //下载完成标志
   const { fileName, contentType, cbData } = options || {};
-  const filenameReg = new RegExp('filename=([^;]+\\.[^\\.;]+);*');
+  const filenameReg = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
   const download = (_response: AxiosResponse) => {
     isFinished.value = false;
     //读取响应头
     const headers = _response.headers || {};
     //读取文件类型
-    const _contentType = contentType ?? headers['content-type']; //读取文件类型
-    if (!_contentType) throw new Error('contentType Cannot be empty');
+    const _contentType = contentType ?? headers["content-type"]; //读取文件类型
+    if (!_contentType) throw new Error("contentType Cannot be empty");
     // 读取文件名称
-    const dispositionRegArr = filenameReg.exec(_response.headers['content-disposition']);
-    const _fileName = fileName ?? decodeURI(dispositionRegArr ? dispositionRegArr[0] : ''); //读取文件类型
-    if (!_fileName) throw new Error('fileName Cannot be empty');
+    const dispositionRegArr = filenameReg.exec(_response.headers["content-disposition"]);
+    const _fileName = fileName ?? decodeURI(dispositionRegArr ? dispositionRegArr[0] : ""); //读取文件类型
+    if (!_fileName) throw new Error("fileName Cannot be empty");
     //下载数据
     const data = cbData ? cbData(_response) : _response.data;
     saveFileFromBlob(data, _fileName, _contentType);

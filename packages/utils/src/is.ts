@@ -5,7 +5,7 @@ export function is(val: unknown, type: string) {
 }
 
 export function isDef<T = unknown>(val?: T): val is T {
-  return typeof val !== 'undefined';
+  return typeof val !== "undefined";
 }
 
 export function isUnDef<T = unknown>(val?: T): val is T {
@@ -17,52 +17,52 @@ export function isNull(val: unknown): val is null {
 }
 
 export function isObject(val: any): val is Record<any, any> {
-  return is(val, 'Object');
+  return is(val, "Object");
 }
 
 export function isDate(val: unknown): val is Date {
-  return is(val, 'Date');
+  return is(val, "Date");
 }
 
 export function isNumber(val: unknown): val is number {
-  return is(val, 'Number');
+  return is(val, "Number");
 }
 
 export function isPromise<T = any>(val: unknown): val is Promise<T> {
-  return is(val, 'Promise') && isObject(val) && isFunction(val.then) && isFunction(val.catch);
+  return is(val, "Promise") && isObject(val) && isFunction(val.then) && isFunction(val.catch);
 }
 
 export function isString(val: unknown): val is string {
-  return is(val, 'String');
+  return is(val, "String");
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function isFunction(val: unknown): val is Function {
-  return typeof val === 'function';
+  return typeof val === "function";
 }
 
 export function isBoolean(val: unknown): val is boolean {
-  return is(val, 'Boolean');
+  return is(val, "Boolean");
 }
 
 export function isMap(val: unknown): val is Map<any, any> {
-  return is(val, 'Map');
+  return is(val, "Map");
 }
 
 export function isSet(val: unknown): val is Set<any> {
-  return is(val, 'Set');
+  return is(val, "Set");
 }
 
 export function isDataView(val: unknown): val is DataView {
-  return is(val, 'DataView');
+  return is(val, "DataView");
 }
 
 export function isArrayBuffer(val: unknown): val is ArrayBuffer {
-  return is(val, 'ArrayBuffer');
+  return is(val, "ArrayBuffer");
 }
 
 export function isRegExp(val: unknown): val is RegExp {
-  return is(val, 'RegExp');
+  return is(val, "RegExp");
 }
 
 export function isArray(val: any): val is Array<any> {
@@ -92,16 +92,31 @@ export function isEmpty<T = unknown>(val: T): val is T {
 
   return false;
 }
+export function isAllEmpty<T = unknown>(val: T): val is T {
+  return val === null || val === undefined || isEmpty(val);
+}
+
+/** 判断俩值是否相等，支持数组、对象、基本类型 */
+export function isEqual(value1: unknown, value2: unknown): boolean {
+  // 基本类型
+  if (value1 === value2) return true;
+  // NaN
+  if (Number.isNaN(value1) && Number.isNaN(value2)) return true;
+  // 数组或者对象
+  if ((isObject(value1) && isObject(value2)) || (isArray(value1) && isArray(value2)))
+    return JSON.stringify(value1) === JSON.stringify(value2);
+  return false;
+}
 
 export function isWindow(val: any): val is Window {
-  return typeof window !== 'undefined' && is(val, 'Window');
+  return typeof window !== "undefined" && is(val, "Window");
 }
 
 export function isElement(val: unknown): val is Element {
   return isObject(val) && !!val.tagName;
 }
 
-export const isServer = typeof window === 'undefined';
+export const isServer = typeof window === "undefined";
 
 export const isClient = !isServer;
 

@@ -5,16 +5,16 @@
  */
 export const formatNumber = (num: number) => {
   // 无小数
-  if (!num.toString().includes('.')) return num.toString().replace(/(?!^)(?=(\d{3})+$)/g, ',');
+  if (!num.toString().includes(".")) return num.toString().replace(/(?!^)(?=(\d{3})+$)/g, ",");
   // 有小数
-  const arr = num.toString().split('.');
+  const arr = num.toString().split(".");
   // 整数部分
-  arr[0] = arr[0].replace(/(?!^)(?=(\d{3})+$)/g, ',');
+  arr[0] = arr[0].replace(/(?!^)(?=(\d{3})+$)/g, ",");
   // 小数部分
-  const ceil = arr[1].split('');
+  const ceil = arr[1].split("");
   for (let i = 2; i < ceil.length; i += 3) {
     ceil.splice(i, 1, `${ceil[i]},`);
   }
-  arr[1] = ceil.join('');
-  return arr.join('.');
+  arr[1] = ceil.join("");
+  return arr.join(".");
 };

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { isArray, isArrayBuffer, isDataView, isDate, isMap, isObject, isRegExp, isSet } from './is';
+import { isArray, isArrayBuffer, isDataView, isDate, isMap, isObject, isRegExp, isSet } from "./is";
 
 /**
  *深度克隆函数
@@ -7,12 +7,12 @@ import { isArray, isArrayBuffer, isDataView, isDate, isMap, isObject, isRegExp, 
  * @returns 克隆值
  */
 export function clone<T>(x: T): T {
-  if (typeof x !== 'object') return x;
+  if (typeof x !== "object") return x;
 
   let k, tmp: T;
 
   if (isObject(x)) {
-    if (x.constructor !== Object && typeof x.constructor === 'function') {
+    if (x.constructor !== Object && typeof x.constructor === "function") {
       tmp = new x.constructor();
       for (k in x) {
         if (Object.prototype.hasOwnProperty.call(x, k) && tmp[k] !== x[k]) {
@@ -22,7 +22,7 @@ export function clone<T>(x: T): T {
     } else {
       tmp = {}; // null
       for (k in x) {
-        if (k === '__proto__') {
+        if (k === "__proto__") {
           Object.defineProperty(tmp, k, {
             value: clone(x[k]),
             configurable: true,
@@ -81,7 +81,7 @@ export function clone<T>(x: T): T {
 
   // ArrayBuffer.isView(x)
   // ~> `new` bcuz `Buffer.slice` => ref
-  if (Object.prototype.toString.call(x).slice(-6) === 'Array]') {
+  if (Object.prototype.toString.call(x).slice(-6) === "Array]") {
     return new x.constructor(x);
   }
 

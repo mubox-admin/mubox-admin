@@ -1,6 +1,6 @@
-import { isWin } from './system';
+import { isWin } from "./system";
 
-const unit = ['B', 'KB', 'MB', 'GB', 'TB'];
+const unit = ["B", "KB", "MB", "GB", "TB"];
 /**
  * 根据系统格式化文件大小
  * @param bytes 字节大小

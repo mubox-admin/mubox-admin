@@ -1,5 +1,5 @@
-import type { App, Directive } from 'vue';
-import type { AppContext, Plugin } from 'vue';
+import type { App, Directive } from "vue";
+import type { AppContext, Plugin } from "vue";
 
 export type SFCWithInstall<T> = T & Plugin;
 

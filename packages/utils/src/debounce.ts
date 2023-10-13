@@ -1,6 +1,6 @@
 /* eslint-disable no-undefined */
 
-import { throttle } from './throttle';
+import { throttle } from "./throttle";
 interface debounceOptions {
   atBegin?: boolean;
 }

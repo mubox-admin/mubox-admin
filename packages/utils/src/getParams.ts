@@ -6,5 +6,5 @@
 export const getParam = (url: string) => {
   const r = new RegExp(`(\\?|#|&)${url}=([^&#]*)(&|#|$)`);
   const m = location.href.match(r);
-  return decodeURI(!m ? '' : m[2]);
+  return decodeURI(!m ? "" : m[2]);
 };

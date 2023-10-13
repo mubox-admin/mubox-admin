@@ -10,7 +10,7 @@ export const nanoid = (t = 21) =>
             : e < 62
             ? (e - 26).toString(36).toUpperCase()
             : e > 62
-            ? '-'
-            : '_'),
-      '',
+            ? "-"
+            : "_"),
+      "",
     );
