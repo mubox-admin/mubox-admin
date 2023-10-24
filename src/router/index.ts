@@ -15,12 +15,11 @@ import {
 } from "./utils";
 import remainingRouter from "./routes/remaining";
 import type { RouteComponent, RouteRecordRaw, Router } from "vue-router";
-import type { IconifyIcon } from "@iconify/vue";
 import { getConfig } from "@/config";
 import NProgress from "@/utils/progress";
 import { type DataInfo, sessionKey } from "@/utils/auth";
-import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
-import { usePermissionStoreHook } from "@/store/modules/permission";
+import { useTagsStore } from "@/store/tags";
+import { usePermissionStore } from "@/store/permission";
 
 const { VITE_HIDE_HOME } = import.meta.env;
 
@@ -97,7 +96,7 @@ export function resetRouter() {
       );
     }
   });
-  usePermissionStoreHook().clearAllCachePage();
+  usePermissionStore().clearAllCachePage();
 }
 
 /** 路由白名单 */
@@ -146,9 +145,9 @@ router.beforeEach((to: ToRouteType, _from, next) => {
       }
     } else {
       // 刷新
-      if (usePermissionStoreHook().wholeMenus.length === 0 && to.path !== "/login") {
+      if (usePermissionStore().wholeMenus.value.length === 0 && to.path !== "/login") {
         initRouter().then((router) => {
-          if (!useMultiTagsStoreHook().getMultiTagsCache) {
+          if (!useTagsStore().tagListCache.value) {
             const { path } = to;
             const route = findRouteByPath(path, router.options.routes[0].children);
             getTopMenu(true);
@@ -157,14 +156,14 @@ router.beforeEach((to: ToRouteType, _from, next) => {
               if (isAllEmpty(route.parentId) && route.meta?.backstage) {
                 // 此处为动态顶级路由（目录）
                 const { path, name, meta } = route.children[0];
-                useMultiTagsStoreHook().handleTags("push", {
+                useTagsStore().pushTags({
                   path,
                   name,
                   meta,
                 });
               } else {
                 const { path, name, meta } = route;
-                useMultiTagsStoreHook().handleTags("push", {
+                useTagsStore().pushTags({
                   path,
                   name,
                   meta,

@@ -54,10 +54,9 @@ const defaultConfig: AxiosRequestConfig = {
 type RequestFn = (token: string) => void;
 
 class Http {
-  constructor(config: AxiosRequestConfig) {
+  constructor() {
     this.httpInterceptorsRequest();
     this.httpInterceptorsResponse();
-    this.axiosInstance = Axios.create(config);
   }
 
   /** token过期后，暂存待执行的请求 */
@@ -70,7 +69,7 @@ class Http {
   // private static initConfig: AxiosRequestConfig = {};
 
   /** 保存当前Axios实例对象 */
-  private axiosInstance: AxiosInstance;
+  private axiosInstance: AxiosInstance = Axios.create(defaultConfig);
 
   /** 重连原始请求 */
   private static retryOriginalRequest(config: AxiosRequestConfig) {
@@ -114,7 +113,7 @@ class Http {
                     useUserStore()
                       .handRefreshToken({ refreshToken: data.refreshToken })
                       .then((res) => {
-                        const token = res.data.accessToken;
+                        const token = res.accessToken;
                         if (config.headers) config.headers["Authorization"] = formatToken(token);
                         Http.pendingRequests.forEach((cb) => cb(token));
                         Http.pendingRequests = [];
@@ -207,4 +206,4 @@ class Http {
   }
 }
 
-export const http = new Http(defaultConfig);
+export const http = new Http();

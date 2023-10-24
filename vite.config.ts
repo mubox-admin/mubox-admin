@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 // vite.config.ts
@@ -5,7 +6,20 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 
+/** 路径查找 */
+const pathResolve = (dir: string): string => {
+  return resolve(__dirname, ".", dir);
+};
+
+const alias: Record<string, string> = {
+  "@": pathResolve("src"),
+  "@build": pathResolve("build"),
+};
+
 export default defineConfig({
+  resolve: {
+    alias,
+  },
   plugins: [
     vue(),
     AutoImport({

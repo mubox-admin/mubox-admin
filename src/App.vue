@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <a-button type="primary">123</a-button>
+  <a-config-provider>
+    <router-view />
+  </a-config-provider>
 </template>
 
 <style lang="scss" scoped></style>
