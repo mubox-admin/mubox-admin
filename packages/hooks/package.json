@@ -1,0 +1,19 @@
+{
+  "name": "@mubox/hooks",
+  "author": "EvilMoOd",
+  "version": "0.0.1",
+  "description": "木盒子钩子库",
+  "keywords": [
+    "hooks"
+  ],
+  "license": "ISC",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "tsup": "^7.2.0",
+    "vue-demi": "^0.14.6"
+  }
+}
