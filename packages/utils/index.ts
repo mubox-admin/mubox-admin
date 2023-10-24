@@ -15,6 +15,7 @@ export * from "./src/storage";
 export * from "./src/fileCarry";
 export * from "./src/formatNumber";
 // Object
-export * from "./src/ObjectDeep";
+export * from "./src/objectDeep";
+export * from "./src/batchAttributeAssignment";
 // Array
 export * from "./src/intersection";

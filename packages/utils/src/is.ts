@@ -69,6 +69,10 @@ export function isArray(val: any): val is Array<any> {
   return val && Array.isArray(val);
 }
 
+export function isJson(val: any) {
+  return isArray(val) || isObject(val);
+}
+
 export function isNullAndUnDef(val: unknown): val is null | undefined {
   return isUnDef(val) && isNull(val);
 }
