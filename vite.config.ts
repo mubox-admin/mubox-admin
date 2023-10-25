@@ -21,7 +21,12 @@ export default defineConfig({
     alias,
   },
   plugins: [
-    vue(),
+    vue({
+      script: {
+        defineModel: true,
+        propsDestructure: true,
+      },
+    }),
     AutoImport({
       imports: ["vue"],
       resolvers: [AntDesignVueResolver()],
