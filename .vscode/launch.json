@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Vue 启动！",
+      "url": "http://127.0.0.1:5173",
+      "webRoot": "${workspaceFolder}/src",
+      "skipFiles": [
+        "<node_internals>/**/*.js", //跳过node核心模块代码
+        "${workspaceFolder}/node_modules/**/*.js"
+      ] //跳过文件
+    }
+  ]
+}

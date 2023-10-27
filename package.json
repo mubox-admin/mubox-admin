@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
-    "@iconify/vue": "^4.1.1",
     "@mubox/utils": "workspace:*",
     "@vueuse/core": "^10.5.0",
     "ant-design-vue": "^4.0.3",
@@ -28,13 +27,16 @@
     "@mubox/eslint-config-vue": "^1.0.0",
     "@mubox/ts-config": "^1.0.0",
     "@types/qs": "^6.9.8",
+    "@unocss/eslint-config": "^0.57.1",
     "@vitejs/plugin-vue": "^4.4.0",
     "eslint": "^8.51.0",
     "prettier": "^3.0.3",
     "sass": "^1.69.4",
     "typescript": "^5.2.2",
+    "unocss": "^0.57.1",
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.2",
-    "vite": "^4.4.11"
+    "vite": "^4.4.11",
+    "vite-plugin-mock": "^3.0.0"
   }
 }

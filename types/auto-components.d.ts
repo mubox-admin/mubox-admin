@@ -13,6 +13,7 @@ declare module 'vue' {
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
     AInput: typeof import('ant-design-vue/es')['Input']
     AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
+    ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     Dialog: typeof import('./../src/components/Dialog/index.vue')['default']
     ReDialog: typeof import('./../src/components/ReDialog/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
