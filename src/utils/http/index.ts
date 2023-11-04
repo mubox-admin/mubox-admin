@@ -21,6 +21,15 @@ export type RequestMethods = Extract<
   "get" | "post" | "put" | "delete" | "patch" | "option" | "head"
 >;
 
+export interface ResponseWrap<Response> {
+  success: boolean;
+  data: Response;
+}
+
+interface customOptions {
+  unResolveData?: boolean;
+}
+
 export interface HttpError extends AxiosError {
   isCancelRequest?: boolean;
 }
@@ -147,7 +156,7 @@ class Http {
         // 关闭进度条动画
         NProgress.done();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
-        return response.data;
+        return response;
       },
       (error: HttpError) => {
         const $error = error;
@@ -165,21 +174,41 @@ class Http {
     method: RequestMethods,
     url: string,
     params?: any,
-    axiosConfig?: AxiosRequestConfig,
-  ): Promise<Response> {
-    const config = {
+    config?: AxiosRequestConfig,
+  ): Promise<Response>;
+  public request<Response>(
+    method: RequestMethods,
+    url: string,
+    params?: any,
+    config?: { unResolveData?: false } & AxiosRequestConfig,
+  ): Promise<Response>;
+  public request<Response>(
+    method: RequestMethods,
+    url: string,
+    params?: any,
+    config?: { unResolveData?: true } & AxiosRequestConfig,
+  ): Promise<ResponseWrap<Response>>;
+  public request<Response>(
+    method: RequestMethods,
+    url: string,
+    params?: any,
+    config?: customOptions & AxiosRequestConfig,
+  ): Promise<Response | ResponseWrap<Response>> {
+    const axiosConfig = {
       method,
       url,
-      ...axiosConfig,
+      ...config,
     } as AxiosRequestConfig;
-    method === "get" ? Object.assign(config, { params }) : Object.assign(config, { data: params });
+    method === "get"
+      ? Object.assign(axiosConfig, { params })
+      : Object.assign(axiosConfig, { data: params });
 
     // 单独处理自定义请求/响应回调
     return new Promise((resolve, reject) => {
       this.axiosInstance
-        .request(config)
+        .request(axiosConfig)
         .then((response) => {
-          resolve(response.data);
+          config?.unResolveData ? resolve(response.data) : resolve(response.data.data);
         })
         .catch((error) => {
           reject(error);
@@ -191,8 +220,18 @@ class Http {
   public post<Response>(
     url: string,
     data?: AxiosRequestConfig,
-    config?: AxiosRequestConfig,
-  ): Promise<Response> {
+    config?: { unResolveData?: false } & AxiosRequestConfig,
+  ): Promise<Response>;
+  public post<Response>(
+    url: string,
+    data?: AxiosRequestConfig,
+    config?: { unResolveData?: true } & AxiosRequestConfig,
+  ): Promise<ResponseWrap<Response>>;
+  public post<Response>(
+    url: string,
+    data?: AxiosRequestConfig,
+    config?: customOptions & AxiosRequestConfig,
+  ): Promise<Response | ResponseWrap<Response>> {
     return this.request<Response>("post", url, data, config);
   }
 
@@ -200,8 +239,18 @@ class Http {
   public get<Response>(
     url: string,
     params?: AxiosRequestConfig,
-    config?: AxiosRequestConfig,
-  ): Promise<Response> {
+    config?: { unResolveData?: false } & AxiosRequestConfig,
+  ): Promise<Response>;
+  public get<Response>(
+    url: string,
+    params?: AxiosRequestConfig,
+    config?: { unResolveData?: true } & AxiosRequestConfig,
+  ): Promise<ResponseWrap<Response>>;
+  public get<Response>(
+    url: string,
+    params?: AxiosRequestConfig,
+    config?: customOptions & AxiosRequestConfig,
+  ): Promise<Response | ResponseWrap<Response>> {
     return this.request<Response>("get", url, params, config);
   }
 }
