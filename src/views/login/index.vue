@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { useRouter } from "vue-router";
 import ImageVerify from "./components/ImageVerify.vue";
 import type { Rule } from "ant-design-vue/es/form";
 import { useUserStore } from "@/store/user";
+import { getTopMenu, initRouter } from "@/router/utils";
 
 // 滑动动画
 const slide = ref(false);
@@ -60,8 +63,17 @@ const loginRules: Record<string, Rule[]> = {
 };
 // 登陆
 const loading = ref(false);
-function login() {
-  loginByUsername(loginForm.value.username, loginForm.value.password);
+const router = useRouter();
+async function login() {
+  loading.value = true;
+  const { success } = await loginByUsername(loginForm.value.username, loginForm.value.password);
+  if (success)
+    initRouter().then(() => {
+      const topMenuPath = getTopMenu(true)?.path;
+      if (topMenuPath) router.push(topMenuPath);
+      message.success("登陆成功");
+    });
+  loading.value = false;
 }
 </script>
 
@@ -108,7 +120,7 @@ function login() {
               </a-input>
             </a-form-item>
             <a-form-item>
-              <a-button type="primary" html-type="submit" :loading="loading">提交</a-button>
+              <a-button type="primary" html-type="submit" :loading="loading">登陆</a-button>
             </a-form-item>
           </a-form>
         </div>

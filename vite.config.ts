@@ -1,12 +1,9 @@
 import { resolve } from "path";
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import UnoCSS from 'unocss/vite'
-import AutoImport from "unplugin-auto-import/vite";
-import Components from "unplugin-vue-components/vite";
-import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
-import { viteMockServe } from "vite-plugin-mock";
+import { defineConfig, loadEnv } from "vite";
+import { pluginList } from "./build/plugins";
+import { exclude, include } from "./build/optimize";
 
+const root: string = process.cwd();
 /** 路径查找 */
 const pathResolve = (dir: string): string => {
   return resolve(__dirname, ".", dir);
@@ -17,41 +14,42 @@ const alias: Record<string, string> = {
   "@build": pathResolve("build"),
 };
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
+  const { VITE_PORT } = loadEnv(mode, root);
+
   return {
     resolve: {
       alias,
     },
-    plugins: [
-      vue({
-        script: {
-          defineModel: true,
-          propsDestructure: true,
+    optimizeDeps: {
+      include,
+      exclude,
+    },
+    server: {
+      // 是否开启 https
+      https: false,
+      // 端口号
+      port: +VITE_PORT,
+      host: "0.0.0.0",
+      // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
+      proxy: {},
+    },
+    build: {
+      sourcemap: false,
+      // 消除打包大小超过500kb警告
+      chunkSizeWarningLimit: 4000,
+      rollupOptions: {
+        input: {
+          index: pathResolve("index.html"),
         },
-      }),
-      UnoCSS(),
-      // 自动导入模块
-      AutoImport({
-        imports: ["vue"],
-        resolvers: [AntDesignVueResolver()],
-        dts: "./types/auto-imports.d.ts",
-      }),
-      // 自动导入组件
-      Components({
-        resolvers: [
-          AntDesignVueResolver({
-            importStyle: false,
-          }),
-        ],
-        dts: "./types/auto-components.d.ts",
-      }),
-      // mock支持
-      viteMockServe({
-        mockPath: "mock",
-        enable: command === "serve",
-        logger: false,
-      }),
-      
-    ],
+        // 静态资源分类打包
+        output: {
+          chunkFileNames: "assets/js/[name]-[hash].js",
+          entryFileNames: "assets/js/[name]-[hash].js",
+          assetFileNames: "assets/[ext]/[name]-[hash].[ext]",
+        },
+      },
+    },
+    plugins: pluginList(command),
   };
 });

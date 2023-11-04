@@ -17,7 +17,8 @@
     "types/**/*.d.ts",
     "types/global.d.ts",
     "types/**/*.ts",
-    "vite.config.ts"
+    "vite.config.ts",
+    "build"
   ],
   "exclude": ["node_modules", "tests/server/**/*.ts", "dist", "**/*.js"]
 }
