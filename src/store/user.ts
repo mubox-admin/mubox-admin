@@ -1,6 +1,7 @@
 import { createGlobalState } from "@vueuse/core";
 import { storageSession } from "@mubox/utils";
 import type { RefreshToken, User } from "@/api/user";
+import type { ResponseWrap } from "@/utils/http";
 import { type DataInfo, removeToken, sessionKey, setToken } from "@/utils/auth";
 import { getLogin, refreshTokenApi } from "@/api/user";
 import router, { resetRouter } from "@/router";
@@ -27,12 +28,12 @@ export const useUserStore = createGlobalState(() => {
   }
   /** 登入 */
   async function loginByUsername(username: string, password: string) {
-    return new Promise<User>((resolve, reject) => {
+    return new Promise<ResponseWrap<User>>((resolve, reject) => {
       getLogin({ username, password })
-        .then((data) => {
-          if (data) {
-            setToken(data);
-            resolve(data);
+        .then((res) => {
+          if (res) {
+            setToken(res.data);
+            resolve(res);
           }
         })
         .catch((error) => {

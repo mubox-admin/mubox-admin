@@ -51,7 +51,7 @@ function ascending(arr: any[]) {
     if (handRank(v)) v.meta.rank = index + 2;
   });
   return arr.sort((a: { meta: { rank: number } }, b: { meta: { rank: number } }) => {
-    return a?.meta.rank - b?.meta.rank;
+    return a?.meta?.rank - b?.meta?.rank;
   });
 }
 
@@ -166,7 +166,7 @@ function handleAsyncRoutes(routeList: RouteRecordRaw[]) {
   if (routeList.length === 0) {
     usePermissionStore().handleWholeMenus(routeList);
   } else {
-    formatFlatteningRoutes(addAsyncRoutes(routeList)).forEach((v) => {
+    formatAsyncRoutes(routeList).forEach((v) => {
       // 防止重复添加路由
       if (
         router.options.routes[0].children &&
@@ -191,8 +191,8 @@ function handleAsyncRoutes(routeList: RouteRecordRaw[]) {
 }
 
 /** 过滤后端传来的动态路由 重新生成规范路由 */
-function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
-  // if (!arrRoutes || !arrRoutes.length) return;
+function formatAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
+  if (!arrRoutes || !arrRoutes.length) return [];
   const modulesRoutesKeys = Object.keys(modulesRoutes);
   arrRoutes.forEach((v: RouteRecordRaw) => {
     // 将backstage属性加入meta，标识此路由为后端返回路由
@@ -212,7 +212,7 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
       v.component = modulesRoutes[modulesRoutesKeys[index]];
     }
     if (v?.children && v.children.length) {
-      addAsyncRoutes(v.children);
+      formatAsyncRoutes(v.children);
     }
   });
   return arrRoutes;
@@ -254,8 +254,11 @@ function handleAliveRoute({ name }: ToRouteType, mode?: string) {
 }
 
 /** 查找对应 `path` 的路由信息 */
-function findRouteByPath(path: string, routes: RouteRecordRaw[] = []) {
-  let res = routes.find((item: { path: string }) => item.path == path);
+function findRouteByPath(
+  path: string,
+  routes: readonly RouteRecordRaw[] = [],
+): RouteRecordRaw | null {
+  let res = routes.find((item: { path: string }) => item.path == path) || null;
   if (res) {
     return isProxy(res) ? toRaw(res) : res;
   } else {
@@ -272,9 +275,9 @@ function findRouteByPath(path: string, routes: RouteRecordRaw[] = []) {
 }
 
 /** 获取所有菜单中的第一个菜单（顶级菜单）*/
-function getTopMenu(tag = false): menuType {
-  const topMenu = usePermissionStore().wholeMenus[0]?.children[0];
-  tag && useTagsStore().pushTags(topMenu);
+function getTopMenu(tag = false): menuType | undefined {
+  const topMenu = usePermissionStore().wholeMenus.value[0]?.children?.[0];
+  if (topMenu) tag && useTagsStore().pushTags(topMenu);
   return topMenu;
 }
 
@@ -303,9 +306,9 @@ function filterNoPermissionTree(data: RouteChildrenConfigsTable[]) {
 }
 
 /** 通过指定 `key` 获取父级路径集合，默认 `key` 为 `path` */
-function getParentPaths(value: string, routes: RouteRecordRaw[], key = "path") {
+function getParentPaths(value: string, routes: readonly RouteRecordRaw[], key = "path") {
   // 深度遍历查找
-  function dfs(routes: RouteRecordRaw[], value: string, parents: string[]) {
+  function dfs(routes: readonly RouteRecordRaw[], value: string, parents: string[]) {
     for (const item of routes) {
       // 返回父级path
       if (item[key] === value) return parents;
@@ -380,7 +383,7 @@ export {
   addPathMatch,
   isOneOfArray,
   getHistoryMode,
-  addAsyncRoutes,
+  formatAsyncRoutes,
   getParentPaths,
   findRouteByPath,
   handleAliveRoute,

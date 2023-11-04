@@ -24,7 +24,7 @@ import { usePermissionStore } from "@/store/permission";
 const { VITE_HIDE_HOME } = import.meta.env;
 
 const modules: Record<string, any> = import.meta.glob(
-  ["./modules/**/*.ts", "!./modules/**/remaining.ts"],
+  ["./routes/**/*.ts", "!./routes/**/remaining.ts"],
   {
     eager: true,
   },

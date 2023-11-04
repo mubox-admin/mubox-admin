@@ -24,10 +24,10 @@ export type RefreshToken = {
 
 /** 登录 */
 export const getLogin = (data?: object) => {
-  return http.post<User>("/login", { data });
+  return http.post<User>("/login", data, { unResolveData: true });
 };
 
 /** [√]刷新token */
 export const refreshTokenApi = (data?: object) => {
-  return http.post<RefreshToken>("/refreshToken", { data });
+  return http.post<RefreshToken>("/refreshToken", data);
 };

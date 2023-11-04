@@ -3,12 +3,9 @@ import { createGlobalState } from "@vueuse/core";
 import { responsiveStorageNameSpace } from "@/config";
 
 export type Tag = {
-  name: string;
-  path: string;
-  meta: CustomizeRouteMeta;
   query?: any;
   params?: any;
-};
+} & RouteConfigsTable;
 
 const { VITE_HIDE_HOME } = import.meta.env;
 export const initRoutes: Tag[] =

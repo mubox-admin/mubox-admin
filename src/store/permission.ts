@@ -42,7 +42,9 @@ export const usePermissionStore = createGlobalState(() => {
     /** 监听缓存页面是否存在于标签页，不存在则删除 */
     debounce(() => {
       let cacheLength = cachePageList.value.length;
-      const nameList: RouteRecordName[] = useTagsStore().tagList.value.map((item) => item["name"]);
+      const nameList: RouteRecordName[] = useTagsStore().tagList.value.map((item) =>
+        item["name"] ? item["name"] : "",
+      );
       while (cacheLength > 0) {
         !nameList.includes(cachePageList.value[cacheLength - 1]) &&
           cachePageList.value.splice(
