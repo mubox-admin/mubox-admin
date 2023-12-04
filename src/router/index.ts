@@ -117,7 +117,7 @@ router.beforeEach((to: ToRouteType, _from, next) => {
     to.matched.forEach((item) => {
       if (!item.meta.title) return "";
       const Title = getConfig().Title;
-      // TODO i18n
+      // MU-TODO i18n
       if (Title) document.title = `${item.meta.title} | ${Title}`;
       else document.title = item.meta.title;
     });

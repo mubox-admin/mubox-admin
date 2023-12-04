@@ -1,5 +1,4 @@
 import { debounce } from "@mubox/utils";
-import { createGlobalState } from "@vueuse/core";
 import { useTagsStore } from "./tags";
 import type { RouteRecordName } from "vue-router";
 import { constantMenus as constantMenus_ } from "@/router";

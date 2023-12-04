@@ -11,7 +11,7 @@ const btn = () => (
 <template>
   <a-button type="primary" :icon="h(AlipayCircleOutlined)">123123</a-button>
   <btn />
-  <div class="i-ph-anchor-simple-thin" />
+  <div class="h-10 w-10 dark:bg-red" />
 </template>
 
 <style lang="scss" scoped></style>

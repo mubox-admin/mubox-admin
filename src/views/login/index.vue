@@ -24,7 +24,7 @@ const REGEXP_PWD =
   /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)]|[()])+$)(?!^.*[\u4E00-\u9FA5].*$)([^(0-9a-zA-Z)]|[()]|[a-z]|[A-Z]|[0-9]){8,18}$/;
 // 登陆规则
 const loginRules: Record<string, Rule[]> = {
-  // TODO 国际化
+  // MU-TODO 国际化
   username: [
     {
       required: true,

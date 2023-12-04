@@ -1,6 +1,5 @@
 import { isProxy, toRaw } from "vue";
 import { createWebHashHistory, createWebHistory } from "vue-router";
-import { useTimeoutFn } from "@vueuse/core";
 import { clone, intersection, isAllEmpty, isString, storageSession } from "@mubox/utils";
 import { router } from "./index";
 import type { Router } from "vue-router";
@@ -346,10 +345,10 @@ function hasAuth(value: string | Array<string>): boolean {
 }
 
 function addPathMatch() {
-  if (!router.hasRoute("pathMatch")) {
+  if (!router.hasRoute("NotFound")) {
     router.addRoute({
       path: "/:pathMatch(.*)",
-      name: "pathMatch",
+      name: "NotFound",
       redirect: "/error/404",
     });
   }

@@ -1,4 +1,3 @@
-import { createGlobalState } from "@vueuse/core";
 import { storageSession } from "@mubox/utils";
 import type { RefreshToken, User } from "@/api/user";
 import type { ResponseWrap } from "@/utils/http";
@@ -42,7 +41,7 @@ export const useUserStore = createGlobalState(() => {
     });
   }
   /** [√]前端登出（不调用接口） */
-  function logOut() {
+  function logout() {
     username.value = "";
     roles.value = [];
     removeToken();
@@ -73,7 +72,7 @@ export const useUserStore = createGlobalState(() => {
     SET_ROLES,
     SET_CURRENT_PAGE,
     loginByUsername,
-    logOut,
+    logout,
     handRefreshToken,
   };
 });

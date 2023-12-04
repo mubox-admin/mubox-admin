@@ -1,19 +1,20 @@
 <script lang="tsx" setup>
-import { ref } from "vue";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 import { isString } from "@mubox/utils";
 import { useRouter } from "vue-router";
 import AntIcon from "./components/AntIcon.vue";
+import User from "./components/User.vue";
+import Setting from "./components/Setting.vue";
+import Search from "./components/Search.vue";
 import type { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
 import { usePermissionStore } from "@/store/permission";
 import { findRouteByPath, getParentPaths } from "@/router/utils";
+import { useMenuStore } from "@/store/menu";
+
+const isDark = useDark({ disableTransition: false });
 
 const { wholeMenus } = usePermissionStore();
-const menuState = ref({
-  selectedKeys: ["Welcome"],
-  openKeys: ["Home"] as string[],
-  collapsed: false,
-});
+const { menuState } = useMenuStore();
 const subMenuKeys = computed(() => {
   return wholeMenus.value.map((item) => item.name);
 });
@@ -69,6 +70,7 @@ const breadcrumbItems = computed(() => {
 
 <template>
   <a-layout style="height: 100vh">
+    <!-- 侧边栏 -->
     <a-layout-sider
       v-model:collapsed="menuState.collapsed"
       breakpoint="lg"
@@ -82,27 +84,41 @@ const breadcrumbItems = computed(() => {
         :items="menuItems"
         theme="dark"
         mode="inline"
-        @click="({ key }) => $router.push(key as string)"
+        @click="({ key }) => $router.push({ name: key as string })"
         @open-change="onOpenChange"
       />
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
-        <a-space>
-          <menu-unfold-outlined
-            v-if="menuState.collapsed"
-            class="menu-icon"
-            @click="() => (menuState.collapsed = !menuState.collapsed)"
-          />
-          <menu-fold-outlined
-            v-else
-            class="menu-icon"
-            @click="() => (menuState.collapsed = !menuState.collapsed)"
-          />
-          <a-breadcrumb :routes="breadcrumbItems" />
-        </a-space>
+      <!-- 顶部栏 -->
+      <a-layout-header
+        :style="{ backgroundColor: isDark ? '#0c0a09' : '#f8fafc' }"
+        style="height: 3rem; line-height: 3rem; padding: 0"
+      >
+        <div class="flex justify-between">
+          <!-- 导航 -->
+          <a-space>
+            <menu-unfold-outlined
+              v-if="menuState.collapsed"
+              class="menu-icon"
+              @click="() => (menuState.collapsed = !menuState.collapsed)"
+            />
+            <menu-fold-outlined
+              v-else
+              class="menu-icon"
+              @click="() => (menuState.collapsed = !menuState.collapsed)"
+            />
+            <a-breadcrumb :routes="breadcrumbItems" />
+          </a-space>
+          <!-- 用户设置 -->
+          <a-space>
+            <Search />
+            <User />
+            <Setting />
+          </a-space>
+        </div>
       </a-layout-header>
-      <a-layout-content class="mx-4 my-6 min-h-screen bg-white p-6">
+      <!-- 右侧内容区 -->
+      <a-layout-content class="mx-4 my-6 min-h-screen p-6">
         <router-view />
       </a-layout-content>
     </a-layout>

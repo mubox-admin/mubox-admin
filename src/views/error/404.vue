@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import noExist from "@/assets/status/404.svg?component";
+import { useMenuStore } from "@/store/menu";
 
 defineOptions({
   name: "404",
 });
 
-const router = useRouter();
+const { backToFrontPage } = useMenuStore();
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const router = useRouter();
     <div class="ml-12">
       <p v-motion-slide-bottom class="mb-4 text-4xl font-medium dark:text-white">404</p>
       <p v-motion-slide-bottom class="mb-4 text-gray-500">抱歉，你访问的页面不存在</p>
-      <a-button v-motion-roll-bottom type="primary" @click="router.push('/')">返回首页</a-button>
+      <a-button v-motion-roll-bottom type="primary" @click="backToFrontPage">返回首页</a-button>
     </div>
   </div>
 </template>

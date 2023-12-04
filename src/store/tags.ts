@@ -1,5 +1,4 @@
 import { isBoolean, isEqual, isUrl, storageLocal } from "@mubox/utils";
-import { createGlobalState } from "@vueuse/core";
 import { responsiveStorageNameSpace } from "@/config";
 
 export type Tag = {
@@ -15,7 +14,7 @@ export const initRoutes: Tag[] =
           name: "Welcome",
           path: "/welcome",
           meta: {
-            // TODO i18n
+            // MU-TODO i18n
             title: "首页",
             icon: "homeFilled",
           },

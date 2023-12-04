@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import noAccess from "@/assets/status/403.svg?component";
+import { useMenuStore } from "@/store/menu";
 
 defineOptions({
   name: "403",
 });
 
-const router = useRouter();
+const { backToFrontPage } = useMenuStore();
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const router = useRouter();
     <div class="ml-12">
       <p v-motion-slide-bottom class="mb-4 text-4xl font-medium dark:text-white">403</p>
       <p v-motion-slide-bottom class="mb-4 text-gray-500">抱歉，你无权访问该页面</p>
-      <a-button v-motion-roll-bottom type="primary" @click="router.push('/')">返回首页</a-button>
+      <a-button v-motion-roll-bottom type="primary" @click="backToFrontPage">返回首页</a-button>
     </div>
   </div>
 </template>
