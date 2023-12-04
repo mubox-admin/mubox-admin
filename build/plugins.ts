@@ -18,7 +18,7 @@ export function pluginList(command: string) {
     UnoCSS(),
     // 自动导入模块
     AutoImport({
-      imports: ["vue"],
+      imports: ["vue", "@vueuse/core"],
       resolvers: [AntDesignVueResolver()],
       dts: "./types/auto-imports.d.ts",
     }),
