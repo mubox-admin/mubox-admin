@@ -1,26 +1,30 @@
 <script lang="tsx" setup>
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
-import { isString } from "@mubox/utils";
+import { isNumber, isString } from "@mubox/utils";
 import { useRouter } from "vue-router";
 import AntIcon from "./components/AntIcon.vue";
-import User from "./components/User.vue";
-import Setting from "./components/Setting.vue";
 import Search from "./components/Search.vue";
+import Setting from "./components/Setting.vue";
+import User from "./components/User.vue";
 import type { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
 import { usePermissionStore } from "@/store/permission";
-import { findRouteByPath, getParentPaths } from "@/router/utils";
 import { useMenuStore } from "@/store/menu";
+import { findRouteByPath, getParentPaths } from "@/router/utils";
+import { useTagsStore } from "@/store/tags";
 
 const isDark = useDark({ disableTransition: false });
+const router = useRouter();
 
+// 菜单
 const { wholeMenus } = usePermissionStore();
 const { menuState } = useMenuStore();
 const subMenuKeys = computed(() => {
   return wholeMenus.value.map((item) => item.name);
 });
+// 菜单抽屉展开唯一
 function onOpenChange(openKeys: (string | number)[]) {
   const lastOpenKey = openKeys.at(-1) as string | undefined;
-  if (openKeys.length > 1 && subMenuKeys.value.includes(lastOpenKey)) {
+  if (lastOpenKey && openKeys.length > 1 && subMenuKeys.value.includes(lastOpenKey)) {
     menuState.value.openKeys = lastOpenKey ? [lastOpenKey] : [];
   }
 }
@@ -39,7 +43,12 @@ function routesToMenuItems(routes: RouteConfigsTable[]) {
   });
 }
 
-const router = useRouter();
+function menuClick({ key }: { key: string | number }) {
+  if (isNumber(key)) throw new Error("路由Name不能为数字");
+  router.push({ name: key });
+}
+
+// 面包屑
 const routes = router.options.routes;
 const breadcrumbItems = computed(() => {
   // 当前路由的父级路径组成的数组
@@ -66,6 +75,23 @@ const breadcrumbItems = computed(() => {
   });
   return breadcrumbArr;
 });
+// 页面缓存
+const { cachePageList } = usePermissionStore();
+const { currentTab, tagList, spliceTags } = useTagsStore();
+// 刷新当前页面导致currentTab重置，而路由页面停留在刷新前
+onMounted(() => {
+  if (router.currentRoute.value.name && isString(router.currentRoute.value.name))
+    currentTab.value = router.currentRoute.value.name;
+});
+
+function removeTag(targetKey: string) {
+  spliceTags(targetKey);
+  if (currentTab.value === targetKey) {
+    const nextTag = tagList.value.at(-1)?.name;
+    router.push({ name: nextTag });
+    currentTab.value = nextTag;
+  }
+}
 </script>
 
 <template>
@@ -84,7 +110,7 @@ const breadcrumbItems = computed(() => {
         :items="menuItems"
         theme="dark"
         mode="inline"
-        @click="({ key }) => $router.push({ name: key as string })"
+        @click="menuClick"
         @open-change="onOpenChange"
       />
     </a-layout-sider>
@@ -117,9 +143,23 @@ const breadcrumbItems = computed(() => {
           </a-space>
         </div>
       </a-layout-header>
+
       <!-- 右侧内容区 -->
-      <a-layout-content class="mx-4 my-6 min-h-screen p-6">
-        <router-view />
+      <a-layout-content class="min-h-screen">
+        <a-tabs
+          v-model:activeKey="currentTab"
+          hide-add
+          type="editable-card"
+          @change="(key) => $router.push({ name: key as string })"
+          @edit="removeTag"
+        >
+          <a-tab-pane v-for="pane in tagList" :key="pane.name" :tab="pane.meta?.title" closable />
+        </a-tabs>
+        <router-view v-slot="{ Component }">
+          <keep-alive :include="cachePageList">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>

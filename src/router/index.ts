@@ -1,6 +1,6 @@
 // import "@/utils/sso";
 import { createRouter } from "vue-router";
-import { isAllEmpty, isUrl, openLink, storageSession } from "@mubox/utils";
+import { isAllEmpty, isString, isUrl, openLink, storageSession } from "@mubox/utils";
 import {
   ascending,
   buildHierarchyTree,
@@ -20,6 +20,7 @@ import NProgress from "@/utils/progress";
 import { type DataInfo, sessionKey } from "@/utils/auth";
 import { useTagsStore } from "@/store/tags";
 import { usePermissionStore } from "@/store/permission";
+import { useMenuStore } from "@/store/menu";
 
 const { VITE_HIDE_HOME } = import.meta.env;
 
@@ -142,6 +143,12 @@ router.beforeEach((to: ToRouteType, _from, next) => {
         NProgress.done();
       } else {
         toCorrectRoute();
+        if (to.name && isString(to.name)) {
+          useMenuStore().menuPositioning(to.name);
+          const { currentTab, addTag } = useTagsStore();
+          currentTab.value = to.name;
+          addTag(to.name);
+        }
       }
     } else {
       // 刷新
@@ -156,18 +163,20 @@ router.beforeEach((to: ToRouteType, _from, next) => {
               if (isAllEmpty(route.parentId) && route.meta?.backstage) {
                 // 此处为动态顶级路由（目录）
                 const { path, name, meta } = route.children[0];
-                useTagsStore().pushTags({
-                  path,
-                  name,
-                  meta,
-                });
+                isString(name) &&
+                  useTagsStore().pushTags({
+                    path,
+                    name,
+                    meta,
+                  });
               } else {
                 const { path, name, meta } = route;
-                useTagsStore().pushTags({
-                  path,
-                  name,
-                  meta,
-                });
+                isString(name) &&
+                  useTagsStore().pushTags({
+                    path,
+                    name,
+                    meta,
+                  });
               }
             }
           }

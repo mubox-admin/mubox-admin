@@ -20,6 +20,7 @@ export default {
       meta: {
         title: "欢迎页",
         showLink: VITE_HIDE_HOME === "true" ? false : true,
+        keepAlive: true,
       },
     },
     {
@@ -35,6 +36,7 @@ export default {
           component: () => import("@/views/test/index.vue"),
           meta: {
             title: "测试页2",
+            keepAlive: true,
           },
         },
       ],

@@ -1,5 +1,7 @@
 import { isBoolean, isEqual, isUrl, storageLocal } from "@mubox/utils";
+import type { RouteRecordRaw } from "vue-router";
 import { responsiveStorageNameSpace } from "@/config";
+import router from "@/router";
 
 export type Tag = {
   query?: any;
@@ -7,42 +9,54 @@ export type Tag = {
 } & RouteConfigsTable;
 
 const { VITE_HIDE_HOME } = import.meta.env;
+// 常驻路由,关闭 multiTagsCache时使用
 export const initRoutes: Tag[] =
   VITE_HIDE_HOME === "false"
     ? [
-        {
-          name: "Welcome",
-          path: "/welcome",
-          meta: {
-            // MU-TODO i18n
-            title: "首页",
-            icon: "homeFilled",
-          },
-        },
+        // {
+        //   name: "Welcome",
+        //   path: "/welcome",
+        //   meta: {
+        //     // MU-TODO i18n
+        //     title: "首页",
+        //     icon: "homeFilled",
+        //   },
+        // },
       ]
     : [];
 
 export const useTagsStore = createGlobalState(() => {
+  const currentTab = ref<string>();
   const tagList = ref(
     storageLocal.getItem<StorageConfigs>(`${responsiveStorageNameSpace()}configure`)?.multiTagsCache
       ? storageLocal.getItem<Tag[]>(`${responsiveStorageNameSpace()}tags`)
       : [...initRoutes],
   );
-  const tagListCache = ref(
-    storageLocal.getItem<StorageConfigs>(`${responsiveStorageNameSpace()}configure`)
-      ?.multiTagsCache,
-  );
-  function TagsListCacheChange(multiTagsCache_: boolean) {
-    tagListCache.value = multiTagsCache_;
-    if (tagListCache.value) {
-      storageLocal.setItem(`${responsiveStorageNameSpace()}tags`, tagList.value);
-    } else {
-      storageLocal.removeItem(`${responsiveStorageNameSpace()}tags`);
+  // 点击菜单项时或者点击搜索登情况，添加Tag标签
+  function addTag(routeName: string): void {
+    const hasValue = tagList.value.some((item) => {
+      return item.path === routeName;
+    });
+    function concatRoute(route: readonly RouteRecordRaw[], value: string) {
+      if (!hasValue) {
+        route.forEach((routeItem) => {
+          if (routeItem.name === value) {
+            pushTags({
+              path: routeItem.path,
+              name: routeItem.name as string,
+              meta: routeItem.meta,
+            });
+          } else {
+            if (routeItem.children && routeItem.children.length > 0) {
+              concatRoute(routeItem.children, value);
+            }
+          }
+        });
+      }
     }
+    concatRoute(router.options.routes, routeName);
   }
-  function tagsCache(tags: Tag[]) {
-    tagListCache.value && storageLocal.setItem(`${responsiveStorageNameSpace()}tags`, tags);
-  }
+
   function equalTags(tags: Tag[]) {
     tagList.value = tags;
     tagsCache(tagList.value);
@@ -58,12 +72,12 @@ export const useTagsStore = createGlobalState(() => {
     if (isBoolean(tag?.meta?.showLink) && !tag?.meta?.showLink) return;
 
     // 判断tag是否已存在
-    const tagHasExits = tagList.value.some((tag) => {
-      return tag.path === tag.path;
+    const tagHasExits = tagList.value.some((item) => {
+      return item.path === tag.path;
     });
     // 判断tag中的query键值是否相等
-    const tagQueryHasExits = tagList.value.some((tag) => {
-      return isEqual(tag?.query, tag?.query);
+    const tagQueryHasExits = tagList.value.some((item) => {
+      return isEqual(item?.query, tag?.query);
     });
     // 判断tag中的params键值是否相等
     const tagParamsHasExits = tagList.value.some((item) => {
@@ -85,14 +99,13 @@ export const useTagsStore = createGlobalState(() => {
   }
   function spliceTags(
     // Tag路径
-    path: string,
-    position = {
-      startIndex: 0,
-      length: 1,
-    },
+    routeName: string,
+    position?: { startIndex: number; length?: number },
   ) {
+    if (!routeName) throw new Error("当前路由未添加name，请添加name后重试");
     if (!position) {
-      const index = tagList.value.findIndex((v) => v.path === path);
+      const index = tagList.value.findIndex((v) => v.name === routeName);
+
       if (index === -1) return;
       tagList.value.splice(index, 1);
     } else {
@@ -104,11 +117,30 @@ export const useTagsStore = createGlobalState(() => {
   const sliceTags = () => {
     return tagList.value.slice(-1);
   };
+
+  // 是否启用Tag本地缓存
+  const tagListCache = ref(
+    storageLocal.getItem<StorageConfigs>(`${responsiveStorageNameSpace()}configure`)
+      ?.multiTagsCache,
+  );
+  function TagsListCacheChange(multiTagsCache_: boolean) {
+    tagListCache.value = multiTagsCache_;
+    if (tagListCache.value) {
+      storageLocal.setItem(`${responsiveStorageNameSpace()}tags`, tagList.value);
+    } else {
+      storageLocal.removeItem(`${responsiveStorageNameSpace()}tags`);
+    }
+  }
+  function tagsCache(tags: Tag[]) {
+    tagListCache.value && storageLocal.setItem(`${responsiveStorageNameSpace()}tags`, tags);
+  }
   return {
+    currentTab,
     tagList,
     tagListCache,
     TagsListCacheChange,
     tagsCache,
+    addTag,
     equalTags,
     pushTags,
     spliceTags,

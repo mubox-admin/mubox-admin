@@ -1,3 +1,4 @@
+// MU-TODO 重构 路由、菜单、标签 类型
 // 全局路由类型声明
 
 import { type RouteComponent, type RouteLocationNormalized } from "vue-router";
@@ -14,7 +15,7 @@ declare global {
     /** 路由地址 `必填` */
     path: string;
     /** 路由名字（保持唯一）`可选` */
-    name?: string;
+    name: string;
     /** `Layout`组件 `可选` */
     component?: RouteComponent;
     /** 路由重定向 `可选` */
@@ -31,7 +32,7 @@ declare global {
     /** 子路由地址 `必填` */
     path: string;
     /** 路由名字（对应不要重复，和当前组件的`name`保持一致）`必填` */
-    name?: string;
+    name: string;
     /** 路由重定向 `可选` */
     redirect?: string;
     /** 按需加载组件 `可选` */

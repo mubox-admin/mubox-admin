@@ -13,7 +13,8 @@ const menuSearchList = ref<(DefaultOptionType & { routeName?: string })[]>([]);
 function traverseRouteName(routes: RouteConfigsTable[]) {
   if (isArray(routes))
     routes.forEach((item) => {
-      if (item.name)
+      // 这里只添加有实例组件的路由查询
+      if (item.name && item.component)
         menuSearchList.value.push({
           label: item.meta?.title,
           value: item.meta?.title,

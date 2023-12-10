@@ -219,6 +219,7 @@ function formatAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
 
 /** 处理缓存路由（添加、删除、刷新） */
 function handleAliveRoute({ name }: ToRouteType, mode?: string) {
+  if (!name || typeof name === "symbol") return;
   switch (mode) {
     case "add":
       usePermissionStore().cacheOperate({
@@ -305,7 +306,12 @@ function filterNoPermissionTree(data: RouteChildrenConfigsTable[]) {
 }
 
 /** 通过指定 `key` 获取父级路径集合，默认 `key` 为 `path` */
-function getParentPaths(value: string, routes: readonly RouteRecordRaw[], key = "path") {
+function getParentPaths(
+  value: string,
+  routes: readonly RouteRecordRaw[],
+  key = "path",
+  returnKey = "path",
+) {
   // 深度遍历查找
   function dfs(routes: readonly RouteRecordRaw[], value: string, parents: string[]) {
     for (const item of routes) {
@@ -314,7 +320,7 @@ function getParentPaths(value: string, routes: readonly RouteRecordRaw[], key = 
       // children不存在或为空则不递归
       if (!item.children || !item.children.length) continue;
       // 往下查找时将当前path入栈
-      parents.push(item.path);
+      parents.push(item[returnKey]);
 
       if (dfs(item.children, value, parents).length) return parents;
       // 深度遍历查找未找到时当前path 出栈
