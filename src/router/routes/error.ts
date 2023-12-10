@@ -1,4 +1,5 @@
 export default {
+  name: "Error",
   path: "/error",
   redirect: "/error/403",
   meta: {
