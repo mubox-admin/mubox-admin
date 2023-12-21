@@ -1,28 +1,14 @@
 import axios from "axios";
 import type { App } from "vue";
 
-let config: object = {};
+let config: ServerConfigs = {};
 const { VITE_PUBLIC_PATH } = import.meta.env;
 
 const setConfig = (cfg?: unknown) => {
   config = Object.assign(config, cfg);
 };
 
-const getConfig = (key?: string): ServerConfigs => {
-  if (typeof key === "string") {
-    const arr = key.split(".");
-    if (arr && arr.length) {
-      let data = config;
-      arr.forEach((v) => {
-        if (data && typeof data[v] !== "undefined") {
-          data = data[v];
-        } else {
-          data = null;
-        }
-      });
-      return data;
-    }
-  }
+const getConfig = (): ServerConfigs => {
   return config;
 };
 
