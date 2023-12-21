@@ -1,3 +1,4 @@
+import { usePermissionStore } from "./permission";
 import router from "@/router";
 import { getParentPaths } from "@/router/utils";
 
@@ -15,7 +16,8 @@ export const useMenuStore = createGlobalState(() => {
   }
   // 菜单定位
   function menuPositioning(routeName: string) {
-    const parentRoutes = getParentPaths(routeName, router.options.routes, "name", "name");
+    const { wholeMenus } = usePermissionStore();
+    const parentRoutes = getParentPaths(routeName, wholeMenus.value, "name", "name");
     menuState.value.openKeys = parentRoutes;
     menuState.value.selectedKeys = [routeName as string];
   }
