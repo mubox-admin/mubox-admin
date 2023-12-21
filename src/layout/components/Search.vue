@@ -3,14 +3,15 @@ import { isArray } from "@mubox/utils";
 import { SearchOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 import type { DefaultOptionType } from "ant-design-vue/es/select";
+import type { RouteRecordName, RouteRecordRaw } from "vue-router";
 import { usePermissionStore } from "@/store/permission";
 
 const menuSearch = ref();
 const { wholeMenus } = usePermissionStore();
 
 /** 将菜单树形结构扁平化为一维数组，用于菜单查询 */
-const menuSearchList = ref<(DefaultOptionType & { routeName?: string })[]>([]);
-function traverseRouteName(routes: RouteConfigsTable[]) {
+const menuSearchList = ref<(DefaultOptionType & { routeName?: RouteRecordName })[]>([]);
+function traverseRouteName(routes: RouteRecordRaw[]) {
   if (isArray(routes))
     routes.forEach((item) => {
       // 这里只添加有实例组件的路由查询
@@ -26,7 +27,7 @@ function traverseRouteName(routes: RouteConfigsTable[]) {
 traverseRouteName(wholeMenus.value);
 
 const router = useRouter();
-function toPage(_, route: DefaultOptionType & { routeName?: string }) {
+function toPage(_, route: DefaultOptionType & { routeName?: RouteRecordName }) {
   router.push({ name: route.routeName });
 }
 </script>

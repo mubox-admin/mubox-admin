@@ -1,10 +1,18 @@
 import { isProxy, toRaw } from "vue";
 import { createWebHashHistory, createWebHistory } from "vue-router";
-import { clone, intersection, isAllEmpty, isString, storageSession } from "@mubox/utils";
+import {
+  clone,
+  intersection,
+  isAllEmpty,
+  isArray,
+  isNumber,
+  isString,
+  storageSession,
+} from "@mubox/utils";
 import { router } from "./index";
+import type { RouteRecord } from "vue-router";
 import type { Router } from "vue-router";
 import type { RouteRecordRaw, RouterHistory } from "vue-router";
-import type { menuType } from "@/layout/types";
 import { getConfig } from "@/config";
 import { type DataInfo, sessionKey } from "@/utils/auth";
 import { useTagsStore } from "@/store/tags";
@@ -44,7 +52,7 @@ function getHistoryMode(routerHistory: string): RouterHistory {
 // #region 路由四层处理
 
 /** 按照路由中meta下的rank等级升序来排序路由 */
-function ascending(arr: any[]) {
+function ascending(arr: RouteRecordRaw[]) {
   arr.forEach((v, index) => {
     // 当rank不存在时，根据顺序自动创建，首页路由永远在第一位
     if (handRank(v)) v.meta.rank = index + 2;
@@ -52,6 +60,7 @@ function ascending(arr: any[]) {
   return arr.sort((a: { meta: { rank: number } }, b: { meta: { rank: number } }) => {
     return a?.meta?.rank - b?.meta?.rank;
   });
+  return arr;
 }
 
 /**
@@ -64,7 +73,10 @@ function ascending(arr: any[]) {
  *  [√]这个函数将传入的数组中的每一个路由元素节点添加id、parentId和pathList作为标记
  *  ！需要注意一点是这个函数会改变传入的原数组
  */
-export const buildHierarchyTree = (tree: any[], pathList = []): any => {
+export const buildHierarchyTree = (
+  tree: RouteRecordRaw[],
+  pathList: RouteRecordRaw["pathList"] = [],
+): RouteRecordRaw[] => {
   if (!Array.isArray(tree)) {
     return [];
   }
@@ -74,7 +86,7 @@ export const buildHierarchyTree = (tree: any[], pathList = []): any => {
     node.parentId = pathList.length ? pathList[pathList.length - 1] : null;
     node.pathList = [...pathList, node.id];
     const hasChildren = node.children && node.children.length > 0;
-    if (hasChildren) {
+    if (hasChildren && node.children) {
       buildHierarchyTree(node.children, node.pathList);
     }
   }
@@ -88,15 +100,13 @@ export const buildHierarchyTree = (tree: any[], pathList = []): any => {
  */
 function formatFlatteningRoutes(routesList: RouteRecordRaw[]): RouteRecordRaw[] {
   if (routesList.length === 0) return routesList;
-  let hierarchyList = buildHierarchyTree(routesList);
-  for (let i = 0; i < hierarchyList.length; i++) {
-    if (hierarchyList[i].children) {
-      hierarchyList = hierarchyList
-        .slice(0, i + 1)
-        .concat(hierarchyList[i].children, hierarchyList.slice(i + 1));
+  for (let i = 0; i < routesList.length; i++) {
+    const children = routesList[i].children;
+    if (isArray(children)) {
+      routesList = routesList.slice(0, i + 1).concat(children, routesList.slice(i + 1));
     }
   }
-  return hierarchyList;
+  return routesList;
 }
 
 /**
@@ -135,7 +145,7 @@ function initRouter(): Promise<Router> {
   if (getConfig()?.CachingAsyncRoutes) {
     // 开启动态路由缓存本地sessionStorage
     const key = "async-routes";
-    const asyncRouteList = storageSession.getItem(key) as any;
+    const asyncRouteList = storageSession.getItem(key) as RouteRecordRaw[];
     if (asyncRouteList && asyncRouteList?.length > 0) {
       return new Promise((resolve) => {
         handleAsyncRoutes(asyncRouteList);
@@ -165,7 +175,7 @@ function handleAsyncRoutes(routeList: RouteRecordRaw[]) {
   if (routeList.length === 0) {
     usePermissionStore().handleWholeMenus(routeList);
   } else {
-    formatAsyncRoutes(routeList).forEach((v) => {
+    formatFlatteningRoutes(buildHierarchyTree(formatAsyncRoutes(routeList))).forEach((v) => {
       // 防止重复添加路由
       if (
         router.options.routes[0].children &&
@@ -180,8 +190,8 @@ function handleAsyncRoutes(routeList: RouteRecordRaw[]) {
           ascending(router.options.routes[0].children);
         }
         if (v?.name && !router.hasRoute(v?.name)) router.addRoute(v);
-        const flattenRouters: any = router.getRoutes().find((n) => n.path === "/");
-        router.addRoute(flattenRouters);
+        const flattenRouters = router.getRoutes().find((n) => n.path === "/");
+        if (flattenRouters) router.addRoute(flattenRouters);
       }
     });
     usePermissionStore().handleWholeMenus(routeList);
@@ -205,6 +215,7 @@ function formatAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
       v.component = IFrame;
     } else {
       // 对后端传component组件路径和不传做兼容（如果后端传component组件路径，那么path可以随便写，如果不传，component组件路径会跟path保持一致）
+      // Tips：后台传入的路由component为文件路径，也就是string类型，这里做起类型处理比较麻烦，手动写一行这个注释便于理解
       const index = v?.component
         ? modulesRoutesKeys.findIndex((ev) => ev.includes(v.component as any))
         : modulesRoutesKeys.findIndex((ev) => ev.includes(v.path));
@@ -275,30 +286,30 @@ function findRouteByPath(
 }
 
 /** 获取所有菜单中的第一个菜单（顶级菜单）*/
-function getTopMenu(tag = false): menuType | undefined {
-  const topMenu = usePermissionStore().wholeMenus.value[0]?.children?.[0];
-  if (topMenu) tag && useTagsStore().pushTags(topMenu);
+function getTopMenu(tagPush = false) {
+  const topMenu = usePermissionStore().wholeMenus.value[0]?.children?.[0] as RouteRecord;
+  if (topMenu) tagPush && useTagsStore().pushTags(topMenu);
   return topMenu;
 }
 
 // #endregion
 
 /** 过滤meta中showLink为false的菜单 */
-function filterTree(data: RouteConfigsTable[]) {
+function filterTree(data: RouteRecordRaw[]) {
   const newTree = clone(data).filter((v) => v.meta?.showLink !== false);
   newTree.forEach((v) => v.children && (v.children = filterTree(v.children)));
   return newTree;
 }
 
 /** 过滤children长度为0的的目录，当目录下没有菜单时，会过滤此目录，目录没有赋予roles权限，当目录下只要有一个菜单有显示权限，那么此目录就会显示 */
-function filterChildrenTree(data: RouteConfigsTable[]) {
+function filterChildrenTree(data: RouteRecordRaw[]) {
   const newTree = clone(data).filter((v) => v?.children?.length !== 0);
   newTree.forEach((v) => v.children && (v.children = filterTree(v.children)));
   return newTree;
 }
 
 /** 从sessionStorage里取出当前登陆用户的角色roles，过滤无权限的菜单 */
-function filterNoPermissionTree(data: RouteChildrenConfigsTable[]) {
+function filterNoPermissionTree(data: RouteRecordRaw[]) {
   const currentRoles = storageSession.getItem<DataInfo<number>>(sessionKey)?.roles ?? [];
   const newTree = clone(data).filter((v) => isOneOfArray(v.meta?.roles, currentRoles));
   newTree.forEach((v) => v.children && (v.children = filterNoPermissionTree(v.children)));

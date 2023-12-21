@@ -1,45 +1,27 @@
-// MU-TODO 重构 路由、菜单、标签 类型
 // 全局路由类型声明
 
-import { type RouteComponent, type RouteLocationNormalized } from "vue-router";
+import { type RouteLocationNormalized } from "vue-router";
 
 declare global {
+  /**
+   * 路由跳转类型声明
+   */
   interface ToRouteType extends RouteLocationNormalized {
     meta: CustomizeRouteMeta;
   }
 
   /**
-   * @description 整体路由配置表（包括完整子路由）
+   * @description 路由自定义附加字段
    */
-  interface RouteConfigsTable {
-    /** 路由地址 `必填` */
-    path: string;
-    /** 路由名字（保持唯一）`可选` */
-    name: string;
-    /** `Layout`组件 `可选` */
-    component?: RouteComponent;
-    /** 路由重定向 `可选` */
-    redirect?: string;
-    meta?: CustomizeRouteMeta;
-    /** 子路由配置项 */
-    children?: Array<RouteChildrenConfigsTable>;
-  }
-
-  /**
-   * @description 完整子路由配置表
-   */
-  interface RouteChildrenConfigsTable {
-    /** 子路由地址 `必填` */
-    path: string;
-    /** 路由名字（对应不要重复，和当前组件的`name`保持一致）`必填` */
-    name: string;
-    /** 路由重定向 `可选` */
-    redirect?: string;
-    /** 按需加载组件 `可选` */
-    component?: RouteComponent;
-    meta?: CustomizeRouteMeta;
-    /** 子路由配置项 */
-    children?: Array<RouteChildrenConfigsTable>;
+  interface RouteExtendConfigs {
+    // 路由唯一标识
+    id?: number;
+    // 路由父级id
+    parentId?: number | null;
+    // id路径数组
+    pathList?: number[];
+    // 路由排序
+    rank?: number;
   }
 
   /**
@@ -50,13 +32,9 @@ declare global {
     title: string;
     /** 菜单图标 `可选` */
     icon?: string | FunctionalComponent | IconifyIcon;
-    /** 菜单名称右侧的额外图标 */
-    extraIcon?: string | FunctionalComponent | IconifyIcon;
     /** 是否在菜单中显示（默认`true`）`可选` */
     showLink?: boolean;
-    /** 是否显示父级菜单 `可选` */
-    showParent?: boolean;
-    /** 页面级别权限设置 `可选` */
+    /** 页面级别权限设置，配置当前页面路由可以由数组中哪些角色可以访问，非数组中的角色会被拦截并跳转至403页面 `可选` */
     roles?: Array<string>;
     /** 按钮级别权限设置 `可选` */
     auths?: Array<string>;
@@ -95,5 +73,9 @@ declare global {
 
 // https://router.vuejs.org/zh/guide/advanced/meta.html#typescript
 declare module "vue-router" {
+  // 路由自定义字段添加到路由对象中
+  interface _RouteRecordBase extends RouteExtendConfigs {}
+  interface RouteRecordNormalized extends RouteExtendConfigs {}
+  // 路由自定义meta参数添加到路由中
   interface RouteMeta extends CustomizeRouteMeta {}
 }

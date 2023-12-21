@@ -1,3 +1,4 @@
+import type { RouteRecordRaw } from "vue-router";
 const { VITE_HIDE_HOME } = import.meta.env;
 const Layout = () => import("@/layout/index.vue");
 
@@ -42,4 +43,4 @@ export default {
       ],
     },
   ],
-} as RouteConfigsTable;
+} as RouteRecordRaw;

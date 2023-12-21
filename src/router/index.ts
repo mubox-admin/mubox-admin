@@ -14,7 +14,7 @@ import {
   isOneOfArray,
 } from "./utils";
 import remainingRouter from "./routes/remaining";
-import type { RouteComponent, RouteRecordRaw, Router } from "vue-router";
+import type { RouteRecordRaw, Router } from "vue-router";
 import { getConfig } from "@/config";
 import NProgress from "@/utils/progress";
 import { type DataInfo, sessionKey } from "@/utils/auth";
@@ -32,8 +32,7 @@ const modules: Record<string, any> = import.meta.glob(
 );
 
 /** 原始静态路由（未做任何处理） */
-const routes: RouteChildrenConfigsTable[] = [];
-
+const routes: RouteRecordRaw[] = [];
 /**
  * 相当于把modules下的每一个export的对象加入到一个数组中，与i18n的那个处理方式类似
  */
@@ -54,7 +53,7 @@ export const constantRoutes: Array<RouteRecordRaw> = formatTwoStageRoutes(
 );
 
 /** 用于渲染菜单，保持原始层级 */
-export const constantMenus: Array<RouteComponent> = ascending(
+export const constantMenus: Array<RouteRecordRaw> = ascending(
   routes.flat(Number.POSITIVE_INFINITY),
 ).concat(...remainingRouter);
 
@@ -66,7 +65,7 @@ export const remainingPaths = Object.keys(remainingRouter).map((v) => {
 /** 创建路由实例 */
 export const router: Router = createRouter({
   history: getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
-  routes: constantRoutes.concat(...(remainingRouter as any)),
+  routes: constantRoutes.concat(...remainingRouter),
   strict: true,
   scrollBehavior(_, from, savedPosition) {
     return new Promise((resolve) => {
@@ -162,21 +161,21 @@ router.beforeEach((to: ToRouteType, _from, next) => {
             if (route && route.meta?.title) {
               if (isAllEmpty(route.parentId) && route.meta?.backstage) {
                 // 此处为动态顶级路由（目录）
-                const { path, name, meta } = route.children[0];
-                isString(name) &&
+                if (route.children) {
+                  const { path, name, meta } = route.children[0];
                   useTagsStore().pushTags({
                     path,
                     name,
                     meta,
                   });
+                }
               } else {
                 const { path, name, meta } = route;
-                isString(name) &&
-                  useTagsStore().pushTags({
-                    path,
-                    name,
-                    meta,
-                  });
+                useTagsStore().pushTags({
+                  path,
+                  name,
+                  meta,
+                });
               }
             }
           }

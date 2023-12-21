@@ -5,7 +5,6 @@ export {};
 declare global {
   /**
    * 全局自定义环境变量的类型声明
-   * @see {@link https://yiming_chang.gitee.io/pure-admin-doc/pages/config/#%E5%85%B7%E4%BD%93%E9%85%8D%E7%BD%AE}
    */
   interface ViteEnv {
     VITE_PORT: number;
@@ -18,7 +17,6 @@ declare global {
 
   /**
    * 对应 `public/serverConfig.json` 文件的类型声明
-   * @see {@link https://yiming_chang.gitee.io/pure-admin-doc/pages/config/#serverconfig-json}
    */
   interface ServerConfigs {
     Version?: string;
@@ -35,26 +33,17 @@ declare global {
     Weak?: boolean;
     HideTabs?: boolean;
     SidebarStatus?: boolean;
-    EpThemeColor?: string;
+    ADThemeColor?: string;
     ShowLogo?: boolean;
     ShowModel?: string;
     MenuArrowIconNoTransition?: boolean;
     CachingAsyncRoutes?: boolean;
     TooltipEffect?: Effect;
     ResponsiveStorageNameSpace?: string;
-    MapConfigure?: {
-      amapKey?: string;
-      options: {
-        resizeEnable?: boolean;
-        center?: number[];
-        zoom?: number;
-      };
-    };
   }
 
   /**
    * 与 `ServerConfigs` 类型不同，这里是缓存到浏览器本地存储的类型声明
-   * @see {@link https://yiming_chang.gitee.io/pure-admin-doc/pages/config/#serverconfig-json}
    */
   interface StorageConfigs {
     version?: string;

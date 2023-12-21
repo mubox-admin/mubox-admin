@@ -1,5 +1,7 @@
 import { debounce } from "@mubox/utils";
 import { useTagsStore } from "./tags";
+import type { RouteRecordName } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 import { constantMenus as constantMenus_ } from "@/router";
 import { ascending, filterNoPermissionTree, filterTree } from "@/router/utils";
 
@@ -7,13 +9,12 @@ export const usePermissionStore = createGlobalState(() => {
   // 静态路由生成的菜单
   const constantMenus = ref(constantMenus_);
   // 整体路由生成的菜单（静态、动态）
-  const wholeMenus = ref<RouteConfigsTable[]>([]);
+  const wholeMenus = ref<RouteRecordRaw[]>([]);
   // 缓存页面keepAlive
-
   const cachePageList = ref<string[]>([]);
 
   /** [√]组装整体路由生成的菜单（最终菜单） */
-  function handleWholeMenus(routes: any[]) {
+  function handleWholeMenus(routes: RouteRecordRaw[]) {
     wholeMenus.value = filterNoPermissionTree(
       filterTree(ascending(constantMenus.value.concat(routes))),
     );
@@ -35,7 +36,7 @@ export const usePermissionStore = createGlobalState(() => {
     /** 监听缓存页面是否存在于标签页，不存在则删除 */
     debounce(() => {
       let cacheLength = cachePageList.value.length;
-      const nameList: string[] = useTagsStore().tagList.value.map((item) =>
+      const nameList: RouteRecordName[] = useTagsStore().tagList.value.map((item) =>
         item["name"] ? item["name"] : "",
       );
       while (cacheLength > 0) {

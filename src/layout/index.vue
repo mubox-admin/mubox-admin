@@ -6,6 +6,8 @@ import AntIcon from "./components/AntIcon.vue";
 import Search from "./components/Search.vue";
 import Setting from "./components/Setting.vue";
 import User from "./components/User.vue";
+import type { TabsProps } from "ant-design-vue";
+import type { RouteRecordRaw } from "vue-router";
 import type { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
 import { usePermissionStore } from "@/store/permission";
 import { useMenuStore } from "@/store/menu";
@@ -32,7 +34,7 @@ function onOpenChange(openKeys: (string | number)[]) {
 const menuItems = computed(() => {
   return routesToMenuItems(wholeMenus.value);
 });
-function routesToMenuItems(routes: RouteConfigsTable[]) {
+function routesToMenuItems(routes: RouteRecordRaw[]) {
   return routes.map((item) => {
     return {
       key: item.name,
@@ -84,14 +86,18 @@ onMounted(() => {
     currentTab.value = router.currentRoute.value.name;
 });
 
-function removeTag(targetKey: string) {
-  spliceTags(targetKey);
+const removeTag: TabsProps["onEdit"] = (targetKey) => {
+  if (isString(targetKey)) spliceTags(targetKey);
   if (currentTab.value === targetKey) {
     const nextTag = tagList.value.at(-1)?.name;
     router.push({ name: nextTag });
-    currentTab.value = nextTag;
+    if (isString(nextTag)) {
+      currentTab.value = nextTag;
+    } else {
+      throw new Error("当前路由name值不为string类型，无法标签化");
+    }
   }
-}
+};
 </script>
 
 <template>

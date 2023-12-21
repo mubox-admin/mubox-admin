@@ -3,10 +3,13 @@ import type { RouteRecordRaw } from "vue-router";
 import { responsiveStorageNameSpace } from "@/config";
 import router from "@/router";
 
-export type Tag = {
+export interface Tag {
+  name: RouteRecordRaw["name"];
+  path: RouteRecordRaw["path"];
+  meta?: RouteRecordRaw["meta"];
   query?: any;
   params?: any;
-} & RouteConfigsTable;
+}
 
 const { VITE_HIDE_HOME } = import.meta.env;
 // 常驻路由,关闭 multiTagsCache时使用
@@ -43,7 +46,7 @@ export const useTagsStore = createGlobalState(() => {
           if (routeItem.name === value) {
             pushTags({
               path: routeItem.path,
-              name: routeItem.name as string,
+              name: routeItem.name,
               meta: routeItem.meta,
             });
           } else {
