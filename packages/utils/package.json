@@ -1,7 +1,7 @@
 {
   "name": "@mubox/utils",
   "author": "EvilMoOd",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "木盒子函数库",
   "private": false,
   "keywords": [
