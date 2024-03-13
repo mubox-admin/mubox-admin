@@ -8,14 +8,17 @@ export default [
     response: ({ body }) => {
       if (body.username === "admin") {
         return {
+          code: 0,
           success: true,
-          data: {
-            username: "admin",
+          result: {
+            userInfo: {
+              username: "木",
+              avatar: "https://avatars.githubusercontent.com/u/98245255?v=4",
+              userId: "123",
+            },
             // 一个用户可能有多个角色
             roles: ["admin"],
             accessToken: "eyJhbGciOiJIUzUxMiJ9.admin",
-            refreshToken: "eyJhbGciOiJIUzUxMiJ9.adminRefresh",
-            expires: "2023/10/30 00:00:00",
           },
         };
       } else {

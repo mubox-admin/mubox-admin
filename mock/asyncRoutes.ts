@@ -44,8 +44,9 @@ export default [
     method: "get",
     response: () => {
       return {
+        code: 0,
         success: true,
-        data: [systemRouter],
+        result: [systemRouter],
       };
     },
   },

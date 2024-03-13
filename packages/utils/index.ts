@@ -17,5 +17,6 @@ export * from "./src/formatNumber";
 // Object
 export * from "./src/objectDeep";
 export * from "./src/batchAttributeAssignment";
+export * from "./src/merge";
 // Array
 export * from "./src/intersection";
