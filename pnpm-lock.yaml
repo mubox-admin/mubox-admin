@@ -29,9 +29,6 @@ importers:
       axios:
         specifier: ^1.5.1
         version: 1.6.0
-      js-cookie:
-        specifier: ^3.0.5
-        version: 3.0.5
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -41,6 +38,9 @@ importers:
       vue:
         specifier: ^3.3.4
         version: 3.3.7(typescript@5.2.2)
+      vue-i18n:
+        specifier: ^9.10.1
+        version: 9.10.1(vue@3.3.7)
       vue-router:
         specifier: ^4.2.5
         version: 4.2.5(vue@3.3.7)
@@ -894,13 +894,13 @@ packages:
     dev: true
 
   /@iconify-json/ep@1.1.13:
-    resolution: {integrity: sha1-wkrvrQSTo619ZGMvHuDQ9AlykD0=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/@iconify-json/ep/-/ep-1.1.13.tgz}
+    resolution: {integrity: sha1-wkrvrQSTo619ZGMvHuDQ9AlykD0=}
     dependencies:
       '@iconify/types': 2.0.0
     dev: false
 
   /@iconify/types@2.0.0:
-    resolution: {integrity: sha1-qw6epoHWyKEhTzDNdB/jogzFf1c=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/@iconify/types/-/types-2.0.0.tgz}
+    resolution: {integrity: sha1-qw6epoHWyKEhTzDNdB/jogzFf1c=}
 
   /@iconify/utils@2.1.11:
     resolution: {integrity: sha1-Fc+eFd/rjm3XkYHcOZTcERXQQuU=}
@@ -914,6 +914,27 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@intlify/core-base@9.10.1:
+    resolution: {integrity: sha1-5h1QfTW+sMafnJRWYxP5UgwlqEo=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/@intlify/core-base/-/core-base-9.10.1.tgz}
+    engines: {node: '>= 16'}
+    dependencies:
+      '@intlify/message-compiler': 9.10.1
+      '@intlify/shared': 9.10.1
+    dev: false
+
+  /@intlify/message-compiler@9.10.1:
+    resolution: {integrity: sha1-1wyewhHatn1QpCrR+3gsDgL4nEI=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/@intlify/message-compiler/-/message-compiler-9.10.1.tgz}
+    engines: {node: '>= 16'}
+    dependencies:
+      '@intlify/shared': 9.10.1
+      source-map-js: 1.0.2
+    dev: false
+
+  /@intlify/shared@9.10.1:
+    resolution: {integrity: sha1-AkrW3U7pWBliQ3Vws9wlUWyC9Ok=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/@intlify/shared/-/shared-9.10.1.tgz}
+    engines: {node: '>= 16'}
+    dev: false
 
   /@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha1-fgLm6135AartsIUUIDsJZhQCQJg=}
@@ -1588,7 +1609,7 @@ packages:
       '@vue/shared': 3.3.7
 
   /@vue/devtools-api@6.5.1:
-    resolution: {integrity: sha1-f3HzHkCXPu7mW5pkOCsTWT/b1pc=}
+    resolution: {integrity: sha1-f3HzHkCXPu7mW5pkOCsTWT/b1pc=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/@vue/devtools-api/-/devtools-api-6.5.1.tgz}
     dev: false
 
   /@vue/reactivity-transform@3.3.7:
@@ -3498,11 +3519,6 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /js-cookie@3.0.5:
-    resolution: {integrity: sha1-C34v0MAVUsWLqG4IQflNwlV9zbw=}
-    engines: {node: '>=14'}
-    dev: false
-
   /js-tokens@4.0.0:
     resolution: {integrity: sha1-GSA/tZmR35jjoocFDUZHzerzJJk=}
 
@@ -4494,7 +4510,7 @@ packages:
     optional: true
 
   /source-map-js@1.0.2:
-    resolution: {integrity: sha1-rbw2HZxi3zgBJefxYfccgm8eSQw=}
+    resolution: {integrity: sha1-rbw2HZxi3zgBJefxYfccgm8eSQw=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/source-map-js/-/source-map-js-1.0.2.tgz}
     engines: {node: '>=0.10.0'}
 
   /source-map@0.8.0-beta.0:
@@ -5197,6 +5213,18 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-i18n@9.10.1(vue@3.3.7):
+    resolution: {integrity: sha1-syRCM9oxpVoHoq5yzd2rcpa8qBQ=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/vue-i18n/-/vue-i18n-9.10.1.tgz}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@intlify/core-base': 9.10.1
+      '@intlify/shared': 9.10.1
+      '@vue/devtools-api': 6.5.1
+      vue: 3.3.7(typescript@5.2.2)
+    dev: false
 
   /vue-router@4.2.5(vue@3.3.7):
     resolution: {integrity: sha1-uePgjxvZ6jY/3RcwMmILxQzw6Yo=}

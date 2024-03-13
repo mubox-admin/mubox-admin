@@ -2,10 +2,13 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import ImageVerify from "./components/ImageVerify.vue";
 import type { Rule } from "ant-design-vue/es/form";
 import { useUserStore } from "@/store/user";
 import { getTopMenu, initRouter } from "@/router/utils";
+
+const { t } = useI18n();
 
 // 滑动动画
 const slide = ref(false);
@@ -28,7 +31,7 @@ const loginRules: Record<string, Rule[]> = {
   username: [
     {
       required: true,
-      message: "请输入账号",
+      message: t("sys.tips.inputUsername"),
       trigger: "blur",
     },
   ],
@@ -37,9 +40,9 @@ const loginRules: Record<string, Rule[]> = {
       validator: (_, value) => {
         return new Promise<void>((resolve, reject) => {
           if (value === "") {
-            reject("请输入密码");
+            reject(t("sys.tips.inputPassword"));
           } else if (!REGEXP_PWD.test(value)) {
-            reject("密码格式应为8-18位数字、字母、符号的任意两种组合");
+            reject(t("sys.tips.passwordError"));
           } else resolve();
         });
       },
@@ -51,9 +54,9 @@ const loginRules: Record<string, Rule[]> = {
       validator: (_, value) => {
         return new Promise<void>((resolve, reject) => {
           if (value === "") {
-            reject("请输入验证码");
+            reject(t("sys.tips.inputVerificationCode"));
           } else if (imageCode.value !== value) {
-            reject("请输入正确的验证码");
+            reject(t("sys.tips.verificationCodeError"));
           } else resolve();
         });
       },
@@ -66,14 +69,17 @@ const loading = ref(false);
 const router = useRouter();
 async function login() {
   loading.value = true;
-  const { success } = await loginByUsername(loginForm.value.username, loginForm.value.password);
-  if (success)
-    initRouter().then(() => {
-      const topMenuPath = getTopMenu(true)?.path;
-      if (topMenuPath) router.push(topMenuPath);
-      message.success("登陆成功");
+  loginByUsername(loginForm.value.username, loginForm.value.password)
+    .then(() => {
+      initRouter().then(() => {
+        const topMenuPath = getTopMenu(true)?.path;
+        if (topMenuPath) router.push(topMenuPath);
+        message.success(t("sys.tips.loginSuccess"));
+      });
+    })
+    .finally(() => {
+      loading.value = false;
     });
-  loading.value = false;
 }
 </script>
 
@@ -94,7 +100,11 @@ async function login() {
           </a-typography-title>
           <a-form layout="vertical" :model="loginForm" :rules="loginRules" @finish="login">
             <a-form-item name="username">
-              <a-input v-model:value="loginForm.username" placeholder="账号" clearable>
+              <a-input
+                v-model:value="loginForm.username"
+                :placeholder="$t('sys.base.username')"
+                clearable
+              >
                 <template #prefix>
                   <UserOutlined />
                 </template>
@@ -103,7 +113,7 @@ async function login() {
             <a-form-item name="password">
               <a-input-password
                 v-model:value="loginForm.password"
-                placeholder="密码"
+                :placeholder="$t('sys.base.password')"
                 autocomplete="谷歌限制"
                 clearable
               >
@@ -113,7 +123,11 @@ async function login() {
               </a-input-password>
             </a-form-item>
             <a-form-item name="verifyCode">
-              <a-input v-model:value="loginForm.verifyCode" placeholder="验证码" clearable>
+              <a-input
+                v-model:value="loginForm.verifyCode"
+                :placeholder="$t('sys.base.verificationCode')"
+                clearable
+              >
                 <template #suffix>
                   <ImageVerify v-model:code="imageCode" />
                 </template>

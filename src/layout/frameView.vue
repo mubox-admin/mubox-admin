@@ -46,8 +46,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- MU-TODO 国际化 -->
-  <div v-loading="loading" class="frame" element-loading-text="加载中...">
+  <div v-loading="loading" class="frame" :element-loading-text="$t('sys.tips.loading')">
     <iframe ref="frameRef" :src="frameSrc" class="frame-iframe" />
   </div>
 </template>

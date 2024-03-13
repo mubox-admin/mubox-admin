@@ -18,8 +18,7 @@ const isDark = useDark({ disableTransition: false });
   <div class="cursor-pointer px-4 hover:bg-gray-2 dark:hover:bg-neutral-9" @click="openDrawer">
     <SettingOutlined />
   </div>
-  <!-- MU-TODO i18n -->
-  <a-drawer v-model:open="isShowDrawer" title="设置">
+  <a-drawer v-model:open="isShowDrawer" :title="$t('sys.base.setting')">
     <div class="flex flex-col items-center gap-xl">
       <a-divider><strong>暗黑模式</strong></a-divider>
       <a-switch v-model:checked="isDark">

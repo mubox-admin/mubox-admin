@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useUserStore } from "@/store/user";
 
-const { logout } = useUserStore();
+const { userInfo, logout } = useUserStore();
 </script>
 
 <template>
   <a-dropdown :trigger="['click']">
     <div class="cursor-pointer px-2 hover:bg-gray-2 dark:hover:bg-neutral-9">
-      <a-avatar size="small">
+      <a-avatar :src="userInfo?.avatar" size="small">
         <template #icon><UserOutlined /></template>
       </a-avatar>
-      {{ "木" }}
+      {{ userInfo?.username }}
     </div>
     <template #overlay>
       <a-menu>
