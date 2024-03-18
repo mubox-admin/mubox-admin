@@ -1,17 +1,18 @@
 import { usePermissionStore } from "./permission";
 import router from "@/router";
+import { BASIC_ROUTE } from "@/router/enums";
 import { getParentPaths } from "@/router/utils";
 
 export const useMenuStore = createGlobalState(() => {
   const menuState = ref({
     selectedKeys: [] as string[],
-    openKeys: ["Home"] as string[],
+    openKeys: [BASIC_ROUTE.HOME] as string[],
     collapsed: false,
   });
 
   function backToFrontPage() {
-    menuState.value.selectedKeys = ["Welcome"];
-    menuState.value.openKeys = ["Home"];
+    menuState.value.selectedKeys = [BASIC_ROUTE.WELCOME];
+    menuState.value.openKeys = [BASIC_ROUTE.HOME];
     router.push("/");
   }
   // 菜单定位

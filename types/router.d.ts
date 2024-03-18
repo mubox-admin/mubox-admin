@@ -44,28 +44,10 @@ declare global {
     frameSrc?: string;
     /** `iframe`页是否开启首次加载动画（默认`true`）`可选` */
     frameLoading?: boolean;
-    /** 页面加载动画（有两种形式，一种直接采用vue内置的`transitions`动画，另一种是使用`animate.css`写进、离场动画）`可选` */
-    transition?: {
-      /**
-       * @description 当前路由动画效果
-       * @see {@link https://next.router.vuejs.org/guide/advanced/transitions.html#transitions}
-       * @see animate.css {@link https://animate.style}
-       */
-      name?: string;
-      /** 进场动画 */
-      enterTransition?: string;
-      /** 离场动画 */
-      leaveTransition?: string;
-    };
     // 是否不添加信息到标签页，（默认`false`）
     hiddenTag?: boolean;
     /** 动态路由可打开的最大数量 `可选` */
     dynamicLevel?: number;
-    /** 将某个菜单激活
-     * （主要用于通过`query`或`params`传参的路由，当它们通过配置`showLink: false`后不在菜单中显示，就不会有任何菜单高亮，
-     * 而通过设置`activePath`指定激活菜单即可获得高亮，`activePath`为指定激活菜单的`path`）
-     */
-    activePath?: string;
     /** 菜单升序排序，值越高排的越后（只针对顶级路由）`可选` */
     rank?: number;
   }

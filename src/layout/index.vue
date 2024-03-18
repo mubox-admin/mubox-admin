@@ -12,7 +12,8 @@ import type { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
 import { usePermissionStore } from "@/store/permission";
 import { useMenuStore } from "@/store/menu";
 import { findRouteByPath, getParentPaths } from "@/router/utils";
-import { useTagsStore } from "@/store/tags";
+import { useTabsStore } from "@/store/tabs";
+import { BASIC_ROUTE } from "@/router/enums";
 
 const isDark = useDark({ disableTransition: false });
 const router = useRouter();
@@ -79,7 +80,7 @@ const breadcrumbItems = computed(() => {
 });
 // 页面缓存
 const { cachePageList } = usePermissionStore();
-const { currentTab, tagList, spliceTags } = useTagsStore();
+const { currentTab, tabList, spliceTabs } = useTabsStore();
 // 刷新当前页面导致currentTab重置，而路由页面停留在刷新前
 onMounted(() => {
   if (router.currentRoute.value.name && isString(router.currentRoute.value.name))
@@ -87,9 +88,12 @@ onMounted(() => {
 });
 
 const removeTag: TabsProps["onEdit"] = (targetKey) => {
-  if (isString(targetKey)) spliceTags(targetKey);
+  if (isString(targetKey)) spliceTabs(targetKey);
   if (currentTab.value === targetKey) {
-    const nextTag = tagList.value.at(-1)?.name;
+    const nextTag = tabList.value.at(-1)?.name;
+    if (!nextTag) {
+      return router.replace({ name: BASIC_ROUTE.HOME });
+    }
     router.push({ name: nextTag });
     if (isString(nextTag)) {
       currentTab.value = nextTag;
@@ -159,7 +163,7 @@ const removeTag: TabsProps["onEdit"] = (targetKey) => {
           @change="(key) => $router.push({ name: key as string })"
           @edit="removeTag"
         >
-          <a-tab-pane v-for="pane in tagList" :key="pane.name" :tab="pane.meta?.title" closable />
+          <a-tab-pane v-for="pane in tabList" :key="pane.name" :tab="pane.meta?.title" closable />
         </a-tabs>
         <router-view v-slot="{ Component }">
           <keep-alive :include="cachePageList">

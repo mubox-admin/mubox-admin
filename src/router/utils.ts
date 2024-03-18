@@ -9,17 +9,18 @@ import {
   isString,
   storageSession,
 } from "@mubox/utils";
+import { BASIC_ROUTE } from "./enums";
 import { router } from "./index";
 import type { RouteRecord } from "vue-router";
 import type { Router } from "vue-router";
 import type { RouteRecordRaw, RouterHistory } from "vue-router";
-import { getConfig } from "@/config";
-import { type DataInfo, sessionKey } from "@/utils/auth";
-import { useTagsStore } from "@/store/tags";
+import { useTabsStore } from "@/store/tabs";
 import { usePermissionStore } from "@/store/permission";
 
 // 动态路由
 import { getAsyncRoutes } from "@/api/routes";
+import { useUserStore } from "@/store/user";
+import { useSettingStore } from "@/store/setting";
 const IFrame = () => import("@/layout/frameView.vue");
 // https://cn.vitejs.dev/guide/features.html#glob-import
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
@@ -144,7 +145,7 @@ function formatTwoStageRoutes(routesList: RouteRecordRaw[]) {
 
 /** 初始化路由（`new Promise` 写法防止在异步请求中造成无限循环）*/
 function initRouter(): Promise<Router> {
-  if (getConfig()?.CachingAsyncRoutes) {
+  if (useSettingStore().projectSetting.value.cachingAsyncRoutes) {
     // 开启动态路由缓存本地sessionStorage
     const key = "async-routes";
     const asyncRouteList = storageSession.getItem(key) as RouteRecordRaw[];
@@ -290,7 +291,7 @@ function findRouteByPath(
 /** 获取所有菜单中的第一个菜单（顶级菜单）*/
 function getTopMenu(tagPush = false) {
   const topMenu = usePermissionStore().wholeMenus.value[0]?.children?.[0] as RouteRecord;
-  if (topMenu) tagPush && useTagsStore().pushTags(topMenu);
+  if (topMenu) tagPush && useTabsStore().pushTabs(topMenu);
   return topMenu;
 }
 
@@ -312,8 +313,8 @@ function filterChildrenTree(data: RouteRecordRaw[]) {
 
 /** 从sessionStorage里取出当前登陆用户的角色roles，过滤无权限的菜单 */
 function filterNoPermissionTree(data: RouteRecordRaw[]) {
-  const currentRoles = storageSession.getItem<DataInfo<number>>(sessionKey)?.roles ?? [];
-  const newTree = clone(data).filter((v) => isOneOfArray(v.meta?.roles, currentRoles));
+  const { roles } = useUserStore();
+  const newTree = clone(data).filter((v) => isOneOfArray(v.meta?.roles, roles.value));
   newTree.forEach((v) => v.children && (v.children = filterNoPermissionTree(v.children)));
   return filterChildrenTree(newTree);
 }
@@ -376,7 +377,7 @@ function addPathMatch() {
 function handRank(routeInfo: any) {
   const { name, path, parentId, meta } = routeInfo;
   return isAllEmpty(parentId)
-    ? isAllEmpty(meta?.rank) || (meta?.rank === 0 && name !== "Home" && path !== "/")
+    ? isAllEmpty(meta?.rank) || (meta?.rank === 0 && name !== BASIC_ROUTE.HOME && path !== "/")
       ? true
       : false
     : false;
