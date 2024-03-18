@@ -23,7 +23,7 @@ export default {
         title: "欢迎页",
         showLink: !(VITE_HIDE_HOME === "true"),
         keepAlive: true,
-        hiddenTag: true,
+        hiddenTab: true,
       },
     },
   ],

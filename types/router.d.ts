@@ -45,7 +45,7 @@ declare global {
     /** `iframe`页是否开启首次加载动画（默认`true`）`可选` */
     frameLoading?: boolean;
     // 是否不添加信息到标签页，（默认`false`）
-    hiddenTag?: boolean;
+    hiddenTab?: boolean;
     /** 动态路由可打开的最大数量 `可选` */
     dynamicLevel?: number;
     /** 菜单升序排序，值越高排的越后（只针对顶级路由）`可选` */

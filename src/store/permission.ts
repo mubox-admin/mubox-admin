@@ -1,5 +1,5 @@
 import { debounce } from "@mubox/utils";
-import { useTagsStore } from "./tags";
+import { useTabsStore } from "./tabs";
 import type { RouteRecordName } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { constantMenus as constantMenus_ } from "@/router";
@@ -36,7 +36,7 @@ export const usePermissionStore = createGlobalState(() => {
     /** 监听缓存页面是否存在于标签页，不存在则删除 */
     debounce(() => {
       let cacheLength = cachePageList.value.length;
-      const nameList: RouteRecordName[] = useTagsStore().tagList.value.map((item) =>
+      const nameList: RouteRecordName[] = useTabsStore().tabList.value.map((item) =>
         item["name"] ? item["name"] : "",
       );
       while (cacheLength > 0) {
