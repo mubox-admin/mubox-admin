@@ -1,5 +1,6 @@
-import { BASIC_ROUTE, RANK } from "../enums";
 import type { RouteRecordRaw } from "vue-router";
+import { BASIC_ROUTE, RANK } from "../enums";
+
 const { VITE_HIDE_HOME } = import.meta.env;
 const Layout = () => import("@/layout/index.vue");
 

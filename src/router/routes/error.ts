@@ -1,5 +1,5 @@
-import { BASIC_ROUTE, RANK } from "../enums";
 import type { RouteRecordRaw } from "vue-router";
+import { BASIC_ROUTE, RANK } from "../enums";
 
 export default {
   name: BASIC_ROUTE.ERROR,

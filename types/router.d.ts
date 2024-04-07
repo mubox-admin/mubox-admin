@@ -1,6 +1,6 @@
 // 全局路由类型声明
 
-import { type RouteLocationNormalized } from "vue-router";
+import type { RouteLocationNormalized } from "vue-router";
 
 declare global {
   /**

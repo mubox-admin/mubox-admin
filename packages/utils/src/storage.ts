@@ -1,10 +1,10 @@
 interface ProxyStorage {
-  setItem<T>(k: string, v: T): void;
-  getItem<T>(k: string): T;
-  removeItem(k: string): void;
-  clear(): void;
+  setItem: <T>(k: string, v: T) => void;
+  getItem: <T>(k: string) => T;
+  removeItem: (k: string) => void;
+  clear: () => void;
 }
-//sessionStorage operate
+// sessionStorage operate
 class sessionStorageProxy implements ProxyStorage {
   protected storage: ProxyStorage;
 
@@ -13,11 +13,13 @@ class sessionStorageProxy implements ProxyStorage {
   }
 
   private deserialize(val: any) {
-    if (typeof val !== "string") return undefined;
+    if (typeof val !== "string")
+      return undefined;
 
     try {
       return JSON.parse(val);
-    } catch {
+    }
+    catch {
       return val || undefined;
     }
   }
@@ -47,7 +49,7 @@ class sessionStorageProxy implements ProxyStorage {
   }
 }
 
-//localStorage operate
+// localStorage operate
 class localStorageProxy extends sessionStorageProxy implements ProxyStorage {
   constructor(localStorage: any) {
     super(localStorage);

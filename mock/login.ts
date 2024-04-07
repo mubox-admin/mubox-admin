@@ -21,7 +21,8 @@ export default [
             accessToken: "eyJhbGciOiJIUzUxMiJ9.admin",
           },
         };
-      } else {
+      }
+      else {
         return {
           success: true,
           data: {

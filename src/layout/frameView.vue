@@ -14,9 +14,9 @@ const currentRoute = useRoute();
 const frameSrc = ref<string>("");
 const frameRef = ref<HTMLElement | null>(null);
 
-if (unref(currentRoute.meta)?.frameSrc) {
+if (unref(currentRoute.meta)?.frameSrc)
   frameSrc.value = unref(currentRoute.meta)?.frameSrc as string;
-}
+
 unref(currentRoute.meta)?.frameLoading === false && hideLoading();
 
 function hideLoading() {
@@ -26,13 +26,15 @@ function hideLoading() {
 function init() {
   nextTick(() => {
     const iframe = unref(frameRef);
-    if (!iframe) return;
+    if (!iframe)
+      return;
     const _frame = iframe as any;
     if (_frame.attachEvent) {
       _frame.attachEvent("onload", () => {
         hideLoading();
       });
-    } else {
+    }
+    else {
       iframe.onload = () => {
         hideLoading();
       };

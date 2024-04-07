@@ -3,8 +3,8 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import ImageVerify from "./components/ImageVerify.vue";
 import type { Rule } from "ant-design-vue/es/form";
+import ImageVerify from "./components/ImageVerify.vue";
 import { useUserStore } from "@/store/user";
 import { getTopMenu, initRouter } from "@/router/utils";
 
@@ -23,8 +23,8 @@ const loginForm = ref({
 const { loginByUsername } = useUserStore();
 
 /** 密码正则（密码格式应为8-18位数字、字母、符号的任意两种组合） */
-const REGEXP_PWD =
-  /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)]|[()])+$)(?!^.*[\u4E00-\u9FA5].*$)([^(0-9a-zA-Z)]|[()]|[a-z]|[A-Z]|[0-9]){8,18}$/;
+const REGEXP_PWD
+  = /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)]|[()])+$)(?!^.*[\u4E00-\u9FA5].*$)([^(0-9a-zA-Z)]|[()]|[a-z]|[A-Z]|[0-9]){8,18}$/;
 // 登陆规则
 const loginRules: Record<string, Rule[]> = {
   // MU-TODO 国际化
@@ -39,11 +39,11 @@ const loginRules: Record<string, Rule[]> = {
     {
       validator: (_, value) => {
         return new Promise<void>((resolve, reject) => {
-          if (value === "") {
+          if (value === "")
             reject(t("sys.tips.inputPassword"));
-          } else if (!REGEXP_PWD.test(value)) {
+          else if (!REGEXP_PWD.test(value))
             reject(t("sys.tips.passwordError"));
-          } else resolve();
+          else resolve();
         });
       },
       trigger: "blur",
@@ -53,11 +53,11 @@ const loginRules: Record<string, Rule[]> = {
     {
       validator: (_, value) => {
         return new Promise<void>((resolve, reject) => {
-          if (value === "") {
+          if (value === "")
             reject(t("sys.tips.inputVerificationCode"));
-          } else if (imageCode.value !== value) {
+          else if (imageCode.value !== value)
             reject(t("sys.tips.verificationCodeError"));
-          } else resolve();
+          else resolve();
         });
       },
       trigger: "blur",
@@ -73,7 +73,8 @@ async function login() {
     .then(() => {
       initRouter().then(() => {
         const topMenuPath = getTopMenu(true)?.path;
-        if (topMenuPath) router.push(topMenuPath);
+        if (topMenuPath)
+          router.push(topMenuPath);
         message.success(t("sys.tips.loginSuccess"));
       });
     })
@@ -134,7 +135,9 @@ async function login() {
               </a-input>
             </a-form-item>
             <a-form-item>
-              <a-button type="primary" html-type="submit" :loading="loading">登陆</a-button>
+              <a-button type="primary" html-type="submit" :loading="loading">
+                登陆
+              </a-button>
             </a-form-item>
           </a-form>
         </div>

@@ -1,6 +1,5 @@
-/* eslint-disable no-undefined */
-
 import { throttle } from "./throttle";
+
 interface debounceOptions {
   atBegin?: boolean;
 }
@@ -15,7 +14,7 @@ interface debounceOptions {
  *
  * @returns {Function} A new, debounced function.
  */
-export const debounce = (callback: Fn, delay = 200, options: debounceOptions = {}) => {
+export function debounce(callback: Fn, delay = 200, options: debounceOptions = {}) {
   const { atBegin = false } = options;
   return throttle(callback, delay, { debounceMode: atBegin !== false });
-};
+}

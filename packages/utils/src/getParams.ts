@@ -19,11 +19,11 @@ export function getParamsMap(url: string) {
  * @param url url
  * @returns 解析后参数
  */
-export const getParam = (key: string, url: string) => {
+export function getParam(key: string, url: string) {
   const r = new RegExp(`(\\?|#|&)${key}=([^&#]*)(&|#|$)`);
   const m = url || location.href.match(r);
   return decodeURI(!m ? "" : m[2]);
-};
+}
 
 /**
  * Add the object as a parameter to the URL
@@ -37,9 +37,9 @@ export const getParam = (key: string, url: string) => {
  */
 export function setObjToUrlParams(baseUrl: string, obj: any): string {
   let parameters = "";
-  for (const key in obj) {
+  for (const key in obj)
     parameters += `${key}=${encodeURIComponent(obj[key])}&`;
-  }
+
   parameters = parameters.replace(/&$/, "");
   return /\?$/.test(baseUrl) ? baseUrl + parameters : baseUrl.replace(/\/?$/, "?") + parameters;
 }

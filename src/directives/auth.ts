@@ -4,10 +4,9 @@ import { hasAuth } from "@/router/utils";
 export const auth: Directive = {
   mounted(el: HTMLElement, binding: DirectiveBinding) {
     const { value } = binding;
-    if (value) {
+    if (value)
       !hasAuth(value) && el.parentNode?.removeChild(el);
-    } else {
+    else
       throw new Error("[Directive: auth]: need auths! Like v-auth=\"['btn.add','btn.edit']\"");
-    }
   },
 };

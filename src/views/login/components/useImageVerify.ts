@@ -5,7 +5,7 @@ import { onMounted, ref } from "vue";
  * @param width - 图形宽度
  * @param height - 图形高度
  */
-export const useImageVerify = (width = 120, height = 40) => {
+export function useImageVerify(width = 120, height = 40) {
   const domRef = ref<HTMLCanvasElement>();
   const imgCode = ref("");
 
@@ -14,7 +14,8 @@ export const useImageVerify = (width = 120, height = 40) => {
   }
 
   function getImgCode() {
-    if (!domRef.value) return;
+    if (!domRef.value)
+      return;
     imgCode.value = draw(domRef.value, width, height);
   }
 
@@ -28,7 +29,7 @@ export const useImageVerify = (width = 120, height = 40) => {
     setImgCode,
     getImgCode,
   };
-};
+}
 
 function randomNum(min: number, max: number) {
   const num = Math.floor(Math.random() * (max - min) + min);
@@ -48,7 +49,8 @@ function draw(dom: HTMLCanvasElement, width: number, height: number) {
   const NUMBER_STRING = "0123456789";
 
   const ctx = dom.getContext("2d");
-  if (!ctx) return imgCode;
+  if (!ctx)
+    return imgCode;
 
   ctx.fillStyle = randomColor(180, 230);
   ctx.fillRect(0, 0, width, height);

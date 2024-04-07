@@ -8,9 +8,9 @@
       "url": "http://localhost:8848/",
       "webRoot": "${workspaceFolder}/src",
       "skipFiles": [
-        "<node_internals>/**/*.js", //跳过node核心模块代码
+        "<node_internals>/**/*.js", // 跳过node核心模块代码
         "${workspaceFolder}/node_modules/**/*.js"
-      ] //跳过文件
+      ] // 跳过文件
     }
   ]
 }

@@ -1,6 +1,5 @@
-export const openLink = <T>(link: T): void => {
+export function openLink(link: string): void {
   const $a: HTMLElement = document.createElement("a");
-  // @ts-expect-error
   $a.setAttribute("href", link);
   $a.setAttribute("target", "_blank");
   $a.setAttribute("rel", "noreferrer noopener");
@@ -10,4 +9,4 @@ export const openLink = <T>(link: T): void => {
   document.body.appendChild($a);
   $a.click();
   $a.remove();
-};
+}

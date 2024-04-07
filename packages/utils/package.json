@@ -1,21 +1,21 @@
 {
   "name": "@mubox/utils",
-  "author": "EvilMoOd",
   "version": "0.1.0",
-  "description": "木盒子函数库",
   "private": false,
+  "description": "木盒子函数库",
+  "author": "EvilMoOd",
+  "license": "ISC",
   "keywords": [
     "utils"
   ],
+  "main": "index.ts",
+  "module": "dist/index.mjs",
+  "unpkg": "dist/index.global.js",
+  "jsdelivr": "dist/index.global.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "license": "ISC",
-  "main": "index.ts",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "unpkg": "dist/index.global.js",
-  "jsdelivr": "dist/index.global.js",
   "scripts": {
     "build": "tsup"
   },

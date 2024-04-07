@@ -82,17 +82,14 @@ export function isNullOrUnDef(val: unknown): val is null | undefined {
 }
 
 export function isEmpty<T = unknown>(val: T): val is T {
-  if (isArray(val) || isString(val)) {
+  if (isArray(val) || isString(val))
     return val.length === 0;
-  }
 
-  if (val instanceof Map || val instanceof Set) {
+  if (val instanceof Map || val instanceof Set)
     return val.size === 0;
-  }
 
-  if (isObject(val)) {
+  if (isObject(val))
     return Object.keys(val).length === 0;
-  }
 
   return false;
 }
@@ -103,9 +100,11 @@ export function isAllEmpty<T = unknown>(val: T): val is T {
 /** 判断俩值是否相等，支持数组、对象、基本类型 */
 export function isEqual(value1: unknown, value2: unknown): boolean {
   // 基本类型
-  if (value1 === value2) return true;
+  if (value1 === value2)
+    return true;
   // NaN
-  if (Number.isNaN(value1) && Number.isNaN(value2)) return true;
+  if (Number.isNaN(value1) && Number.isNaN(value2))
+    return true;
   // 数组或者对象
   if ((isObject(value1) && isObject(value2)) || (isArray(value1) && isArray(value2)))
     return JSON.stringify(value1) === JSON.stringify(value2);
@@ -126,17 +125,17 @@ export const isClient = !isServer;
 
 /** url链接正则 */
 export function isUrl<T>(value: T): boolean {
-  const reg =
-    // eslint-disable-next-line no-useless-escape
-    /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+  const reg
+
+    = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
   // @ts-expect-error
   return reg.test(value);
 }
 
 /** 手机号码正则 */
 export function isPhone<T>(value: T): boolean {
-  const reg =
-    /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/;
+  const reg
+    = /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/;
   // @ts-expect-error
   return reg.test(value);
 }

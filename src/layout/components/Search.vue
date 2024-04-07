@@ -12,17 +12,19 @@ const { wholeMenus } = usePermissionStore();
 /** 将菜单树形结构扁平化为一维数组，用于菜单查询 */
 const menuSearchList = ref<(DefaultOptionType & { routeName?: RouteRecordName })[]>([]);
 function traverseRouteName(routes: RouteRecordRaw[]) {
-  if (isArray(routes))
+  if (isArray(routes)) {
     routes.forEach((item) => {
-      // 这里只添加有实例组件的路由查询
-      if (item.name && item.component)
+    // 这里只添加有实例组件的路由查询
+      if (item.name && item.component) {
         menuSearchList.value.push({
           label: item.meta?.title,
           value: item.meta?.title,
           routeName: item.name,
         });
+      }
       item.children && traverseRouteName(item.children);
     });
+  }
 }
 traverseRouteName(wholeMenus.value);
 

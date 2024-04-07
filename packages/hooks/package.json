@@ -1,12 +1,12 @@
 {
   "name": "@mubox/hooks",
-  "author": "EvilMoOd",
   "version": "0.0.1",
   "description": "木盒子钩子库",
+  "author": "EvilMoOd",
+  "license": "ISC",
   "keywords": [
     "hooks"
   ],
-  "license": "ISC",
   "main": "index.ts",
   "module": "index.ts",
   "scripts": {

@@ -4,15 +4,15 @@
 import axios from "axios";
 import { isAllEmpty, isString, setObjToUrlParams } from "@mubox/utils";
 import { useI18n } from "vue-i18n";
-import { checkStatus } from "./checkStatus";
-import { formatRequestDate, joinTimestamp } from "./helper";
-import { AxiosRetry } from "./axiosRetry";
 import type {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
+import { checkStatus } from "./checkStatus";
+import { formatRequestDate, joinTimestamp } from "./helper";
+import { AxiosRetry } from "./axiosRetry";
 import type { RequestOptions, Result } from "#/axios";
 import { RequestEnum, ResultEnum } from "@/enums/HttpEnum";
 import { useUserStore } from "@/store/user";
@@ -79,14 +79,14 @@ export const transform: AxiosTransform = {
     const { t } = i18n.global;
     const { isTransformResponse, isReturnNativeResponse } = options;
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
-    if (isReturnNativeResponse) {
+    if (isReturnNativeResponse)
       return res;
-    }
+
     // 不进行任何处理，直接返回
     // 用于页面代码可能需要直接获取code，data，message这些信息时开启
-    if (!isTransformResponse) {
+    if (!isTransformResponse)
       return res.data;
-    }
+
     // 错误的时候返回
 
     const { data } = res;
@@ -102,15 +102,13 @@ export const transform: AxiosTransform = {
     if (hasSuccess) {
       let successMsg = message;
 
-      if (isAllEmpty(successMsg)) {
+      if (isAllEmpty(successMsg))
         successMsg = t(`sys.api.operationSuccess`);
-      }
 
-      if (options.successMessageMode === "modal") {
+      if (options.successMessageMode === "modal")
         createSuccessModal({ title: t("sys.api.successTip"), content: successMsg });
-      } else if (options.successMessageMode === "message") {
+      else if (options.successMessageMode === "message")
         createMessage.success(successMsg);
-      }
 
       return result;
     }
@@ -125,18 +123,16 @@ export const transform: AxiosTransform = {
         logout();
         break;
       default:
-        if (message) {
+        if (message)
           timeoutMsg = message;
-        }
     }
 
     // errorMessageMode='modal'的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
     // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-    if (options.errorMessageMode === "modal") {
+    if (options.errorMessageMode === "modal")
       createErrorModal({ title: t("sys.api.errorTip"), content: timeoutMsg });
-    } else if (options.errorMessageMode === "message") {
+    else if (options.errorMessageMode === "message")
       createMessage.error(timeoutMsg);
-    }
 
     throw new Error(timeoutMsg || t("sys.api.apiRequestFailed"));
   },
@@ -145,13 +141,12 @@ export const transform: AxiosTransform = {
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
 
-    if (joinPrefix) {
+    if (joinPrefix)
       config.url = `${urlPrefix}${config.url}`;
-    }
 
-    if (apiUrl && isString(apiUrl)) {
+    if (apiUrl && isString(apiUrl))
       config.url = `${apiUrl}${config.url}`;
-    }
+
     const params = config.params || {};
     const data = config.data || false;
     formatDate && data && !isString(data) && formatRequestDate(data);
@@ -159,22 +154,25 @@ export const transform: AxiosTransform = {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
         config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
-      } else {
+      }
+      else {
         // 兼容restful风格
         config.url = `${config.url + params}${joinTimestamp(joinTime, true)}`;
         config.params = undefined;
       }
-    } else {
+    }
+    else {
       if (!isString(params)) {
         formatDate && formatRequestDate(params);
         if (
-          Reflect.has(config, "data") &&
-          config.data &&
-          (Object.keys(config.data).length > 0 || config.data instanceof FormData)
+          Reflect.has(config, "data")
+          && config.data
+          && (Object.keys(config.data).length > 0 || config.data instanceof FormData)
         ) {
           config.data = data;
           config.params = params;
-        } else {
+        }
+        else {
           // 非GET请求如果没有提供data，则将params视为data
           config.data = params;
           config.params = undefined;
@@ -185,7 +183,8 @@ export const transform: AxiosTransform = {
             Object.assign({}, config.params, config.data),
           );
         }
-      } else {
+      }
+      else {
         // 兼容restful风格
         config.url = config.url + params;
         config.params = undefined;
@@ -227,27 +226,26 @@ export const transform: AxiosTransform = {
     const err: string = error?.toString?.() ?? "";
     let errMessage = "";
 
-    if (axios.isCancel(error)) {
+    if (axios.isCancel(error))
       return Promise.reject(error);
-    }
 
     try {
-      if (code === "ECONNABORTED" && message.includes("timeout")) {
+      if (code === "ECONNABORTED" && message.includes("timeout"))
         errMessage = t("sys.api.apiTimeoutMessage");
-      }
-      if (err?.includes("Network Error")) {
+
+      if (err?.includes("Network Error"))
         errMessage = t("sys.api.networkExceptionMsg");
-      }
 
       if (errMessage) {
-        if (errorMessageMode === "modal") {
+        if (errorMessageMode === "modal")
           createErrorModal({ title: t("sys.api.errorTip"), content: errMessage });
-        } else if (errorMessageMode === "message") {
+        else if (errorMessageMode === "message")
           createMessage.error(errMessage);
-        }
+
         return Promise.reject(error);
       }
-    } catch (error) {
+    }
+    catch (error) {
       throw new Error(error as unknown as string);
     }
 
@@ -256,10 +254,9 @@ export const transform: AxiosTransform = {
     // 添加自动重试机制 保险起见 只针对GET请求
     const retryRequest = new AxiosRetry();
     const { isOpenRetry } = config.requestOptions.retryRequest;
-    config.method?.toUpperCase() === RequestEnum.GET &&
-      isOpenRetry &&
-      // @ts-ignore
-      retryRequest.retry(axiosInstance, error);
+    config.method?.toUpperCase() === RequestEnum.GET
+    && isOpenRetry
+    && retryRequest.retry(axiosInstance, error);
     return Promise.reject(error);
   },
 };

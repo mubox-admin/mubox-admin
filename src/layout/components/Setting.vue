@@ -6,9 +6,9 @@ const { logout } = useUserStore();
 
 const isShowDrawer = ref<boolean>(false);
 
-const openDrawer = () => {
+function openDrawer() {
   isShowDrawer.value = true;
-};
+}
 
 // 暗黑模式
 const isDark = useDark({ disableTransition: false });
@@ -22,8 +22,12 @@ const isDark = useDark({ disableTransition: false });
     <div class="flex flex-col items-center gap-xl">
       <a-divider><strong>暗黑模式</strong></a-divider>
       <a-switch v-model:checked="isDark">
-        <template #checkedChildren><i class="i-ep:moon" /></template>
-        <template #unCheckedChildren><i class="i-ep:sunny" /></template>
+        <template #checkedChildren>
+          <i class="i-ep:moon" />
+        </template>
+        <template #unCheckedChildren>
+          <i class="i-ep:sunny" />
+        </template>
       </a-switch>
       <a-divider />
       <a-button class="w-100%" type="primary" danger @click="logout">

@@ -6,19 +6,20 @@ import { clone } from "./clone";
  * @param {*} passive 被赋值对象
  * @param {*} assignment 赋值对象
  * @param {*} shallow 赋值保留对引用值的引用
- * @returns void
+ * @return void
  */
 export function batchAttributeAssignment(
   passive: Record<string, unknown>,
   assignment: Record<string, unknown>,
   shallow = false,
 ) {
-  if (passive === null || assignment === null) return;
-  if (typeof passive !== "object" || typeof assignment !== "object") return;
+  if (passive === null || assignment === null)
+    return;
+  if (typeof passive !== "object" || typeof assignment !== "object")
+    return;
   const assignmentArr = Object.keys(assignment);
   for (const key in passive) {
-    if (assignmentArr.includes(key)) {
+    if (assignmentArr.includes(key))
       shallow ? (passive[key] = assignment[key]) : (passive[key] = clone(assignment[key]));
-    }
   }
 }

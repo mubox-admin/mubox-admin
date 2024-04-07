@@ -7,7 +7,8 @@ import { isArray, isArrayBuffer, isDataView, isDate, isMap, isObject, isRegExp, 
  * @returns 克隆值
  */
 export function clone<T>(x: T): T {
-  if (typeof x !== "object") return x;
+  if (typeof x !== "object")
+    return x;
 
   let k, tmp: T;
 
@@ -15,11 +16,11 @@ export function clone<T>(x: T): T {
     if (x.constructor !== Object && typeof x.constructor === "function") {
       tmp = new x.constructor();
       for (k in x) {
-        if (Object.prototype.hasOwnProperty.call(x, k) && tmp[k] !== x[k]) {
+        if (Object.prototype.hasOwnProperty.call(x, k) && tmp[k] !== x[k])
           tmp[k] = clone(x[k]);
-        }
       }
-    } else {
+    }
+    else {
       tmp = {}; // null
       for (k in x) {
         if (k === "__proto__") {
@@ -29,7 +30,8 @@ export function clone<T>(x: T): T {
             enumerable: true,
             writable: true,
           });
-        } else {
+        }
+        else {
           tmp[k] = clone(x[k]);
         }
       }
@@ -39,9 +41,9 @@ export function clone<T>(x: T): T {
 
   if (isArray(x)) {
     k = x.length;
-    for (tmp = Array.from({ length: k }); k--; ) {
+    for (tmp = Array.from({ length: k }); k--;)
       tmp[k] = clone(x[k]);
-    }
+
     return tmp;
   }
 
@@ -61,9 +63,8 @@ export function clone<T>(x: T): T {
     return tmp;
   }
 
-  if (isDate(x)) {
+  if (isDate(x))
     return new Date(+x);
-  }
 
   if (isRegExp(x)) {
     tmp = new RegExp(x.source, x.flags);
@@ -71,19 +72,16 @@ export function clone<T>(x: T): T {
     return tmp;
   }
 
-  if (isDataView(x)) {
+  if (isDataView(x))
     return new x.constructor(clone(x.buffer));
-  }
 
-  if (isArrayBuffer(x)) {
+  if (isArrayBuffer(x))
     return x.slice(0);
-  }
 
   // ArrayBuffer.isView(x)
   // ~> `new` bcuz `Buffer.slice` => ref
-  if (Object.prototype.toString.call(x).slice(-6) === "Array]") {
+  if (Object.prototype.toString.call(x).slice(-6) === "Array]")
     return new x.constructor(x);
-  }
 
   return x;
 }

@@ -29,7 +29,8 @@ export function createAxios(config: AxiosRequestConfig) {
     };
     // 中断函数
     const abort = (message?: string) => {
-      if (isFinished.value || !isLoading.value) return;
+      if (isFinished.value || !isLoading.value)
+        return;
       // cancelToken.cancel(message)
       controller.abort();
       isAborted.value = true;
@@ -37,8 +38,8 @@ export function createAxios(config: AxiosRequestConfig) {
       isFinished.value = false;
     };
 
-    const response = ref<AxiosResponse<T>>(); //axios响应
-    const data = ref<T>(defaultVal); //响应数据
+    const response = ref<AxiosResponse<T>>(); // axios响应
+    const data = ref<T>(defaultVal); // 响应数据
     const error = ref<AxiosError>(); // axios 错误响应
     const errorData = ref<T>(); // axios 错误响应数据
 
@@ -77,12 +78,13 @@ export function createAxios(config: AxiosRequestConfig) {
       return isDebounce
         ? debounceRequest(config)
         : isThrottle
-        ? throttleRequest(config)
-        : request(config);
+          ? throttleRequest(config)
+          : request(config);
     };
 
     // 立即执行
-    if (immediate) execute();
+    if (immediate)
+      execute();
 
     return {
       response,
@@ -98,8 +100,8 @@ export function createAxios(config: AxiosRequestConfig) {
   }
 
   function useGet<Response>(url: string, params?: any, options?: RequestOptions) {
-    const { response, data, error, errorData, execute, isAborted, abort, isFinished, isLoading } =
-      useRequest<Response>(
+    const { response, data, error, errorData, execute, isAborted, abort, isFinished, isLoading }
+      = useRequest<Response>(
         {
           url,
           params,
@@ -161,7 +163,8 @@ export function createAxios(config: AxiosRequestConfig) {
 
     // 结果响应调用下载，转换blob流
     watchEffect(() => {
-      if (!unref(request.isFinished)) return;
+      if (!unref(request.isFinished))
+        return;
       download(unref(request.response) as AxiosResponse);
     });
 
@@ -201,7 +204,7 @@ export function createLocalURL(
   contentType: contentTypeStr | string = "application/*",
 ) {
   const blob = new Blob([file], {
-    type: contentType, //这个是Content-Typele的type类型（https://tool.oschina.net/commons）
+    type: contentType, // 这个是Content-Typele的type类型（https://tool.oschina.net/commons）
   });
   return window.URL.createObjectURL(blob);
 }
@@ -211,9 +214,9 @@ export function saveFileFromBlob(
   fileName: string,
   contentType: contentTypeStr | string = "application/*",
 ) {
-  if (isServer) {
+  if (isServer)
     throw new Error("saveFileFromBlob methods is running in browser");
-  }
+
   const link = document.createElement("a");
   const url = (link.href = createLocalURL(file, contentType));
   link.download = fileName;
@@ -223,21 +226,23 @@ export function saveFileFromBlob(
 }
 
 export function useResponseBlobDownLoad(options?: DownLoadRequestOptions) {
-  const isFinished = shallowRef(false); //下载完成标志
+  const isFinished = shallowRef(false); // 下载完成标志
   const { fileName, contentType, cbData } = options || {};
-  const filenameReg = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
+  const filenameReg = /filename=([^;]+\\.[^\\.;]+);*/;
   const download = (_response: AxiosResponse) => {
     isFinished.value = false;
-    //读取响应头
+    // 读取响应头
     const headers = _response.headers || {};
-    //读取文件类型
-    const _contentType = contentType ?? headers["content-type"]; //读取文件类型
-    if (!_contentType) throw new Error("contentType Cannot be empty");
+    // 读取文件类型
+    const _contentType = contentType ?? headers["content-type"]; // 读取文件类型
+    if (!_contentType)
+      throw new Error("contentType Cannot be empty");
     // 读取文件名称
     const dispositionRegArr = filenameReg.exec(_response.headers["content-disposition"]);
-    const _fileName = fileName ?? decodeURI(dispositionRegArr ? dispositionRegArr[0] : ""); //读取文件类型
-    if (!_fileName) throw new Error("fileName Cannot be empty");
-    //下载数据
+    const _fileName = fileName ?? decodeURI(dispositionRegArr ? dispositionRegArr[0] : ""); // 读取文件类型
+    if (!_fileName)
+      throw new Error("fileName Cannot be empty");
+    // 下载数据
     const data = cbData ? cbData(_response) : _response.data;
     saveFileFromBlob(data, _fileName, _contentType);
     isFinished.value = true;
@@ -253,5 +258,5 @@ interface RequestOptions {
   delay?: number; // 防抖延迟时间
   isDebounce?: boolean; // 是否防抖
   isThrottle?: boolean; // 是否节流
-  defaultVal?: any; //默认响应值
+  defaultVal?: any; // 默认响应值
 }

@@ -2,13 +2,13 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 import { isNumber, isString } from "@mubox/utils";
 import { useRouter } from "vue-router";
+import type { TabsProps } from "ant-design-vue";
+import type { RouteRecordRaw } from "vue-router";
+import type { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
 import AntIcon from "./components/AntIcon.vue";
 import Search from "./components/Search.vue";
 import Setting from "./components/Setting.vue";
 import User from "./components/User.vue";
-import type { TabsProps } from "ant-design-vue";
-import type { RouteRecordRaw } from "vue-router";
-import type { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
 import { usePermissionStore } from "@/store/permission";
 import { useMenuStore } from "@/store/menu";
 import { findRouteByPath, getParentPaths } from "@/router/utils";
@@ -22,14 +22,13 @@ const router = useRouter();
 const { wholeMenus } = usePermissionStore();
 const { menuState } = useMenuStore();
 const subMenuKeys = computed(() => {
-  return wholeMenus.value.map((item) => item.name);
+  return wholeMenus.value.map(item => item.name);
 });
 // 菜单抽屉展开唯一
 function onOpenChange(openKeys: (string | number)[]) {
   const lastOpenKey = openKeys.at(-1) as string | undefined;
-  if (lastOpenKey && openKeys.length > 1 && subMenuKeys.value.includes(lastOpenKey)) {
+  if (lastOpenKey && openKeys.length > 1 && subMenuKeys.value.includes(lastOpenKey))
     menuState.value.openKeys = lastOpenKey ? [lastOpenKey] : [];
-  }
 }
 
 const menuItems = computed(() => {
@@ -47,7 +46,8 @@ function routesToMenuItems(routes: RouteRecordRaw[]) {
 }
 
 function menuClick({ key }: { key: string | number }) {
-  if (isNumber(key)) throw new Error("路由Name不能为数字");
+  if (isNumber(key))
+    throw new Error("路由Name不能为数字");
   router.push({ name: key });
 }
 
@@ -61,15 +61,16 @@ const breadcrumbItems = computed(() => {
   // 获取每个父级路径对应的路由信息
   parentRoutes.forEach((path) => {
     const route = findRouteByPath(path, routes);
-    if (path !== "/" && route)
+    if (path !== "/" && route) {
       breadcrumbArr.push({
         path: route.path,
         breadcrumbName: route.meta?.title
           ? route.meta.title
           : route.name && isString(route.name)
-          ? route.name
-          : "",
+            ? route.name
+            : "",
       });
+    }
   });
   // 加入当前路由
   breadcrumbArr.push({
@@ -88,18 +89,18 @@ onMounted(() => {
 });
 
 const removeTag: TabsProps["onEdit"] = (targetKey) => {
-  if (isString(targetKey)) spliceTabs(targetKey);
+  if (isString(targetKey))
+    spliceTabs(targetKey);
   if (currentTab.value === targetKey) {
     const nextTag = tabList.value.at(-1)?.name;
-    if (!nextTag) {
+    if (!nextTag)
       return router.replace({ name: BASIC_ROUTE.HOME });
-    }
+
     router.push({ name: nextTag });
-    if (isString(nextTag)) {
+    if (isString(nextTag))
       currentTab.value = nextTag;
-    } else {
+    else
       throw new Error("当前路由name值不为string类型，无法标签化");
-    }
   }
 };
 </script>
@@ -133,12 +134,12 @@ const removeTag: TabsProps["onEdit"] = (targetKey) => {
         <div class="flex justify-between">
           <!-- 导航 -->
           <a-space>
-            <menu-unfold-outlined
+            <MenuUnfoldOutlined
               v-if="menuState.collapsed"
               class="menu-icon"
               @click="() => (menuState.collapsed = !menuState.collapsed)"
             />
-            <menu-fold-outlined
+            <MenuFoldOutlined
               v-else
               class="menu-icon"
               @click="() => (menuState.collapsed = !menuState.collapsed)"

@@ -5,7 +5,7 @@ export default defineConfig({
     presetUno(),
     presetIcons({
       extraProperties: {
-        display: "inline-block",
+        "display": "inline-block",
         "vertical-align": "-0.125rem",
         "margin-right": "0.5rem",
         "font-size": "1rem",

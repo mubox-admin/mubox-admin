@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable no-undefined,no-param-reassign,no-shadow */
-
 interface ThrottleOptions {
   noTrailing?: boolean;
   noLeading?: boolean;
@@ -19,7 +16,7 @@ interface ThrottleOptions {
  *
  * @returns {Function} A new, throttled, function.
  */
-export const throttle = (callback: Fn, delay = 200, options: ThrottleOptions = {}) => {
+export function throttle(callback: Fn, delay = 200, options: ThrottleOptions = {}) {
   const { noTrailing = false, noLeading = false, debounceMode = undefined } = options;
   // 包装器停止被调用后，此超时可确保在 `throttle` 和 `end debounce` 模式下的正确时间执行回调
   let timeoutID: ReturnType<typeof setTimeout> | undefined;
@@ -30,9 +27,8 @@ export const throttle = (callback: Fn, delay = 200, options: ThrottleOptions = {
 
   // 清除现有超时的函数
   function clearExistingTimeout() {
-    if (timeoutID) {
+    if (timeoutID)
       clearTimeout(timeoutID);
-    }
   }
 
   // 取消下一次执行的函数
@@ -48,9 +44,8 @@ export const throttle = (callback: Fn, delay = 200, options: ThrottleOptions = {
     const self = this;
     const elapsed = Date.now() - lastExec;
 
-    if (cancelled) {
+    if (cancelled)
       return;
-    }
 
     // 执行回调并更新上次执行时间戳
     function exec() {
@@ -63,22 +58,22 @@ export const throttle = (callback: Fn, delay = 200, options: ThrottleOptions = {
       timeoutID = undefined;
     }
 
-    if (!noLeading && debounceMode && !timeoutID) {
+    if (!noLeading && debounceMode && !timeoutID)
       exec();
-    }
 
     clearExistingTimeout();
 
     if (debounceMode === undefined && elapsed > delay) {
       if (noLeading) {
         lastExec = Date.now();
-        if (!noTrailing) {
+        if (!noTrailing)
           timeoutID = setTimeout(debounceMode ? clear : exec, delay);
-        }
-      } else {
+      }
+      else {
         exec();
       }
-    } else if (noTrailing !== true) {
+    }
+    else if (noTrailing !== true) {
       timeoutID = setTimeout(
         debounceMode ? clear : exec,
         debounceMode === undefined ? delay - elapsed : delay,
@@ -89,4 +84,4 @@ export const throttle = (callback: Fn, delay = 200, options: ThrottleOptions = {
   wrapper.cancel = cancel;
 
   return wrapper;
-};
+}

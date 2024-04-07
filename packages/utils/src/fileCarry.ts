@@ -9,7 +9,8 @@ const unit = ["B", "KB", "MB", "GB", "TB"];
 export default function fileCarry(bytes: number, precision = 2) {
   const carry = isWin() ? 1024 : 1000;
   let index = 0;
-  if (bytes < carry) return bytes + unit[index];
+  if (bytes < carry)
+    return bytes + unit[index];
   while (bytes >= carry) {
     bytes /= carry;
     index++;

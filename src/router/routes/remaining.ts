@@ -1,5 +1,6 @@
-import { BASIC_ROUTE, RANK, WHITE_LIST } from "../enums";
 import type { RouteRecordRaw } from "vue-router";
+import { BASIC_ROUTE, RANK, WHITE_LIST } from "../enums";
+
 const Layout = () => import("@/layout/index.vue");
 
 const LoginRoute: RouteRecordRaw = {

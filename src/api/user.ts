@@ -14,6 +14,6 @@ export interface UserInfo {
 }
 
 /** 登录 */
-export const getLogin = (data?: object) => {
+export function getLogin(data?: object) {
   return http.post<User>({ url: "/login", data });
-};
+}

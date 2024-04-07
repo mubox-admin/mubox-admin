@@ -1,5 +1,6 @@
 // import "@/utils/sso";
 import { createRouter } from "vue-router";
+import type { RouteRecordRaw, Router } from "vue-router";
 import remainingRouter from "./routes/remaining";
 import {
   ascending,
@@ -11,7 +12,6 @@ import {
 import { createTitleGuard } from "./guard/titleGuard";
 import { createPermissionGuard } from "./guard/permissionGuard";
 import { createCacheGuard } from "./guard/cacheGuard";
-import type { RouteRecordRaw, Router } from "vue-router";
 import NProgress from "@/utils/progress";
 import { usePermissionStore } from "@/store/permission";
 
@@ -62,7 +62,8 @@ export const router: Router = createRouter({
     return new Promise((resolve) => {
       if (savedPosition) {
         return savedPosition;
-      } else {
+      }
+      else {
         if (from.meta.saveSrollTop) {
           const top: number = document.documentElement.scrollTop || document.body.scrollTop;
           resolve({ left: 0, top });

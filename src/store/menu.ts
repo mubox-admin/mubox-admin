@@ -24,9 +24,8 @@ export const useMenuStore = createGlobalState(() => {
   }
   // 页面刷新时菜单需要重新定位
   onMounted(() => {
-    if (router.currentRoute.value.name) {
+    if (router.currentRoute.value.name)
       menuPositioning(router.currentRoute.value.name as string);
-    }
   });
   return { menuState, backToFrontPage, menuPositioning };
 });

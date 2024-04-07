@@ -1,7 +1,7 @@
 import { debounce } from "@mubox/utils";
+import type { RouteRecordName, RouteRecordRaw } from "vue-router";
+
 import { useTabsStore } from "./tabs";
-import type { RouteRecordName } from "vue-router";
-import type { RouteRecordRaw } from "vue-router";
 import { constantMenus as constantMenus_ } from "@/router";
 import { ascending, filterNoPermissionTree, filterTree } from "@/router/utils";
 
@@ -20,11 +20,12 @@ export const usePermissionStore = createGlobalState(() => {
     );
   }
   function cacheOperate({ mode, name }: { mode: string; name: string }) {
-    if (!name) return;
+    if (!name)
+      return;
     const delIndex = cachePageList.value.indexOf(name);
     switch (mode) {
       case "refresh":
-        cachePageList.value = cachePageList.value.filter((v) => v !== name);
+        cachePageList.value = cachePageList.value.filter(v => v !== name);
         break;
       case "add":
         cachePageList.value.push(name);
@@ -36,15 +37,15 @@ export const usePermissionStore = createGlobalState(() => {
     /** 监听缓存页面是否存在于标签页，不存在则删除 */
     debounce(() => {
       let cacheLength = cachePageList.value.length;
-      const nameList: RouteRecordName[] = useTabsStore().tabList.value.map((item) =>
-        item["name"] ? item["name"] : "",
+      const nameList: RouteRecordName[] = useTabsStore().tabList.value.map(item =>
+        item.name ? item.name : "",
       );
       while (cacheLength > 0) {
-        !nameList.includes(cachePageList.value[cacheLength - 1]) &&
-          cachePageList.value.splice(
-            cachePageList.value.indexOf(cachePageList.value[cacheLength - 1]),
-            1,
-          );
+        !nameList.includes(cachePageList.value[cacheLength - 1])
+        && cachePageList.value.splice(
+          cachePageList.value.indexOf(cachePageList.value[cacheLength - 1]),
+          1,
+        );
         cacheLength--;
       }
     })();

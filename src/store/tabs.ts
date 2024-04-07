@@ -1,6 +1,6 @@
 import { isBoolean, isEqual, isUrl, storageLocal } from "@mubox/utils";
-import { useSettingStore } from "./setting";
 import type { RouteRecordRaw } from "vue-router";
+import { useSettingStore } from "./setting";
 import router from "@/router";
 import { TABS_KEY } from "@/enums/CacheEnum";
 
@@ -14,8 +14,8 @@ export interface Tab {
 
 const { VITE_HIDE_HOME } = import.meta.env;
 // 常驻路由,关闭 multitabsCache时使用
-export const initRoutes: Tab[] =
-  VITE_HIDE_HOME === "false"
+export const initRoutes: Tab[]
+  = VITE_HIDE_HOME === "false"
     ? [
         // {
         //   name: "Welcome",
@@ -46,10 +46,10 @@ export const useTabsStore = createGlobalState(() => {
               name: routeItem.name,
               meta: routeItem.meta,
             });
-          } else {
-            if (routeItem.children && routeItem.children.length > 0) {
+          }
+          else {
+            if (routeItem.children && routeItem.children.length > 0)
               concatRoute(routeItem.children, value);
-            }
           }
         });
       }
@@ -63,13 +63,17 @@ export const useTabsStore = createGlobalState(() => {
   }
   function pushTabs(tab: Tab) {
     // 不添加到标签页
-    if (tab?.meta?.hiddenTab) return;
+    if (tab?.meta?.hiddenTab)
+      return;
     // 如果是外链无需添加信息到标签页
-    if (isUrl(tab?.name)) return;
+    if (isUrl(tab?.name))
+      return;
     // 如果title为空拒绝添加空信息到标签页
-    if (tab?.meta?.title.length === 0) return;
+    if (tab?.meta?.title.length === 0)
+      return;
     // showLink:false 不添加到标签页
-    if (isBoolean(tab?.meta?.showLink) && !tab?.meta?.showLink) return;
+    if (isBoolean(tab?.meta?.showLink) && !tab?.meta?.showLink)
+      return;
 
     // 判断tab是否已存在
     const tabHasExits = tabList.value.some((item) => {
@@ -83,14 +87,15 @@ export const useTabsStore = createGlobalState(() => {
     const tabParamsHasExits = tabList.value.some((item) => {
       return isEqual(item?.params, tab?.params);
     });
-    if (tabHasExits && tabQueryHasExits && tabParamsHasExits) return;
+    if (tabHasExits && tabQueryHasExits && tabParamsHasExits)
+      return;
 
     // 动态路由可打开的最大数量
     const dynamicLevel = tab?.meta?.dynamicLevel ?? -1;
     if (dynamicLevel > 0) {
-      if (tabList.value.filter((e) => e?.path === tab.path).length >= dynamicLevel) {
+      if (tabList.value.filter(e => e?.path === tab.path).length >= dynamicLevel) {
         // 如果当前已打开的动态路由数大于dynamicLevel，替换第一个动态路由标签
-        const index = tabList.value.findIndex((item) => item?.path === tab.path);
+        const index = tabList.value.findIndex(item => item?.path === tab.path);
         index !== -1 && tabList.value.splice(index, 1);
       }
     }
@@ -102,13 +107,16 @@ export const useTabsStore = createGlobalState(() => {
     routeName: string,
     position?: { startIndex: number; length?: number },
   ) {
-    if (!routeName) throw new Error("当前路由未添加name，请添加name后重试");
+    if (!routeName)
+      throw new Error("当前路由未添加name，请添加name后重试");
     if (!position) {
-      const index = tabList.value.findIndex((v) => v.name === routeName);
+      const index = tabList.value.findIndex(v => v.name === routeName);
 
-      if (index === -1) return;
+      if (index === -1)
+        return;
       tabList.value.splice(index, 1);
-    } else {
+    }
+    else {
       tabList.value.splice(position?.startIndex, position?.length);
     }
     tabsCache(tabList.value);
@@ -121,11 +129,10 @@ export const useTabsStore = createGlobalState(() => {
   function TabsListCacheChange(cache: boolean) {
     const { projectSetting } = useSettingStore();
     projectSetting.value.tabsSetting.cache = cache;
-    if (projectSetting.value.tabsSetting.cache) {
+    if (projectSetting.value.tabsSetting.cache)
       storageLocal.setItem(TABS_KEY, tabList.value);
-    } else {
+    else
       storageLocal.removeItem(TABS_KEY);
-    }
   }
   function tabsCache(tabs: Tab[]) {
     const { projectSetting } = useSettingStore();

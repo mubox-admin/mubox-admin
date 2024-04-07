@@ -8,7 +8,7 @@ interface BrowserInter {
 }
 
 // 检测设备类型(手机返回true,反之)
-export const deviceDetection = () => {
+export function deviceDetection() {
   const sUserAgent: deviceInter = navigator.userAgent.toLowerCase();
   // const bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
   const bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
@@ -19,10 +19,10 @@ export const deviceDetection = () => {
   const bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
   const bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
   return bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM;
-};
+}
 
 // 获取浏览器型号以及版本
-export const getBrowserInfo = () => {
+export function getBrowserInfo() {
   const ua = navigator.userAgent.toLowerCase();
   const re = /(msie|firefox|chrome|opera|version).*?([\d.]+)/;
   const m = ua.match(re);
@@ -32,4 +32,4 @@ export const getBrowserInfo = () => {
   };
 
   return Sys;
-};
+}
