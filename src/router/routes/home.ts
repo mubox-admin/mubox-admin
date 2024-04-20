@@ -13,7 +13,7 @@ export default {
     icon: "home-filled",
     title: "首页",
     rank: RANK.HOME,
-    // showLink: false,
+    showLink: false,
   },
   children: [
     {

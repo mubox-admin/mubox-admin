@@ -8,7 +8,7 @@ export default {
   meta: {
     icon: "informationLine",
     title: "异常页面",
-    // showLink: false,
+    showLink: false,
     rank: RANK.ERROR,
   },
   children: [
@@ -18,6 +18,7 @@ export default {
       component: () => import("@/views/error/403.vue"),
       meta: {
         title: "403",
+        hiddenTab: true,
       },
     },
     {
@@ -26,6 +27,7 @@ export default {
       component: () => import("@/views/error/404.vue"),
       meta: {
         title: "404",
+        hiddenTab: true,
       },
     },
     {
@@ -34,6 +36,7 @@ export default {
       component: () => import("@/views/error/500.vue"),
       meta: {
         title: "500",
+        hiddenTab: true,
       },
     },
   ],
