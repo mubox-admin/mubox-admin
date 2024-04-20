@@ -8,6 +8,7 @@ const defaultSetting: ProjectSetting = {
   darkMode: false,
   ADThemeColor: "#409EFF",
   cachingAsyncRoutes: false,
+  removeAllHttpPending: true,
   sideBarSetting: {
     showLogo: true,
     collapsed: false,

@@ -26,4 +26,6 @@ export interface ProjectSetting {
   ADThemeColor: string;
   // 缓存远程路由
   cachingAsyncRoutes: boolean;
+  // 切换页面时是否移除未完成的请求
+  removeAllHttpPending: boolean;
 }

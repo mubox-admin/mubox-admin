@@ -87,9 +87,9 @@ export class MuAxios {
       // If cancel repeat request is turned on, then cancel repeat request is prohibited
       const requestOptions
         = (config as unknown as any).requestOptions ?? this.options.requestOptions;
-      const ignoreCancelToken = requestOptions?.ignoreCancelToken ?? true;
+      const cancelRepeatRequest = requestOptions?.cancelRepeatRequest ?? true;
 
-      !ignoreCancelToken && axiosCanceler.addPending(config);
+      cancelRepeatRequest && axiosCanceler.addPending(config);
 
       if (requestInterceptors && isFunction(requestInterceptors))
         config = requestInterceptors(config, this.options);
@@ -151,7 +151,7 @@ export class MuAxios {
       data: formData,
       headers: {
         "Content-type": ContentTypeEnum.FORM_DATA,
-        "ignoreCancelToken": true,
+        "cancelRepeatRequest": false,
       },
     });
   }

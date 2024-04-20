@@ -11,6 +11,7 @@ import {
 } from "./utils";
 import { createTitleGuard } from "./guard/titleGuard";
 import { createPermissionGuard } from "./guard/permissionGuard";
+import { createHttpGuard } from "./guard/httpGuard";
 import NProgress from "@/utils/progress";
 import { usePermissionStore } from "@/store/permission";
 
@@ -95,6 +96,7 @@ export function createRouterGuard() {
   NProgress.start();
   createTitleGuard();
   createPermissionGuard();
+  createHttpGuard(router);
 }
 
 // 路由后置守卫

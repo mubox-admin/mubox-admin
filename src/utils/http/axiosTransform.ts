@@ -3,20 +3,18 @@
  */
 import axios from "axios";
 import { isAllEmpty, isString, setObjToUrlParams } from "@mubox/utils";
-import { useI18n } from "vue-i18n";
 import type {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-import { checkStatus } from "./checkStatus";
-import { formatRequestDate, joinTimestamp } from "./helper";
+import { checkCustomStatus, checkHttpStatus } from "./checkStatus";
+import { errorFeedback, formatRequestDate, joinTimestamp, successFeedback } from "./helper";
 import { AxiosRetry } from "./axiosRetry";
 import type { RequestOptions, Result } from "#/axios";
 import { RequestEnum, ResultEnum } from "@/enums/HttpEnum";
 import { useUserStore } from "@/store/user";
-import { useMessage } from "@/hooks/useMessage";
 import { i18n } from "@/locales";
 
 export interface CreateAxiosOptions extends AxiosRequestConfig {
@@ -66,8 +64,6 @@ export abstract class AxiosTransform {
   responseInterceptorsCatch?: (axiosInstance: AxiosInstance, error: Error) => void;
 }
 
-const { createMessage, createErrorModal, createSuccessModal } = useMessage();
-
 /**
  * @description: 数据处理，方便区分多种处理方式
  */
@@ -105,43 +101,19 @@ export const transform: AxiosTransform = {
       if (isAllEmpty(successMsg))
         successMsg = t(`sys.api.operationSuccess`);
 
-      if (options.successMessageMode === "modal")
-        createSuccessModal({ title: t("sys.api.successTip"), content: successMsg });
-      else if (options.successMessageMode === "message")
-        createMessage.success(successMsg);
+      successFeedback(successMsg, options.successMessageMode);
 
       return result;
     }
-
-    // 在此处根据自己项目的实际情况对不同的code执行不同的操作
-    // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
-    let timeoutMsg = "";
-    const { logout } = useUserStore();
-    switch (code) {
-      case ResultEnum.TIMEOUT:
-        timeoutMsg = t("sys.api.timeoutMessage");
-        logout();
-        break;
-      default:
-        if (message)
-          timeoutMsg = message;
-    }
-
-    // errorMessageMode='modal'的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
-    // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-    if (options.errorMessageMode === "modal")
-      createErrorModal({ title: t("sys.api.errorTip"), content: timeoutMsg });
-    else if (options.errorMessageMode === "message")
-      createMessage.error(timeoutMsg);
-
-    throw new Error(timeoutMsg || t("sys.api.apiRequestFailed"));
+    // 处理业务响应错误码
+    checkCustomStatus(code, message);
   },
 
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
-    const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
+    const { apiUrl, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
 
-    if (joinPrefix)
+    if (urlPrefix && isString(urlPrefix))
       config.url = `${urlPrefix}${config.url}`;
 
     if (apiUrl && isString(apiUrl))
@@ -219,7 +191,7 @@ export const transform: AxiosTransform = {
    * @description: 响应错误处理
    */
   responseInterceptorsCatch: (axiosInstance: AxiosInstance, error: any) => {
-    const { t } = useI18n();
+    const { t } = i18n.global;
     const { response, code, message, config } = error || {};
     const errorMessageMode = config?.requestOptions?.errorMessageMode || "none";
     const msg: string = response?.data?.error?.message ?? "";
@@ -236,12 +208,11 @@ export const transform: AxiosTransform = {
       if (err?.includes("Network Error"))
         errMessage = t("sys.api.networkExceptionMsg");
 
-      if (errMessage) {
-        if (errorMessageMode === "modal")
-          createErrorModal({ title: t("sys.api.errorTip"), content: errMessage });
-        else if (errorMessageMode === "message")
-          createMessage.error(errMessage);
+      if (code === "ERR_CANCELED")
+        errMessage = t("sys.api.apiTimeoutMessage");
 
+      if (errMessage) {
+        errorFeedback(errMessage, errorMessageMode);
         return Promise.reject(error);
       }
     }
@@ -249,7 +220,7 @@ export const transform: AxiosTransform = {
       throw new Error(error as unknown as string);
     }
 
-    checkStatus(error?.response?.status, msg, errorMessageMode);
+    checkHttpStatus(error?.response?.status, msg, errorMessageMode);
 
     // 添加自动重试机制 保险起见 只针对GET请求
     const retryRequest = new AxiosRetry();

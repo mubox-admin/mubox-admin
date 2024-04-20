@@ -1,17 +1,16 @@
-import { useI18n } from "vue-i18n";
+import { errorFeedback } from "./helper";
 import type { ErrorMessageMode } from "#/axios";
-import { useMessage } from "@/hooks/useMessage";
 import { useUserStore } from "@/store/user";
+import { ResultEnum } from "@/enums/HttpEnum";
+import { i18n } from "@/locales";
 
-const { createMessage, createErrorModal } = useMessage();
-const error = createMessage.error!;
-
-export function checkStatus(
+// 服务器返回的HTTP CODE
+export function checkHttpStatus(
   status: number,
   msg: string,
   errorMessageMode: ErrorMessageMode = "message",
 ): void {
-  const { t } = useI18n();
+  const { t } = i18n.global;
   const { logout } = useUserStore();
   let errMessage = "";
 
@@ -59,11 +58,32 @@ export function checkStatus(
       break;
     default:
   }
+  if (errMessage)
+    errorFeedback(errMessage, errorMessageMode);
+}
 
-  if (errMessage) {
-    if (errorMessageMode === "modal")
-      createErrorModal({ title: t("sys.api.errorTip"), content: errMessage });
-    else if (errorMessageMode === "message")
-      error({ content: errMessage, key: `global_error_message_status_${status}` });
+// 业务自定义CODE
+export function checkCustomStatus(
+  code: number,
+  message: string,
+  errorMessageMode: ErrorMessageMode = "message",
+) {
+  // 在此处根据自己项目的实际情况对不同的code执行不同的操作
+  let errMessage = "";
+  const { t } = i18n.global;
+  const { logout } = useUserStore();
+  switch (code) {
+    case ResultEnum.TIMEOUT:
+      errMessage = t("sys.api.timeoutMessage");
+      logout();
+      break;
+    default:
+      if (message)
+        errMessage = message;
   }
+  if (errMessage)
+    errorFeedback(errMessage, errorMessageMode);
+
+  // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
+  throw new Error(errMessage || t("sys.api.apiRequestFailed"));
 }
