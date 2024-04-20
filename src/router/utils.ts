@@ -20,6 +20,7 @@ import { usePermissionStore } from "@/store/permission";
 import { getAsyncRoutes } from "@/api/routes";
 import { useUserStore } from "@/store/user";
 import { useSettingStore } from "@/store/setting";
+import { ASYNC_ROUTE_KEY } from "@/enums/CacheEnum";
 
 const IFrame = () => import("@/layout/frameView.vue");
 // https://cn.vitejs.dev/guide/features.html#glob-import
@@ -145,8 +146,7 @@ function formatTwoStageRoutes(routesList: RouteRecordRaw[]) {
 function initRouter(): Promise<Router> {
   if (useSettingStore().projectSetting.value.cachingAsyncRoutes) {
     // 开启动态路由缓存本地sessionStorage
-    const key = "async-routes";
-    const asyncRouteList = storageSession.getItem(key) as RouteRecordRaw[];
+    const asyncRouteList = storageSession.getItem(ASYNC_ROUTE_KEY) as RouteRecordRaw[];
     if (asyncRouteList && asyncRouteList?.length > 0) {
       return new Promise((resolve) => {
         handleAsyncRoutes(asyncRouteList);
@@ -157,7 +157,7 @@ function initRouter(): Promise<Router> {
       return new Promise((resolve) => {
         getAsyncRoutes().then((data) => {
           handleAsyncRoutes(clone(data));
-          storageSession.setItem(key, data);
+          storageSession.setItem(ASYNC_ROUTE_KEY, data);
           resolve(router);
         });
       });
@@ -233,43 +233,6 @@ function formatAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
       formatAsyncRoutes(v.children);
   });
   return arrRoutes;
-}
-
-/** 处理缓存路由（添加、删除、刷新） */
-function handleAliveRoute({ name }: ToRouteType, mode?: string) {
-  if (!name || typeof name === "symbol")
-    return;
-  switch (mode) {
-    case "add":
-      usePermissionStore().cacheOperate({
-        mode: "add",
-        name,
-      });
-      break;
-    case "delete":
-      usePermissionStore().cacheOperate({
-        mode: "delete",
-        name,
-      });
-      break;
-    case "refresh":
-      usePermissionStore().cacheOperate({
-        mode: "refresh",
-        name,
-      });
-      break;
-    default:
-      usePermissionStore().cacheOperate({
-        mode: "delete",
-        name,
-      });
-      useTimeoutFn(() => {
-        usePermissionStore().cacheOperate({
-          mode: "add",
-          name,
-        });
-      }, 100);
-  }
 }
 
 /** 查找对应 `path` 的路由信息 */
@@ -412,7 +375,6 @@ export {
   formatAsyncRoutes,
   getParentPaths,
   findRouteByPath,
-  handleAliveRoute,
   formatTwoStageRoutes,
   formatFlatteningRoutes,
   filterNoPermissionTree,

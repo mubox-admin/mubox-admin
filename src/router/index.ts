@@ -11,7 +11,6 @@ import {
 } from "./utils";
 import { createTitleGuard } from "./guard/titleGuard";
 import { createPermissionGuard } from "./guard/permissionGuard";
-import { createCacheGuard } from "./guard/cacheGuard";
 import NProgress from "@/utils/progress";
 import { usePermissionStore } from "@/store/permission";
 
@@ -95,7 +94,6 @@ export function resetRouter() {
 export function createRouterGuard() {
   NProgress.start();
   createTitleGuard();
-  createCacheGuard();
   createPermissionGuard();
 }
 

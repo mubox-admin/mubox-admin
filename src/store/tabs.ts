@@ -30,8 +30,14 @@ export const initRoutes: Tab[]
     : [];
 
 export const useTabsStore = createGlobalState(() => {
+  // 当前Tab
   const currentTab = ref<string>();
+  // Tab列表
   const tabList = ref(storageLocal.getItem<Tab[]>(TABS_KEY) || [...initRoutes]);
+  // 缓存页面keepAlive
+  const cachePageList = computed(() => {
+    return tabList.value.filter(tab => tab.meta?.keepAlive).map(tab => tab.name as string);
+  });
   // 点击菜单项时或者点击搜索登情况，添加tab标签
   function addTab(routeName: string): void {
     const hasValue = tabList.value.some((item) => {
@@ -122,9 +128,6 @@ export const useTabsStore = createGlobalState(() => {
     tabsCache(tabList.value);
     return tabList.value;
   }
-  const sliceTabs = () => {
-    return tabList.value.slice(-1);
-  };
 
   function TabsListCacheChange(cache: boolean) {
     const { projectSetting } = useSettingStore();
@@ -141,12 +144,12 @@ export const useTabsStore = createGlobalState(() => {
   return {
     currentTab,
     tabList,
+    cachePageList,
     TabsListCacheChange,
     tabsCache,
     addTab,
     equalTabs,
     pushTabs,
     spliceTabs,
-    sliceTabs,
   };
 });

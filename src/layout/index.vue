@@ -80,15 +80,14 @@ const breadcrumbItems = computed(() => {
   return breadcrumbArr;
 });
 // 页面缓存
-const { cachePageList } = usePermissionStore();
-const { currentTab, tabList, spliceTabs } = useTabsStore();
+const { currentTab, tabList, cachePageList, spliceTabs } = useTabsStore();
 // 刷新当前页面导致currentTab重置，而路由页面停留在刷新前
 onMounted(() => {
   if (router.currentRoute.value.name && isString(router.currentRoute.value.name))
     currentTab.value = router.currentRoute.value.name;
 });
 
-const removeTag: TabsProps["onEdit"] = (targetKey) => {
+const removeTab: TabsProps["onEdit"] = (targetKey) => {
   if (isString(targetKey))
     spliceTabs(targetKey);
   if (currentTab.value === targetKey) {
@@ -162,7 +161,7 @@ const removeTag: TabsProps["onEdit"] = (targetKey) => {
           hide-add
           type="editable-card"
           @change="(key) => $router.push({ name: key as string })"
-          @edit="removeTag"
+          @edit="removeTab"
         >
           <a-tab-pane v-for="pane in tabList" :key="pane.name" :tab="pane.meta?.title" closable />
         </a-tabs>
