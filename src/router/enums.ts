@@ -13,7 +13,7 @@ export const enum BASIC_ROUTE {
   ERROR500 = "500",
 }
 // 路由白名单
-export enum WHITE_LIST {
+export const enum WHITE_LIST {
   LOGIN = "/login",
 }
 
