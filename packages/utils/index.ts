@@ -20,3 +20,5 @@ export * from "./src/batchAttributeAssignment";
 export * from "./src/merge";
 // Array
 export * from "./src/intersection";
+// types
+export * from "./src/types";
