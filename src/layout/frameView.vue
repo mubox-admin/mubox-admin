@@ -1,14 +1,11 @@
 <script setup lang="ts">
-// [√]
 import { nextTick, onMounted, ref, unref } from "vue";
-// import { useI18n } from 'vue-i18n';
 import { useRoute } from "vue-router";
 
 defineOptions({
   name: "FrameView",
 });
 
-// const { t } = useI18n();
 const loading = ref(true);
 const currentRoute = useRoute();
 const frameSrc = ref<string>("");

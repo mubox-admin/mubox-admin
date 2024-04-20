@@ -1,4 +1,7 @@
 {
+  "common": {
+    "okText": "确认"
+  },
   "sys": {
     "api": {
       "apiRequestFailed": "请求出错，请稍候重试",
