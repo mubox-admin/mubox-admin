@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import type { Rule } from "ant-design-vue/es/form";
+import type { FormRules } from "naive-ui";
+import { useMessage } from "naive-ui";
+import { LockClosed, Person } from "@vicons/ionicons5";
 import ImageVerify from "./components/ImageVerify.vue";
 import { useUserStore } from "@/store/user";
 import { getTopMenu, initRouter } from "@/router/utils";
 
 const { t } = useI18n();
-
-// 滑动动画
-const slide = ref(false);
+const message = useMessage();
 
 const imageCode = ref("");
 const loginForm = ref({
@@ -26,8 +24,7 @@ const { loginByUsername } = useUserStore();
 const REGEXP_PWD
   = /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)]|[()])+$)(?!^.*[\u4E00-\u9FA5].*$)([^(0-9a-zA-Z)]|[()]|[a-z]|[A-Z]|[0-9]){8,18}$/;
 // 登陆规则
-const loginRules: Record<string, Rule[]> = {
-  // MU-TODO 国际化
+const loginRules: FormRules = {
   username: [
     {
       required: true,
@@ -65,229 +62,81 @@ const loginRules: Record<string, Rule[]> = {
   ],
 };
 // 登陆
+const formRef = ref();
 const loading = ref(false);
 const router = useRouter();
 async function login() {
-  loading.value = true;
-  loginByUsername(loginForm.value.username, loginForm.value.password)
-    .then(() => {
-      initRouter().then(() => {
-        const topMenuPath = getTopMenu(true)?.path;
-        if (topMenuPath)
-          router.push(topMenuPath);
-        message.success(t("sys.tips.loginSuccess"));
+  formRef.value.validate((error) => {
+    if (error)
+      return;
+    loading.value = true;
+    loginByUsername(loginForm.value.username, loginForm.value.password)
+      .then(() => {
+        initRouter().then(() => {
+          const topMenuPath = getTopMenu(true)?.path;
+          if (topMenuPath)
+            router.push(topMenuPath);
+          message.success(t("sys.tips.loginSuccess"));
+        });
+      })
+      .finally(() => {
+        loading.value = false;
       });
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  });
 }
 </script>
 
 <template>
-  <div class="login-body flex-box">
-    <div class="login-body__box">
-      <div class="signup" :class="{ slide }">
-        <a-typography-title class="form-title" @click="slide = false">
-          <span>or</span>
-          Sign up
-        </a-typography-title>
-      </div>
-      <div class="login" :class="{ slide: !slide }">
-        <div class="login-box">
-          <a-typography-title class="form-title" @click="slide = true">
-            <span>or</span>
-            Log in
-          </a-typography-title>
-          <a-form layout="vertical" :model="loginForm" :rules="loginRules" @finish="login">
-            <a-form-item name="username">
-              <a-input
-                v-model:value="loginForm.username"
-                :placeholder="$t('sys.base.username')"
-                clearable
-              >
-                <template #prefix>
-                  <UserOutlined />
-                </template>
-              </a-input>
-            </a-form-item>
-            <a-form-item name="password">
-              <a-input-password
-                v-model:value="loginForm.password"
-                :placeholder="$t('sys.base.password')"
-                autocomplete="谷歌限制"
-                clearable
-              >
-                <template #prefix>
-                  <LockOutlined />
-                </template>
-              </a-input-password>
-            </a-form-item>
-            <a-form-item name="verifyCode">
-              <a-input
-                v-model:value="loginForm.verifyCode"
-                :placeholder="$t('sys.base.verificationCode')"
-                clearable
-              >
-                <template #suffix>
-                  <ImageVerify v-model:code="imageCode" />
-                </template>
-              </a-input>
-            </a-form-item>
-            <a-form-item>
-              <a-button type="primary" html-type="submit" :loading="loading">
-                登陆
-              </a-button>
-            </a-form-item>
-          </a-form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <n-layout class="flex-box h-100vh" has-sider>
+    <n-layout-sider class="bg-black" width="50%">
+      123
+    </n-layout-sider>
+    <n-layout-content>
+      <n-flex align="center" class="h-100vh">
+        <n-form ref="formRef" class="w-360px m-auto" :model="loginForm" :rules="loginRules">
+          <n-form-item path="username">
+            <n-input
+              v-model:value="loginForm.username"
+              :placeholder="$t('sys.base.username')"
+              clearable
+            >
+              <template #prefix>
+                <n-icon :component="Person" />
+              </template>
+            </n-input>
+          </n-form-item>
+          <n-form-item path="password">
+            <n-input
+              v-model:value="loginForm.password"
+              type="password"
+              :placeholder="$t('sys.base.password')"
+              autocomplete="谷歌限制"
+              clearable
+            >
+              <template #prefix>
+                <n-icon :component="LockClosed" />
+              </template>
+            </n-input>
+          </n-form-item>
+          <n-form-item path="verifyCode">
+            <n-input
+              v-model:value="loginForm.verifyCode"
+              :placeholder="$t('sys.base.verificationCode')"
+              clearable
+              size="large"
+            >
+              <template #suffix>
+                <ImageVerify v-model:code="imageCode" />
+              </template>
+            </n-input>
+          </n-form-item>
+          <n-form-item>
+            <n-button class="w-100%" type="primary" :loading="loading" @click="login">
+              登陆
+            </n-button>
+          </n-form-item>
+        </n-form>
+      </n-flex>
+    </n-layout-content>
+  </n-layout>
 </template>
-
-<style lang="scss" scoped>
-@mixin or {
-  color: rgba(0, 0, 0, 0.4);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-}
-@mixin slide-title {
-  font-size: 1em;
-  cursor: pointer;
-}
-@mixin slide-or {
-  margin-right: 5px;
-  opacity: 1;
-  visibility: visible;
-  transition: all 0.3s ease;
-}
-
-.login-body {
-  position: relative;
-  min-height: 100vh;
-  background-color: #e1e8ee;
-
-  .login-body__box {
-    background-color: #222;
-    border-radius: 15px;
-    height: 550px;
-    width: 500px;
-    position: relative;
-    overflow: hidden;
-    &::after {
-      content: "";
-      opacity: 0.8;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-repeat: no-repeat;
-      background-position: left bottom;
-      background-size: 500px;
-      background-image: url("https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bf884ad570b50659c5fa2dc2cfb20ecf&auto=format&fit=crop&w=1000&q=100");
-    }
-    .signup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 65%;
-      z-index: 5;
-      transition: all 0.3s ease;
-
-      .form-title {
-        color: #fff;
-        font-size: 1.7em;
-        text-align: center;
-
-        span {
-          @include or;
-        }
-      }
-
-      &.slide {
-        top: 5%;
-        transform: translate(-50%, 0%);
-      }
-
-      &.slide .form-title {
-        @include slide-title;
-      }
-
-      &.slide .form-title span {
-        @include slide-or;
-      }
-    }
-
-    .login {
-      position: absolute;
-      top: 20%;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #fff;
-      z-index: 5;
-      transition: all 0.3s ease;
-
-      &::before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: -20px;
-        transform: translate(-50%, 0);
-        background-color: #fff;
-        width: 200%;
-        height: 250px;
-        border-radius: 50%;
-        z-index: 4;
-        transition: all 0.3s ease;
-      }
-
-      .login-box {
-        position: absolute;
-        top: 45%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 65%;
-        z-index: 5;
-        transition: all 0.3s ease;
-
-        .form-title {
-          color: #000;
-          font-size: 1.7em;
-          text-align: center;
-          margin-bottom: 3rem;
-
-          span {
-            @include or;
-          }
-        }
-      }
-
-      &.slide {
-        top: 90%;
-        transition: all 0.3s ease;
-      }
-
-      &.slide .login-box {
-        top: 10%;
-        transform: translate(-50%, 0%);
-      }
-
-      &.slide .form-title {
-        @include slide-title;
-        margin-bottom: 5rem;
-        padding: 0;
-        transition: all 0.3s ease;
-      }
-
-      &.slide .form-title span {
-        @include slide-or;
-      }
-    }
-  }
-}
-</style>

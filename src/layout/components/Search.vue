@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { isArray } from "@mubox/utils";
-import { SearchOutlined } from "@ant-design/icons-vue";
+import { isArray, isString } from "@mubox/utils";
 import { useRouter } from "vue-router";
-import type { DefaultOptionType } from "ant-design-vue/es/select";
-import type { RouteRecordName, RouteRecordRaw } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
+import type { SelectOption } from "naive-ui";
+import { Search } from "@vicons/ionicons5";
 import { usePermissionStore } from "@/store/permission";
 
-const menuSearch = ref();
+const menuSearch = ref("");
 const { wholeMenus } = usePermissionStore();
 
 /** 将菜单树形结构扁平化为一维数组，用于菜单查询 */
-const menuSearchList = ref<(DefaultOptionType & { routeName?: RouteRecordName })[]>([]);
+const menuSearchList = ref<SelectOption[]>([]);
+
 function traverseRouteName(routes: RouteRecordRaw[]) {
   if (isArray(routes)) {
     routes.forEach((item) => {
@@ -18,8 +19,7 @@ function traverseRouteName(routes: RouteRecordRaw[]) {
       if (item.name && item.component) {
         menuSearchList.value.push({
           label: item.meta?.title,
-          value: item.meta?.title,
-          routeName: item.name,
+          value: isString(item.name) ? item.name : undefined,
         });
       }
       item.children && traverseRouteName(item.children);
@@ -29,23 +29,21 @@ function traverseRouteName(routes: RouteRecordRaw[]) {
 traverseRouteName(wholeMenus.value);
 
 const router = useRouter();
-function toPage(_, route: DefaultOptionType & { routeName?: RouteRecordName }) {
-  router.push({ name: route.routeName });
+function toPage(route: string) {
+  router.push({ name: route });
 }
 </script>
 
 <template>
-  <a-auto-complete
+  <n-select
     v-model:value="menuSearch"
-    class="w-48"
+    filterable
+    class="lh-10"
     :options="menuSearchList"
-    filter-option
-    @change="toPage"
+    @update:value="toPage"
   >
-    <a-input allow-clear>
-      <template #suffix>
-        <SearchOutlined />
-      </template>
-    </a-input>
-  </a-auto-complete>
+    <template #suffix>
+      <n-icon :component="Search" />
+    </template>
+  </n-select>
 </template>

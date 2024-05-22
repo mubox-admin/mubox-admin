@@ -1,17 +1,27 @@
 <script setup lang="ts">
-import { theme } from "ant-design-vue";
+import { darkTheme } from "naive-ui";
 
 const isDark = useDark({ disableTransition: false });
+const themeOverrides = {
+  common: {
+    primaryColor: "#3451B2EB",
+    primaryColorHover: "#3451B2C9",
+    primaryColorPressed: "#3451B2FF",
+    primaryColorSuppl: "#3451B2FF",
+    invertedColor: "#2C2D2D",
+  },
+};
 </script>
 
 <template>
-  <a-config-provider
-    :theme="{
-      algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-    }"
+  <n-config-provider
+    :theme="isDark ? darkTheme : null"
+    :theme-overrides="themeOverrides"
   >
-    <router-view />
-  </a-config-provider>
+    <n-message-provider>
+      <router-view />
+    </n-message-provider>
+  </n-config-provider>
 </template>
 
 <style lang="scss" scoped></style>

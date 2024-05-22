@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { LogoutOutlined, SettingOutlined } from "@ant-design/icons-vue";
+import { LogInOutline, Moon, SettingsOutline, Sunny } from "@vicons/ionicons5";
+
 import { useUserStore } from "@/store/user";
 
 const { logout } = useUserStore();
@@ -16,26 +17,28 @@ const isDark = useDark({ disableTransition: false });
 
 <template>
   <div class="cursor-pointer px-4 hover:bg-gray-2 dark:hover:bg-neutral-9" @click="openDrawer">
-    <SettingOutlined />
+    <n-icon :component="SettingsOutline" />
   </div>
-  <a-drawer v-model:open="isShowDrawer" :title="$t('sys.base.setting')">
-    <div class="flex flex-col items-center gap-xl">
-      <a-divider><strong>暗黑模式</strong></a-divider>
-      <a-switch v-model:checked="isDark">
-        <template #checkedChildren>
-          <i class="i-ep:moon" />
-        </template>
-        <template #unCheckedChildren>
-          <i class="i-ep:sunny" />
-        </template>
-      </a-switch>
-      <a-divider />
-      <a-button class="w-100%" type="primary" danger @click="logout">
-        <LogoutOutlined />
-        退出登录
-      </a-button>
-    </div>
-  </a-drawer>
+  <n-drawer v-model:show="isShowDrawer" :default-width="350">
+    <n-divider><strong>暗黑模式</strong></n-divider>
+    <n-drawer-content>
+      <div class="flex flex-col items-center gap-xl">
+        <n-switch v-model:value="isDark">
+          <template #checked-icon>
+            <n-icon :component="Moon" />
+          </template>
+          <template #unchecked-icon>
+            <n-icon :component="Sunny" />
+          </template>
+        </n-switch>
+        <n-divider />
+        <n-button class="w-100%" type="primary" danger @click="logout">
+          退出登录
+          <n-icon :component="LogInOutline" />
+        </n-button>
+      </div>
+    </n-drawer-content>
+  </n-drawer>
 </template>
 
 <style lang="scss" scoped></style>

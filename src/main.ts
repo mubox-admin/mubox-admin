@@ -1,7 +1,6 @@
 import { MotionPlugin } from "@vueuse/motion";
-import * as Icons from "@ant-design/icons-vue";
+import * as Icons from "@vicons/ionicons5";
 import App from "./App.vue";
-import "ant-design-vue/dist/reset.css";
 import router, { createRouterGuard } from "./router";
 import "virtual:uno.css";
 import { i18n } from "./locales";

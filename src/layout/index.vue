@@ -1,14 +1,12 @@
 <script lang="tsx" setup>
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 import { isNumber, isString } from "@mubox/utils";
 import { useRouter } from "vue-router";
-import type { TabsProps } from "ant-design-vue";
 import type { RouteRecordRaw } from "vue-router";
-import type { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
-import AntIcon from "./components/AntIcon.vue";
+import MenuIcon from "./components/MenuIcon.vue";
 import Search from "./components/Search.vue";
 import Setting from "./components/Setting.vue";
 import User from "./components/User.vue";
+import Logo from "@/assets/basic/logo.svg";
 import { usePermissionStore } from "@/store/permission";
 import { useMenuStore } from "@/store/menu";
 import { findRouteByPath, getParentPaths } from "@/router/utils";
@@ -21,15 +19,6 @@ const router = useRouter();
 // 菜单
 const { wholeMenus } = usePermissionStore();
 const { menuState } = useMenuStore();
-const subMenuKeys = computed(() => {
-  return wholeMenus.value.map(item => item.name);
-});
-// 菜单抽屉展开唯一
-function onOpenChange(openKeys: (string | number)[]) {
-  const lastOpenKey = openKeys.at(-1) as string | undefined;
-  if (lastOpenKey && openKeys.length > 1 && subMenuKeys.value.includes(lastOpenKey))
-    menuState.value.openKeys = lastOpenKey ? [lastOpenKey] : [];
-}
 
 const menuItems = computed(() => {
   return routesToMenuItems(wholeMenus.value);
@@ -39,13 +28,13 @@ function routesToMenuItems(routes: RouteRecordRaw[]) {
     return {
       key: item.name,
       label: item.meta?.title,
-      icon: () => (item.meta?.icon ? <AntIcon icon={item.meta.icon} /> : ""),
+      icon: () => (item.meta?.icon ? <MenuIcon icon={item.meta.icon} /> : ""),
       children: item.children ? routesToMenuItems(item.children) : undefined,
     };
   });
 }
 
-function menuClick({ key }: { key: string | number }) {
+function menuClick(key: string | number) {
   if (isNumber(key))
     throw new Error("路由Name不能为数字");
   router.push({ name: key });
@@ -55,9 +44,13 @@ function menuClick({ key }: { key: string | number }) {
 const routes = router.options.routes;
 const breadcrumbItems = computed(() => {
   // 当前路由的父级路径组成的数组
-  const parentRoutes = getParentPaths(router.currentRoute.value.name as string, routes, "name");
+  const parentRoutes = getParentPaths(
+    router.currentRoute.value.name as string,
+    routes,
+    "name",
+  );
   // 存放组成面包屑的数组
-  const breadcrumbArr: Route[] = [];
+  const breadcrumbArr: any[] = [];
   // 获取每个父级路径对应的路由信息
   parentRoutes.forEach((path) => {
     const route = findRouteByPath(path, routes);
@@ -83,11 +76,14 @@ const breadcrumbItems = computed(() => {
 const { currentTab, tabList, cachePageList, spliceTabs } = useTabsStore();
 // 刷新当前页面导致currentTab重置，而路由页面停留在刷新前
 onMounted(() => {
-  if (router.currentRoute.value.name && isString(router.currentRoute.value.name))
+  if (
+    router.currentRoute.value.name
+    && isString(router.currentRoute.value.name)
+  )
     currentTab.value = router.currentRoute.value.name;
 });
 
-const removeTab: TabsProps["onEdit"] = (targetKey) => {
+function removeTab(targetKey) {
   if (isString(targetKey))
     spliceTabs(targetKey);
   if (currentTab.value === targetKey) {
@@ -98,79 +94,86 @@ const removeTab: TabsProps["onEdit"] = (targetKey) => {
     router.push({ name: nextTag });
     if (isString(nextTag))
       currentTab.value = nextTag;
-    else
-      throw new Error("当前路由name值不为string类型，无法标签化");
+    else throw new Error("当前路由name值不为string类型，无法标签化");
   }
-};
+}
 </script>
 
 <template>
-  <a-layout style="height: 100vh">
+  <n-layout class="admin-layout" has-sider>
     <!-- 侧边栏 -->
-    <a-layout-sider
-      v-model:collapsed="menuState.collapsed"
-      breakpoint="lg"
-      :trigger="null"
-      collapsible
+    <n-layout-sider
+      bordered
+      inverted
+      collapse-mode="width"
+      show-trigger="bar"
+      :collapsed="menuState.collapsed"
+      @collapse="menuState.collapsed = true"
+      @expand="menuState.collapsed = false"
     >
-      <div class="m-4 h-8 bg-cyan-400" />
-      <a-menu
-        v-model:selectedKeys="menuState.selectedKeys"
-        v-model:openKeys="menuState.openKeys"
-        :items="menuItems"
-        theme="dark"
-        mode="inline"
-        @click="menuClick"
-        @open-change="onOpenChange"
+      <div class="mt-4 w-2">
+        <Logo />
+      </div>
+      <n-menu
+        v-model:value="menuState.selectedKeys"
+        :options="menuItems"
+        inverted
+        accordion
+        @update:value="menuClick"
       />
-    </a-layout-sider>
-    <a-layout>
+    </n-layout-sider>
+    <n-layout class="min-h-screen">
       <!-- 顶部栏 -->
-      <a-layout-header
+      <n-layout-header
         :style="{ backgroundColor: isDark ? '#0c0a09' : '#f8fafc' }"
         style="height: 3rem; line-height: 3rem; padding: 0"
       >
-        <div class="flex justify-between">
+        <n-flex justify="space-between">
           <!-- 导航 -->
-          <a-space>
-            <MenuUnfoldOutlined
-              v-if="menuState.collapsed"
-              class="menu-icon"
-              @click="() => (menuState.collapsed = !menuState.collapsed)"
-            />
-            <MenuFoldOutlined
-              v-else
-              class="menu-icon"
-              @click="() => (menuState.collapsed = !menuState.collapsed)"
-            />
-            <a-breadcrumb :routes="breadcrumbItems" />
-          </a-space>
+          <n-space>
+            <n-breadcrumb :routes="breadcrumbItems" />
+          </n-space>
           <!-- 用户设置 -->
-          <a-space>
+          <n-space>
             <Search />
             <User />
             <Setting />
-          </a-space>
-        </div>
-      </a-layout-header>
+          </n-space>
+        </n-flex>
+      </n-layout-header>
 
       <!-- 右侧内容区 -->
-      <a-layout-content class="min-h-screen">
-        <a-tabs
-          v-model:activeKey="currentTab"
-          hide-add
-          type="editable-card"
-          @change="(key) => $router.push({ name: key as string })"
-          @edit="removeTab"
+      <n-layout-content>
+        <n-tabs
+          v-model:value="currentTab"
+          type="card"
+          closable
+          @update:value="(key) => $router.push({ name: key as string })"
+          @close="removeTab"
         >
-          <a-tab-pane v-for="pane in tabList" :key="pane.name" :tab="pane.meta?.title" closable />
-        </a-tabs>
-        <router-view v-slot="{ Component }">
-          <keep-alive :include="cachePageList">
-            <component :is="Component" />
-          </keep-alive>
-        </router-view>
-      </a-layout-content>
-    </a-layout>
-  </a-layout>
+          <n-tab-pane
+            v-for="pane in tabList"
+            :key="pane.name"
+            :name="(pane.name as string)"
+            :tab="pane.meta?.title"
+          />
+        </n-tabs>
+        <n-scrollbar style="max-height: calc(100vh - 48px - 55px)">
+          <router-view v-slot="{ Component }">
+            <keep-alive :include="cachePageList">
+              <component :is="Component" />
+            </keep-alive>
+          </router-view>
+        </n-scrollbar>
+      </n-layout-content>
+    </n-layout>
+  </n-layout>
 </template>
+
+<style lang="scss">
+.admin-layout {
+  .n-layout-sider-scroll-container {
+    overflow: hidden !important;
+  }
+}
+</style>

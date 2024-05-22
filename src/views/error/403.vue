@@ -19,9 +19,9 @@ const { backToFrontPage } = useMenuStore();
       <p v-motion-slide-bottom class="mb-4 text-gray-500">
         抱歉，你无权访问该页面
       </p>
-      <a-button v-motion-roll-bottom type="primary" @click="backToFrontPage">
+      <n-button v-motion-roll-bottom type="primary" @click="backToFrontPage">
         返回首页
-      </a-button>
+      </n-button>
     </div>
   </div>
 </template>

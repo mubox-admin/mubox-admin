@@ -3,7 +3,7 @@ import type { MockMethod } from "vite-plugin-mock";
 const systemRouter = {
   path: "/system",
   meta: {
-    icon: "SettingOutlined",
+    icon: "SettingsOutline",
     title: "系统配置",
     rank: 12,
   },
@@ -12,7 +12,7 @@ const systemRouter = {
       path: "/system/user/index",
       name: "User",
       meta: {
-        icon: "AppleOutlined",
+        icon: "LogoApple",
         title: "用户",
         roles: ["admin"],
       },
@@ -21,7 +21,7 @@ const systemRouter = {
       path: "/system/role/index",
       name: "Role",
       meta: {
-        icon: "WindowsOutlined",
+        icon: "LogoWindows",
         title: "角色",
         roles: ["admin"],
       },
@@ -30,7 +30,7 @@ const systemRouter = {
       path: "/system/dept/index",
       name: "Dept",
       meta: {
-        icon: "IeOutlined",
+        icon: "AirplaneOutline",
         title: "啥东西",
         roles: ["admin"],
       },

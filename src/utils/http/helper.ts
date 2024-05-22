@@ -1,5 +1,5 @@
 import { isObject, isString } from "@mubox/utils";
-import { useMessage } from "@/hooks/useMessage";
+import { createDiscreteApi } from "naive-ui";
 import type { ErrorMessageMode, SuccessMessageMode } from "#/axios";
 import { i18n } from "@/locales";
 
@@ -7,7 +7,7 @@ const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
 
 export function joinTimestamp<T extends boolean>(
   join: boolean,
-  restful: T,
+  restful: T
 ): T extends true ? string : object;
 
 export function joinTimestamp(join: boolean, restful = false): string | object {
@@ -49,24 +49,30 @@ export function formatRequestDate(params: Record<string, any>) {
   }
 }
 
+const { message, dialog } = createDiscreteApi(["message", "dialog"]);
+
 // 成功提示
-export function successFeedback(successMsg: string, successMessageMode: SuccessMessageMode = "none") {
+export function successFeedback(
+  successMsg: string,
+  successMessageMode: SuccessMessageMode = "none",
+) {
   // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
   const { t } = i18n.global;
-  const { createMessage, createSuccessModal } = useMessage();
   // errorMessageMode='modal'的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
   if (successMessageMode === "modal")
-    createSuccessModal({ title: t("sys.api.successTip"), content: successMsg });
+    dialog.success({ title: t("sys.api.successTip"), content: successMsg });
   else if (successMessageMode === "message")
-    createMessage.success(successMsg);
+    message.success(successMsg);
 }
 
 // 错误提示
-export function errorFeedback(errMessage: string, errorMessageMode: ErrorMessageMode = "message") {
+export function errorFeedback(
+  errMessage: string,
+  errorMessageMode: ErrorMessageMode = "message",
+) {
   const { t } = i18n.global;
-  const { createMessage, createErrorModal } = useMessage();
   if (errorMessageMode === "modal")
-    createErrorModal({ title: t("sys.api.errorTip"), content: errMessage });
+    dialog.error({ title: t("sys.api.errorTip"), content: errMessage });
   else if (errorMessageMode === "message")
-    createMessage.error({ content: errMessage, key: `global_error_message_status_${status}` });
+    message.error(errMessage);
 }

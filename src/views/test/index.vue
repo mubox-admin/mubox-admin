@@ -7,5 +7,5 @@ const input = ref("");
 </script>
 
 <template>
-  <a-input v-model:value="input" />
+  <n-input v-model:value="input" />
 </template>
