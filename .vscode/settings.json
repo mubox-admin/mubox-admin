@@ -1,6 +1,5 @@
 {
   "cSpell.words": ["Mubox"],
   "i18n-ally.localesPaths": ["src/locales/lang"],
-  "i18n-ally.displayLanguage": "zh",
-  "eslint.experimental.useFlatConfig": true
+  "i18n-ally.displayLanguage": "zh"
 }
