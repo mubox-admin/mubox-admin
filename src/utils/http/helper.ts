@@ -1,5 +1,5 @@
 import { isObject, isString } from "@mubox/utils";
-import { createDiscreteApi } from "naive-ui";
+import { dialog, message } from "../discreteApi";
 import type { ErrorMessageMode, SuccessMessageMode } from "#/axios";
 import { i18n } from "@/locales";
 
@@ -48,8 +48,6 @@ export function formatRequestDate(params: Record<string, any>) {
       formatRequestDate(params[key]);
   }
 }
-
-const { message, dialog } = createDiscreteApi(["message", "dialog"]);
 
 // 成功提示
 export function successFeedback(

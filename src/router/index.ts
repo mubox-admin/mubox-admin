@@ -12,8 +12,8 @@ import {
 import { createTitleGuard } from "./guard/titleGuard";
 import { createPermissionGuard } from "./guard/permissionGuard";
 import { createHttpGuard } from "./guard/httpGuard";
-import NProgress from "@/utils/progress";
 import { usePermissionStore } from "@/store/permission";
+import { loadingBar } from "@/utils/discreteApi";
 
 const modules: Record<string, any> = import.meta.glob(
   ["./routes/**/*.ts", "!./routes/**/remaining.ts"],
@@ -93,7 +93,7 @@ export function resetRouter() {
 
 // 创建路由前置守卫
 export function createRouterGuard() {
-  NProgress.start();
+  loadingBar.start();
   createTitleGuard();
   createPermissionGuard();
   createHttpGuard(router);
@@ -101,7 +101,7 @@ export function createRouterGuard() {
 
 // 路由后置守卫
 router.afterEach(() => {
-  NProgress.done();
+  loadingBar.finish();
 });
 
 export default router;
