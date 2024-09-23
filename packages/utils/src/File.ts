@@ -1,4 +1,4 @@
-import { isWin } from "./system";
+import { isWin } from "./is";
 
 const unit = ["B", "KB", "MB", "GB", "TB"];
 /**

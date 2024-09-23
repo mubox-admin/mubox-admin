@@ -36,7 +36,6 @@ export function isString(val: unknown): val is string {
   return is(val, "String");
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function isFunction(val: unknown): val is Function {
   return typeof val === "function";
 }
@@ -81,6 +80,7 @@ export function isNullOrUnDef(val: unknown): val is null | undefined {
   return isUnDef(val) || isNull(val);
 }
 
+// 判断当前的数组、对象、Map、Set、string是否为空
 export function isEmpty<T = unknown>(val: T): val is T {
   if (isArray(val) || isString(val))
     return val.length === 0;
@@ -93,6 +93,7 @@ export function isEmpty<T = unknown>(val: T): val is T {
 
   return false;
 }
+// 判断当前是否为空，包括null 和 undefined
 export function isAllEmpty<T = unknown>(val: T): val is T {
   return val === null || val === undefined || isEmpty(val);
 }
@@ -124,25 +125,36 @@ export const isServer = typeof window === "undefined";
 export const isClient = !isServer;
 
 /** url链接正则 */
-export function isUrl<T>(value: T): boolean {
+export function isUrl(value: string): boolean {
   const reg
-
-    = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
-  // @ts-expect-error
+    = /^(?:(?:ht|f)tps?:\/\/)?(?:[^!@#$%^&*?.\s-][^!@#$%^&*?.\s]{0,64}\.)+[a-z]{2,6}\/?/;
   return reg.test(value);
 }
 
 /** 手机号码正则 */
-export function isPhone<T>(value: T): boolean {
+export function isPhone(value: string): boolean {
   const reg
-    = /^[1](([3][0-9])|([4][0,1,4-9])|([5][0-3,5-9])|([6][2,5,6,7])|([7][0-8])|([8][0-9])|([9][0-3,5-9]))[0-9]{8}$/;
-  // @ts-expect-error
+    = /^1(?:3\d|4[0,14-9]|5[0-3,5-9]|6[2,567]|7[0-8]|8\d|9[0-3,5-9])\d{8}$/;
   return reg.test(value);
 }
 
 /** 邮箱正则 */
-export function isEmail<T>(value: T): boolean {
-  const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-  // @ts-expect-error
+export function isEmail(value: string): boolean {
+  const reg = /^[A-Z0-9\u4E00-\u9FA5]+@[\w-]+(?:\.[\w-]+)+$/i;
   return reg.test(value);
+}
+
+/**
+ * 判断是否为mac系统
+ * @returns boolean
+ */
+export function isMac() {
+  return navigator.userAgent.toLowerCase().includes("mac");
+}
+/**
+ * 判断是否为win系统
+ * @returns boolean
+ */
+export function isWin() {
+  return navigator.userAgent.toLowerCase().includes("windows");
 }

@@ -1,3 +1,8 @@
+/*
+本篇收纳部分柯里化函数工具
+柯里化即为高阶函数，使业务函数具备一定的高阶功能，诸如防抖、节流、缓存等
+*/
+
 interface ThrottleOptions {
   noTrailing?: boolean;
   noLeading?: boolean;
@@ -39,24 +44,22 @@ export function throttle(callback: Fn, delay = 200, options: ThrottleOptions = {
   }
 
   // 包装函数封装了所有的节流去抖动功能，并且在执行时将限制回调的执行速率
-  function wrapper(...arg: any) {
-    // @ts-expect-error
-    const self = this;
+  function wrapper(this: Window | Node | Record<string, any>, ...arg: any) {
     const elapsed = Date.now() - lastExec;
 
     if (cancelled)
       return;
 
     // 执行回调并更新上次执行时间戳
-    function exec() {
+    const exec = () => {
       lastExec = Date.now();
-      callback.apply(self, arg);
-    }
+      callback.apply(this, arg);
+    };
 
     // 如果`debounceMode`在开始时为 true，则用于清除标志以允许将来的回调执行
-    function clear() {
+    const clear = () => {
       timeoutID = undefined;
-    }
+    };
 
     if (!noLeading && debounceMode && !timeoutID)
       exec();
@@ -84,4 +87,23 @@ export function throttle(callback: Fn, delay = 200, options: ThrottleOptions = {
   wrapper.cancel = cancel;
 
   return wrapper;
+}
+
+interface debounceOptions {
+  atBegin?: boolean;
+}
+
+/**
+ * 函数防抖 保证函数仅在一系列调用的最开始或最后执行一次
+ *
+ * @param {Function} callback 被执行的函数
+ * @param {number} delay 延迟多少秒后执行
+ * @param {object} [options] 执行选项
+ * @param {boolean} [options.atBegin] 默认为false,执行的时机是开始还是结束：开始则执行函数后，非重复触发的 `delay` ms后恢复，结束则在非重复触发的 `delay` ms后执行函数
+ *
+ * @returns {Function} A new, debounced function.
+ */
+export function debounce(callback: Fn, delay = 200, options: debounceOptions = {}) {
+  const { atBegin = false } = options;
+  return throttle(callback, delay, { debounceMode: atBegin !== false });
 }
