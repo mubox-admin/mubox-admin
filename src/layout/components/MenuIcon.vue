@@ -5,5 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <component :is="icon" />
+  <n-icon>
+    <component :is="icon" />
+  </n-icon>
 </template>
