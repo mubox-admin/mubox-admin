@@ -89,7 +89,8 @@ export class MuAxios {
         = (config as unknown as any).requestOptions ?? this.options.requestOptions;
       const cancelRepeatRequest = requestOptions?.cancelRepeatRequest ?? true;
 
-      cancelRepeatRequest && axiosCanceler.addPending(config);
+      if (cancelRepeatRequest)
+        axiosCanceler.addPending(config);
 
       if (requestInterceptors && isFunction(requestInterceptors))
         config = requestInterceptors(config, this.options);
@@ -98,13 +99,14 @@ export class MuAxios {
     }, undefined);
 
     // Request interceptor error capture
-    requestInterceptorsCatch
-    && isFunction(requestInterceptorsCatch)
-    && this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
+    if (requestInterceptorsCatch && isFunction(requestInterceptorsCatch)) {
+      this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
+    }
 
     // Response result interceptor processing
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
-      res && axiosCanceler.removePending(res.config);
+      if (res)
+        axiosCanceler.removePending(res.config);
       if (responseInterceptors && isFunction(responseInterceptors))
         res = responseInterceptors(res);
 
@@ -112,11 +114,11 @@ export class MuAxios {
     }, undefined);
 
     // Response result interceptor error capture
-    responseInterceptorsCatch
-    && isFunction(responseInterceptorsCatch)
-    && this.axiosInstance.interceptors.response.use(undefined, (error) => {
-      return responseInterceptorsCatch(axiosInstance, error);
-    });
+    if (responseInterceptorsCatch && isFunction(responseInterceptorsCatch)) {
+      this.axiosInstance.interceptors.response.use(undefined, (error) => {
+        return responseInterceptorsCatch(axiosInstance, error);
+      });
+    }
   }
 
   /**
@@ -165,8 +167,9 @@ export class MuAxios {
       contentType !== ContentTypeEnum.FORM_URLENCODED
       || !Reflect.has(config, "data")
       || config.method?.toUpperCase() === RequestEnum.GET
-    )
+    ) {
       return config;
+    }
 
     return {
       ...config,

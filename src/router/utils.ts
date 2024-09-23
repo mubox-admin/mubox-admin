@@ -259,8 +259,8 @@ function findRouteByPath(
 /** 获取所有菜单中的第一个菜单（顶级菜单） */
 function getTopMenu(tagPush = false) {
   const topMenu = usePermissionStore().wholeMenus.value[0]?.children?.[0] as RouteRecord;
-  if (topMenu)
-    tagPush && useTabsStore().pushTabs(topMenu);
+  if (topMenu && tagPush)
+    useTabsStore().pushTabs(topMenu);
   return topMenu;
 }
 

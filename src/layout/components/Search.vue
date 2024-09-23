@@ -22,7 +22,8 @@ function traverseRouteName(routes: RouteRecordRaw[]) {
           value: isString(item.name) ? item.name : undefined,
         });
       }
-      item.children && traverseRouteName(item.children);
+      if (item.children)
+        traverseRouteName(item.children);
     });
   }
 }

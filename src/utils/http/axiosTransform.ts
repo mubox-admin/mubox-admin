@@ -121,7 +121,8 @@ export const transform: AxiosTransform = {
 
     const params = config.params || {};
     const data = config.data || false;
-    formatDate && data && !isString(data) && formatRequestDate(data);
+    if (formatDate && data && !isString(data))
+      formatRequestDate(data);
     if (config.method?.toUpperCase() === RequestEnum.GET) {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
@@ -135,7 +136,8 @@ export const transform: AxiosTransform = {
     }
     else {
       if (!isString(params)) {
-        formatDate && formatRequestDate(params);
+        if (formatDate)
+          formatRequestDate(params);
         if (
           Reflect.has(config, "data")
           && config.data
@@ -225,9 +227,8 @@ export const transform: AxiosTransform = {
     // 添加自动重试机制 保险起见 只针对GET请求
     const retryRequest = new AxiosRetry();
     const { isOpenRetry } = config.requestOptions.retryRequest;
-    config.method?.toUpperCase() === RequestEnum.GET
-    && isOpenRetry
-    && retryRequest.retry(axiosInstance, error);
+    if (config.method?.toUpperCase() === RequestEnum.GET && isOpenRetry)
+      retryRequest.retry(axiosInstance, error);
     return Promise.reject(error);
   },
 };
