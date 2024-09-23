@@ -79,8 +79,9 @@ onMounted(() => {
   if (
     router.currentRoute.value.name
     && isString(router.currentRoute.value.name)
-  )
+  ) {
     currentTab.value = router.currentRoute.value.name;
+  }
 });
 
 function removeTab(targetKey) {
