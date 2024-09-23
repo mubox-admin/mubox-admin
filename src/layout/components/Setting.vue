@@ -20,9 +20,9 @@ const isDark = useDark({ disableTransition: false });
     <n-icon :component="SettingsOutline" />
   </div>
   <n-drawer v-model:show="isShowDrawer" :default-width="350">
-    <n-divider><strong>暗黑模式</strong></n-divider>
     <n-drawer-content>
       <div class="flex flex-col items-center gap-xl">
+        <n-divider><strong>暗黑模式</strong></n-divider>
         <n-switch v-model:value="isDark">
           <template #checked-icon>
             <n-icon :component="Moon" />
