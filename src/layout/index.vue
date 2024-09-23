@@ -12,6 +12,7 @@ import { useMenuStore } from "@/store/menu";
 import { findRouteByPath, getParentPaths } from "@/router/utils";
 import { useTabsStore } from "@/store/tabs";
 import { BASIC_ROUTE } from "@/router/enums";
+import { useSettingStore } from "@/store/setting";
 
 const isDark = useDark({ disableTransition: false });
 const router = useRouter();
@@ -19,6 +20,7 @@ const router = useRouter();
 // 菜单
 const { wholeMenus } = usePermissionStore();
 const { menuState } = useMenuStore();
+const { projectSetting } = useSettingStore();
 
 const menuItems = computed(() => {
   return routesToMenuItems(wholeMenus.value);
@@ -112,7 +114,7 @@ function removeTab(targetKey) {
       @collapse="menuState.collapsed = true"
       @expand="menuState.collapsed = false"
     >
-      <div class="mt-4 w-2">
+      <div v-if="projectSetting.sideBarSetting.showLogo" class="mt-4 w-2">
         <Logo />
       </div>
       <n-menu
