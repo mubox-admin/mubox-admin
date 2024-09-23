@@ -7,7 +7,7 @@ const common = {
 };
 
 const Tabs = {
-  tabBorderRadius: "20px",
+  tabBorderRadius: "8px",
 };
 
 export const themeOverrides = {
