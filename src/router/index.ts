@@ -1,7 +1,7 @@
 // import "@/utils/sso";
 import { createRouter } from "vue-router";
 import type { RouteRecordRaw, Router } from "vue-router";
-import remainingRouter from "./routes/remaining";
+import remainingRouter from "./basic/remaining";
 import {
   ascending,
   buildHierarchyTree,
@@ -16,7 +16,7 @@ import { usePermissionStore } from "@/store/permission";
 import { loadingBar } from "@/utils/discreteApi";
 
 const modules: Record<string, any> = import.meta.glob(
-  ["./routes/**/*.ts", "!./routes/**/remaining.ts"],
+  ["./basic/**/*.ts", "./routes/**/*.ts", "!./basic/**/remaining.ts"],
   {
     eager: true,
   },
