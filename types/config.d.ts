@@ -21,6 +21,7 @@ export interface ProjectSetting {
     cache: boolean;
   };
   // 开启页面缓存
+  // MARK-MU 当前缓存的页签路由name应与组件name一致
   keepAlive: boolean;
   // ant-design主题色
   ADThemeColor: string;

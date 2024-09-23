@@ -1,5 +1,6 @@
 /**
  * @description: Request result set
+ * TAG-MU 请求编码根据系统自定义
  */
 export const enum ResultEnum {
   SUCCESS = 0,

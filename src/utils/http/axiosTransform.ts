@@ -17,6 +17,8 @@ import { RequestEnum, ResultEnum } from "@/enums/HttpEnum";
 import { useUserStore } from "@/store/user";
 import { i18n } from "@/locales";
 
+// TODO-MU 新增全局loading
+
 export interface CreateAxiosOptions extends AxiosRequestConfig {
   authenticationScheme?: string;
   transform?: AxiosTransform;
@@ -90,7 +92,7 @@ export const transform: AxiosTransform = {
       // return '[HTTP] Request has no return value';
       throw new Error(t("sys.api.apiRequestFailed"));
     }
-    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+    // TAG-MU 这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code, result, message } = data;
 
     // 这里逻辑可以根据项目进行修改

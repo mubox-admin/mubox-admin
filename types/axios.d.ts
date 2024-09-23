@@ -38,6 +38,8 @@ export interface RetryRequest {
   // 重试间隔
   waitTime: number;
 }
+
+// TAG-MU 当前接口返回结构可能会有调整
 export interface Result<T = any> {
   code: number;
   type: "success" | "error" | "warning";

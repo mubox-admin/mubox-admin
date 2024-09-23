@@ -123,6 +123,7 @@ export class MuAxios {
 
   /**
    * @description:  File Upload
+   * MARK-MU 该函数不走transform逻辑，意味着接口响应为纯原生，接口请求也不会有前缀等操作
    */
   uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
     const formData = new window.FormData();
