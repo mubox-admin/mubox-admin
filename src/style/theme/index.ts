@@ -8,6 +8,8 @@ const common = {
 
 const Tabs = {
   tabBorderRadius: "8px",
+  tabPaddingMediumCard: "6px 10px",
+  panePaddingMedium: "0px",
 };
 
 export const themeOverrides = {

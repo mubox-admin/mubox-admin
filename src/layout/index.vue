@@ -161,7 +161,8 @@ function removeTab(targetKey) {
             :tab="pane.meta?.title"
           />
         </n-tabs>
-        <n-scrollbar style="max-height: calc(100vh - 48px - 55px)">
+        <!-- 这里不能写在tab插槽中，否则hiddenTab的路由会无法显示 -->
+        <n-scrollbar class="views-container">
           <router-view v-slot="{ Component }">
             <keep-alive :include="cachePageList">
               <component :is="Component" />
@@ -178,5 +179,12 @@ function removeTab(targetKey) {
   .n-layout-sider-scroll-container {
     overflow: hidden !important;
   }
+}
+.views-container {
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100vh - 24px - 55px - 16px);
+  padding: 8px;
+  background-color: var(--mu-container-background);
 }
 </style>
