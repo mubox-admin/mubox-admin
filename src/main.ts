@@ -4,6 +4,7 @@ import App from "./App.vue";
 import router, { createRouterGuard } from "./router";
 import "virtual:uno.css";
 import { i18n } from "./locales";
+import "./style/theme/color.scss";
 
 const app = createApp(App);
 
