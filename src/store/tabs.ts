@@ -1,4 +1,4 @@
-import { isBoolean, isEqual, isUrl, storageLocal } from "@mubox/utils";
+import { isEqual, isString, isUrl, storageLocal } from "@mubox/utils";
 import type { RouteRecordRaw } from "vue-router";
 import { useSettingStore } from "./setting";
 import router from "@/router";
@@ -72,13 +72,10 @@ export const useTabsStore = createGlobalState(() => {
     if (tab?.meta?.hiddenTab)
       return;
     // 如果是外链无需添加信息到标签页
-    if (isUrl(tab?.name))
+    if (isString(tab?.name) && isUrl(tab?.name))
       return;
     // 如果title为空拒绝添加空信息到标签页
     if (tab?.meta?.title.length === 0)
-      return;
-    // showLink:false 不添加到标签页
-    if (isBoolean(tab?.meta?.showLink) && !tab?.meta?.showLink)
       return;
 
     // 判断tab是否已存在

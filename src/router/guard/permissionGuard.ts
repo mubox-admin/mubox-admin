@@ -1,6 +1,6 @@
 import { isAllEmpty, isString } from "@mubox/utils";
 import router from "..";
-import { findRouteByPath, getTopMenu, initRouter, isOneOfArray } from "../utils";
+import { findRouteByPath, initRouter, isOneOfArray } from "../utils";
 import { BASIC_ROUTE, WHITE_LIST } from "../enums";
 import { useTabsStore } from "@/store/tabs";
 import { useMenuStore } from "@/store/menu";
@@ -49,7 +49,6 @@ export function createPermissionGuard() {
             if (!projectSetting.value.tabsSetting.cache) {
               const { path } = to;
               const route = findRouteByPath(path, router.options.routes[0].children);
-              getTopMenu(true);
               // query、params模式路由传参数的标签页不在此处处理
               if (route && route.meta?.title) {
                 if (isAllEmpty(route.parentId) && route.meta?.backstage) {
