@@ -102,7 +102,8 @@ export const useTabsStore = createGlobalState(() => {
       if (tabList.value.filter(e => e?.path === tab.path).length >= dynamicLevel) {
         // 如果当前已打开的动态路由数大于dynamicLevel，替换第一个动态路由标签
         const index = tabList.value.findIndex(item => item?.path === tab.path);
-        index !== -1 && tabList.value.splice(index, 1);
+        if (index !== -1)
+          tabList.value.splice(index, 1);
       }
     }
     tabList.value.push(tab);
@@ -139,7 +140,8 @@ export const useTabsStore = createGlobalState(() => {
   }
   function tabsCache(tabs: Tab[]) {
     const { projectSetting } = useSettingStore();
-    projectSetting.value.tabsSetting.cache && storageLocal.setItem(TABS_KEY, tabs);
+    if (projectSetting.value.tabsSetting.cache)
+      storageLocal.setItem(TABS_KEY, tabs);
   }
   return {
     currentTab,

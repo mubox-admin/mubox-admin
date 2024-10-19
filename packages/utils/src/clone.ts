@@ -1,3 +1,4 @@
+// eslint-disable-next-line ts/ban-ts-comment
 // @ts-nocheck
 import { isArray, isArrayBuffer, isDataView, isDate, isMap, isObject, isRegExp, isSet } from "./is";
 

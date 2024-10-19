@@ -1,7 +1,9 @@
 /*
   1. 使用更直观的 box-sizing 模型
 */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 /*
@@ -13,7 +15,8 @@
 /*
   3. 在应用中允许基于百分比的高度
 */
-html, body {
+html,
+body {
   height: 100%;
 }
 /*
@@ -28,25 +31,39 @@ body {
 /*
   6. 改进媒体默认设置
 */
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
 /*
   7. 删除内置表单排版样式
 */
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
 }
 /*
   8. 避免文字溢出
 */
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 /*
   9. 创建根层叠上下文
 */
-#root, #__next {
+#root,
+#__next {
   isolation: isolate;
 }

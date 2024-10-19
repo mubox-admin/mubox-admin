@@ -32,7 +32,7 @@ export function createAxios(config: AxiosRequestConfig) {
       if (isFinished.value || !isLoading.value)
         return;
       // cancelToken.cancel(message)
-      controller.abort();
+      controller.abort(message);
       isAborted.value = true;
       isLoading.value = false;
       isFinished.value = false;
@@ -228,7 +228,7 @@ export function saveFileFromBlob(
 export function useResponseBlobDownLoad(options?: DownLoadRequestOptions) {
   const isFinished = shallowRef(false); // 下载完成标志
   const { fileName, contentType, cbData } = options || {};
-  const filenameReg = /filename=([^;]+\\.[^\\.;]+);*/;
+  const filenameReg = /filename=[^;]+\\.[^\\.;]+;*/;
   const download = (_response: AxiosResponse) => {
     isFinished.value = false;
     // 读取响应头
