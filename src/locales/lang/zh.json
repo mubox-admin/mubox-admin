@@ -24,6 +24,7 @@
       "timeoutMessage": "登录超时,请重新登录!"
     },
     "base": {
+      "login": "登录",
       "password": "密码",
       "setting": "加载中...",
       "username": "账号",

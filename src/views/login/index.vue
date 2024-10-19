@@ -7,14 +7,16 @@ import { LockClosed, Person } from "@vicons/ionicons5";
 import ImageVerify from "./components/ImageVerify.vue";
 import { useUserStore } from "@/store/user";
 import { getTopMenu, initRouter } from "@/router/utils";
+import bg from "@/assets/basic/bg.png";
+import illustration from "@/assets/basic/illustration.svg";
 
 const { t } = useI18n();
 const message = useMessage();
 
 const imageCode = ref("");
 const loginForm = ref({
-  username: "",
-  password: "",
+  username: "admin",
+  password: "MuYou123456",
   verifyCode: "",
 });
 
@@ -22,7 +24,7 @@ const { loginByUsername } = useUserStore();
 
 /** 密码正则（密码格式应为8-18位数字、字母、符号的任意两种组合） */
 const REGEXP_PWD
-  = /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)]|[()])+$)(?!^.*[\u4E00-\u9FA5].*$)([^(0-9a-zA-Z)]|[()]|[a-z]|[A-Z]|[0-9]){8,18}$/;
+  = /^(?!\d+$)(?![a-z]+$)(?![A-Z]+$)(?!(?:[^(0-9a-zA-Z)]|[()])+$)(?![^\n\r\u2028\u2029\u4E00-\u9FA5]*[\u4E00-\u9FA5].*$)[\s\S]{8,18}$/;
 // 登陆规则
 const loginRules: FormRules = {
   username: [
@@ -88,12 +90,18 @@ async function login() {
 
 <template>
   <n-layout class="flex-box h-100vh" has-sider>
-    <n-layout-sider class="bg-black" width="50%">
-      123
+    <n-layout-sider class="hidden lg:block" width="50%">
+      <img class="wave" :src="bg">
+      <illustration class="illustration" />
     </n-layout-sider>
-    <n-layout-content>
+    <n-layout-content class="z-10">
       <n-flex align="center" class="h-100vh">
-        <n-form ref="formRef" class="w-360px m-auto" :model="loginForm" :rules="loginRules">
+        <n-form
+          ref="formRef"
+          class="w-360px m-auto"
+          :model="loginForm"
+          :rules="loginRules"
+        >
           <n-form-item path="username">
             <n-input
               v-model:value="loginForm.username"
@@ -131,8 +139,14 @@ async function login() {
             </n-input>
           </n-form-item>
           <n-form-item>
-            <n-button class="w-100%" type="primary" :loading="loading" @click="login">
-              登陆
+            <n-button
+              attr-type="submit"
+              class="w-100%"
+              type="primary"
+              :loading="loading"
+              @click="login"
+            >
+              {{ $t('sys.base.login') }}
             </n-button>
           </n-form-item>
         </n-form>
@@ -140,3 +154,18 @@ async function login() {
     </n-layout-content>
   </n-layout>
 </template>
+
+<style>
+.wave {
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  width: 80%;
+}
+.illustration {
+  position: absolute;
+  top: 30%;
+  left: 15%;
+}
+</style>
