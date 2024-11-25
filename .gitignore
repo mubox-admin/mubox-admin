@@ -1,2 +1,5 @@
 node_modules
 dist
+# 自动生成类型文件
+auto-components.d.ts
+auto-imports.d.ts
