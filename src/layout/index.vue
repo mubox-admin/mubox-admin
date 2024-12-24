@@ -64,6 +64,7 @@ const breadcrumbItems = computed(() => {
           : route.name && isString(route.name)
             ? route.name
             : "",
+        icon: route.meta?.icon,
       });
     }
   });
@@ -71,6 +72,7 @@ const breadcrumbItems = computed(() => {
   breadcrumbArr.push({
     path: router.currentRoute.value.path,
     breadcrumbName: router.currentRoute.value.meta.title,
+    icon: router.currentRoute.value.meta?.icon,
   });
   return breadcrumbArr;
 });
@@ -134,7 +136,14 @@ function removeTab(targetKey) {
         <n-flex justify="space-between">
           <!-- 导航 -->
           <n-space>
-            <n-breadcrumb :routes="breadcrumbItems" />
+            <n-breadcrumb class="h-12 flex items-center p-x-3" separator=">">
+              <n-breadcrumb-item v-for="item in breadcrumbItems" :key="item.path">
+                <n-icon>
+                  <component :is="item.icon" />
+                </n-icon>
+                {{ item.breadcrumbName }}
+              </n-breadcrumb-item>
+            </n-breadcrumb>
           </n-space>
           <!-- 用户设置 -->
           <n-space>
