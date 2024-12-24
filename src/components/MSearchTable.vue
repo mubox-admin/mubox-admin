@@ -118,7 +118,7 @@ defineExpose({
 .search-form {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  background-color: var(--n-color);
+  background-color: var(----mu-search-table-background);
   position: absolute;
   width: calc(100% - 24px);
   padding: 12px;
@@ -146,15 +146,17 @@ defineExpose({
   height: 100%;
   position: absolute;
   z-index: 20;
-  background-color: var(--n-color);
+  background-color: var(----mu-search-table-background);
   right: 0;
   display: flex;
   gap: 8px;
+  justify-content: flex-end;
   align-items: center;
   box-sizing: border-box;
   padding-top: 18px;
   padding-right: 32px;
   border-radius: 8px;
+  min-width: 240px;
   &--shrink {
     width: 100%;
     height: auto;
@@ -170,7 +172,7 @@ defineExpose({
 .search-table-container {
   height: calc(100% - 124px);
   margin-top: 16px;
-  background-color: var(--n-color);
+  background-color: var(----mu-search-table-background);
   border-radius: 10px;
   padding: 4px 12px 12px;
   .search-buttons {
