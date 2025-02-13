@@ -1,0 +1,30 @@
+{
+  "name": "@mubox-core/preferences",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "development": "./src/index.ts",
+      "default": "./src/index.ts",
+      "#default": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "#build": "pnpm unbuild"
+  },
+  "dependencies": {
+    "@mubox-core/shared": "workspace:*",
+    "@mubox-core/typings": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "vue": "catalog:"
+  }
+}

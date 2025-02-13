@@ -1,0 +1,47 @@
+{
+  "name": "@mubox/vite-config",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "stub": "pnpm unbuild --stub"
+  },
+  "dependencies": {
+    "@intlify/unplugin-vue-i18n": "catalog:",
+    "@jspm/generator": "catalog:",
+    "archiver": "catalog:",
+    "cheerio": "catalog:",
+    "html-minifier-terser": "catalog:",
+    "vite-plugin-pwa": "catalog:",
+    "vite-plugin-vue-devtools": "catalog:"
+  },
+  "devDependencies": {
+    "@mubox/node-utils": "workspace:*",
+    "@pnpm/workspace.read-manifest": "catalog:",
+    "@types/archiver": "catalog:",
+    "@types/html-minifier-terser": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vitejs/plugin-vue-jsx": "catalog:",
+    "dayjs": "catalog:",
+    "dotenv": "catalog:",
+    "rollup": "catalog:",
+    "rollup-plugin-visualizer": "catalog:",
+    "sass": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-compression": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vite-plugin-html": "catalog:"
+  }
+}

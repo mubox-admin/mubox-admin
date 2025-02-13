@@ -1,0 +1,24 @@
+{
+  "name": "@mubox/access",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@mubox-core/preferences": "workspace:*",
+    "@mubox-core/shared": "workspace:*",
+    "@mubox-core/typings": "workspace:*",
+    "@mubox/stores": "workspace:*",
+    "@mubox/utils": "workspace:*",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
+  }
+}

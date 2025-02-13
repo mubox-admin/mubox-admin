@@ -1,0 +1,26 @@
+{
+  "name": "@mubox/hooks",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@mubox-core/composables": "workspace:*",
+    "@mubox-core/preferences": "workspace:*",
+    "@mubox-core/shared": "workspace:*",
+    "@mubox/stores": "workspace:*",
+    "@mubox/types": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:",
+    "watermark-js-plus": "catalog:"
+  }
+}

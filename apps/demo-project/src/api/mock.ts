@@ -1,0 +1,159 @@
+// 由于不同使用者所使用的mock习惯不同，本系统不设置专门mock服务，采用模拟promise返回作简单演示，方便后续兼容不同系统时能更便捷高效
+
+/**
+ * 模拟接口返回
+ * @param returnValue
+ */
+export function interfaceMockResult<T>(returnValue: T) {
+  return new Promise<T>((resolve) => {
+    resolve(returnValue);
+  });
+}
+
+export interface UserInfo {
+  id: number;
+  password: string;
+  realName: string;
+  roles: string[];
+  username: string;
+  homePath?: string;
+}
+
+export const MOCK_USERS: UserInfo[] = [
+  {
+    id: 0,
+    password: '123456',
+    realName: 'EvilMoOd',
+    roles: ['super'],
+    username: 'EvilMoOd',
+  },
+  {
+    id: 1,
+    password: '123456',
+    realName: 'Admin',
+    roles: ['admin'],
+    username: 'admin',
+    homePath: '/workspace',
+  },
+  {
+    id: 2,
+    password: '123456',
+    realName: 'Jack',
+    roles: ['user'],
+    username: 'jack',
+    homePath: '/analytics',
+  },
+];
+
+export const MOCK_CODES = [
+  // super
+  {
+    codes: ['AC_100100', 'AC_100110', 'AC_100120', 'AC_100010'],
+    username: 'EvilMoOd',
+  },
+  {
+    // admin
+    codes: ['AC_100010', 'AC_100020', 'AC_100030'],
+    username: 'admin',
+  },
+  {
+    // user
+    codes: ['AC_1000001', 'AC_1000002'],
+    username: 'jack',
+  },
+];
+
+export const MOCK_MENUS = [[
+  {
+    meta: {
+      order: -1,
+      title: 'page.dashboard.title',
+    },
+    name: 'Dashboard',
+    path: '/',
+    redirect: '/analytics',
+    children: [
+      {
+        name: 'Analytics',
+        path: '/analytics',
+        component: '/dashboard/analytics/index',
+        meta: {
+          affixTab: true,
+          title: 'page.dashboard.analytics',
+        },
+      },
+      {
+        name: 'Workspace',
+        path: '/workspace',
+        component: '/dashboard/workspace/index',
+        meta: {
+          title: 'page.dashboard.workspace',
+        },
+      },
+    ],
+  },
+  {
+    meta: {
+      icon: 'ic:baseline-view-in-ar',
+      keepAlive: true,
+      order: 1000,
+      title: 'demos.title',
+    },
+    name: 'Demos',
+    path: '/demos',
+    redirect: '/demos/access',
+    children: [
+      {
+        name: 'AccessDemos',
+        path: '/demosaccess',
+        meta: {
+          icon: 'mdi:cloud-key-outline',
+          title: 'demos.access.backendPermissions',
+        },
+        redirect: '/demos/access/page-control',
+        children: [
+          {
+            name: 'AccessPageControlDemo',
+            path: '/demos/access/page-control',
+            component: '/demos/access/index',
+            meta: {
+              icon: 'mdi:page-previous-outline',
+              title: 'demos.access.pageAccess',
+            },
+          },
+          {
+            name: 'AccessButtonControlDemo',
+            path: '/demos/access/button-control',
+            component: '/demos/access/button-control',
+            meta: {
+              icon: 'mdi:button-cursor',
+              title: 'demos.access.buttonControl',
+            },
+          },
+          {
+            name: 'AccessMenuVisible403Demo',
+            path: '/demos/access/menu-visible-403',
+            component: '/demos/access/menu-visible-403',
+            meta: {
+              authority: [
+                'no-body',
+              ],
+              icon: 'mdi:button-cursor',
+              menuVisibleWithForbidden: true,
+              title: 'demos.access.menuVisible403',
+            },
+          },
+          {
+            component: '/demos/access/super-visible',
+            meta: {
+              icon: 'mdi:button-cursor',
+              title: 'demos.access.superVisible',
+            },
+            name: 'AccessSuperVisibleDemo',
+            path: '/demos/access/super-visible',
+          },
+        ],
+      },
+    ],
+  },
+]];

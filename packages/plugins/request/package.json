@@ -1,0 +1,20 @@
+{
+  "name": "@mubox/request",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@mubox/locales": "workspace:*",
+    "@mubox/utils": "workspace:*",
+    "axios": "catalog:"
+  }
+}

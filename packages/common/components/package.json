@@ -1,0 +1,27 @@
+{
+  "name": "@mubox/components",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@mubox-core/composables": "workspace:*",
+    "@mubox-core/form-ui": "workspace:*",
+    "@mubox-core/mubox-ui": "workspace:*",
+    "@mubox-core/popup-ui": "workspace:*",
+    "@mubox-core/shadcn-ui": "workspace:*",
+    "@mubox-core/shared": "workspace:*",
+    "@mubox-core/typings": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "lucide-vue-next": "catalog:",
+    "vue": "catalog:"
+  }
+}

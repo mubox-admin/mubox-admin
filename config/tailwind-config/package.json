@@ -1,0 +1,58 @@
+{
+  "name": "@mubox/tailwind-config",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./postcss": {
+      "types": "./src/postcss.config.ts",
+      "import": "./dist/postcss.config.mjs",
+      "require": "./dist/postcss.config.cjs",
+      "default": "./dist/postcss.config.mjs"
+    },
+    "./*": "./*"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./*"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "stub": "pnpm unbuild"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.4.3"
+  },
+  "dependencies": {
+    "@iconify/json": "catalog:",
+    "@iconify/tailwind": "catalog:",
+    "@manypkg/get-packages": "catalog:",
+    "@tailwindcss/nesting": "catalog:",
+    "@tailwindcss/typography": "catalog:",
+    "autoprefixer": "catalog:",
+    "cssnano": "catalog:",
+    "postcss": "catalog:",
+    "postcss-antd-fixes": "catalog:",
+    "postcss-import": "catalog:",
+    "postcss-preset-env": "catalog:",
+    "tailwindcss": "catalog:",
+    "tailwindcss-animate": "catalog:"
+  },
+  "devDependencies": {
+    "@types/postcss-import": "catalog:"
+  }
+}

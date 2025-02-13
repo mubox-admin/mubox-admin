@@ -1,0 +1,87 @@
+{
+  "name": "@mubox-core/shared",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "sideEffects": false,
+  "exports": {
+    "./constants": {
+      "types": "./src/constants/index.ts",
+      "development": "./src/constants/index.ts",
+      "default": "./dist/constants/index.mjs"
+    },
+    "./utils": {
+      "types": "./src/utils/index.ts",
+      "development": "./src/utils/index.ts",
+      "default": "./dist/utils/index.mjs"
+    },
+    "./color": {
+      "types": "./src/color/index.ts",
+      "development": "./src/color/index.ts",
+      "default": "./dist/color/index.mjs"
+    },
+    "./cache": {
+      "types": "./src/cache/index.ts",
+      "development": "./src/cache/index.ts",
+      "default": "./dist/cache/index.mjs"
+    },
+    "./store": {
+      "types": "./src/store/index.ts",
+      "development": "./src/store/index.ts",
+      "default": "./dist/store/index.mjs"
+    },
+    "./global-state": {
+      "types": "./dist/global-state/index.d.ts",
+      "development": "./src/global-state/index.ts",
+      "default": "./dist/global-state/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm unbuild",
+    "stub": "pnpm unbuild --stub"
+  },
+  "publishConfig": {
+    "exports": {
+      "./constants": {
+        "types": "./dist/constants/index.d.ts",
+        "default": "./dist/constants/index.mjs"
+      },
+      "./utils": {
+        "types": "./dist/utils/index.d.ts",
+        "default": "./dist/utils/index.mjs"
+      },
+      "./color": {
+        "types": "./dist/color/index.d.ts",
+        "default": "./dist/color/index.mjs"
+      },
+      "./cache": {
+        "types": "./dist/cache/index.d.ts",
+        "default": "./dist/cache/index.mjs"
+      },
+      "./store": {
+        "types": "./dist/store/index.d.ts",
+        "default": "./dist/store/index.mjs"
+      },
+      "./global-state": {
+        "types": "./dist/global-state/index.d.ts",
+        "default": "./dist/global-state/index.mjs"
+      }
+    }
+  },
+  "dependencies": {
+    "@ctrl/tinycolor": "catalog:",
+    "@tanstack/vue-store": "catalog:",
+    "clsx": "catalog:",
+    "dayjs": "catalog:",
+    "defu": "catalog:",
+    "nprogress": "catalog:",
+    "tailwind-merge": "catalog:",
+    "theme-colors": "catalog:"
+  },
+  "devDependencies": {
+    "@types/nprogress": "catalog:"
+  }
+}

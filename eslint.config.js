@@ -1,24 +1,18 @@
 // eslint.config.js
-import antfu from "@antfu/eslint-config";
+import antfu from '@antfu/eslint-config';
 
 export default antfu({
-  javascript: {
-    overrides: {
-      "no-restricted-syntax": [
-        "error",
-        "DebuggerStatement",
-        "LabeledStatement",
-        "WithStatement",
-        "TSExportAssignment",
-      ],
-    },
+  rules: {
+    'node/prefer-global/process': 'off',
+    'no-console': 'warn',
+    '@typescript-eslint/no-unsafe-function-type': 'off',
   },
   stylistic: {
-    quotes: "double",
+    quotes: 'single',
     semi: true,
   },
   formatters: {
     css: true,
-    markdown: "prettier",
+    markdown: 'prettier',
   },
 });

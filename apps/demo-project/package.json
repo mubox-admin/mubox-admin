@@ -1,0 +1,37 @@
+{
+  "name": "@mubox/demo-project",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "pnpm vite build --mode production",
+    "build:analyze": "pnpm vite build --mode analyze",
+    "dev": "pnpm vite --mode development",
+    "preview": "vite preview"
+  },
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "dependencies": {
+    "@mubox/access": "workspace:*",
+    "@mubox/components": "workspace:*",
+    "@mubox/echarts": "workspace:*",
+    "@mubox/hooks": "workspace:*",
+    "@mubox/layouts": "workspace:*",
+    "@mubox/locales": "workspace:*",
+    "@mubox/preferences": "workspace:*",
+    "@mubox/request": "workspace:*",
+    "@mubox/stores": "workspace:*",
+    "@mubox/styles": "workspace:*",
+    "@mubox/types": "workspace:*",
+    "@mubox/utils": "workspace:*",
+    "@mubox/views": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "dayjs": "catalog:",
+    "lucide-vue-next": "catalog:",
+    "naive-ui": "^2.40.4",
+    "pinia": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
+  }
+}

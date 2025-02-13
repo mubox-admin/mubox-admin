@@ -1,0 +1,42 @@
+{
+  "name": "@mubox-core/popup-ui",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "development": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm unbuild",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
+  "dependencies": {
+    "@mubox-core/composables": "workspace:*",
+    "@mubox-core/mubox-ui": "workspace:*",
+    "@mubox-core/shadcn-ui": "workspace:*",
+    "@mubox-core/shared": "workspace:*",
+    "@mubox-core/typings": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "lucide-vue-next": "catalog:",
+    "vue": "catalog:"
+  }
+}

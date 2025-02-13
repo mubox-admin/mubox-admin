@@ -14,13 +14,6 @@
   - [x] 暗黑模式
 - [x] 国际化
 
-## 技术实现
-
-- 框架-`vue3.3`
-- 组件库-`ant design vue`
-- CSS方案-`unocss` + `scss`
-- 图标方案-`unocss_icon` + `ant_icon`
-
 ## Git 提交规范
 
 ✨新功能、新特性

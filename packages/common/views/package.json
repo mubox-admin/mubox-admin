@@ -1,0 +1,34 @@
+{
+  "name": "@mubox/views",
+  "type": "module",
+  "version": "2.0.0",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@mubox-core/form-ui": "workspace:*",
+    "@mubox-core/mubox-ui": "workspace:*",
+    "@mubox-core/popup-ui": "workspace:*",
+    "@mubox-core/shadcn-ui": "workspace:*",
+    "@mubox-core/shared": "workspace:*",
+    "@mubox/hooks": "workspace:*",
+    "@mubox/locales": "workspace:*",
+    "@mubox/types": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "@vueuse/integrations": "catalog:",
+    "lucide-vue-next": "catalog:",
+    "qrcode": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
+  },
+  "devDependencies": {
+    "@types/qrcode": "catalog:"
+  }
+}
