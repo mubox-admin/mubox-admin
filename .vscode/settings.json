@@ -14,7 +14,7 @@
   "i18n-ally.enabledFrameworks": ["vue"],
 
   "css.customData": [".vscode/tailwindcss.json"],
-  "cssVariables.lookupFiles": ["packages/core/design/src/**/*.css"],
+  "cssVariables.lookupFiles": ["packages/@core/design/src/**/*.css"],
   "tailwindCSS.experimental.configFile": "config/tailwind-config/src/index.ts",
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
