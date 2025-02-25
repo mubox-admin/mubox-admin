@@ -13,6 +13,7 @@ export function vitePrintPlugin(options: PrintPluginOptions = {}): PluginOption 
         _printUrls();
 
         for (const [key, value] of Object.entries(infoMap)) {
+          // eslint-disable-next-line no-console
           console.log(
             `  ${colors.green('➜')}  ${colors.bold(key)}: ${colors.cyan(value)}`,
           );

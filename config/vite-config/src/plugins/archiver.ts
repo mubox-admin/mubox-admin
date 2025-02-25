@@ -27,6 +27,7 @@ export function viteArchiverPlugin(options: ArchiverPluginOptions = {}): PluginO
 
           try {
             await zipFolder(folderToZip, zipOutputPath);
+            // eslint-disable-next-line no-console
             console.log(`Folder has been zipped to: ${zipOutputPath}`);
           }
           catch (error) {
@@ -52,6 +53,7 @@ async function zipFolder(
     });
 
     output.on('close', () => {
+      // eslint-disable-next-line no-console
       console.log(
         `ZIP file created: ${outputPath} (${archive.pointer()} total bytes)`,
       );

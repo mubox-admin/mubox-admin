@@ -22,7 +22,7 @@ export default defineComponent({
       }
       const isComponent
         = (isObject(props.content) || isFunction(props.content))
-        && props.content !== null;
+          && props.content !== null;
       if (!isComponent) {
         return props.content;
       }

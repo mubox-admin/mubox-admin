@@ -236,8 +236,8 @@ function updateActiveName(val: string) {
   const itemsInData = items.value;
   const item
     = itemsInData[val]
-    || (activePath.value && itemsInData[activePath.value])
-    || itemsInData[props.defaultActive || ''];
+      || (activePath.value && itemsInData[activePath.value])
+      || itemsInData[props.defaultActive || ''];
 
   activePath.value = item ? item.path : val;
 }

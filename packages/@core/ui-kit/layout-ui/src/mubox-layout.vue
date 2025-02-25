@@ -223,8 +223,8 @@ const mainStyle = computed(() => {
     // fixed模式下生效
     const isSideNavEffective
       = (isSidebarMixedNav.value || isHeaderMixedNav.value)
-      && sidebarExpandOnHover.value
-      && sidebarExtraVisible.value;
+        && sidebarExpandOnHover.value
+        && sidebarExtraVisible.value;
 
     if (isSideNavEffective) {
       const sideCollapseWidth = sidebarCollapse.value

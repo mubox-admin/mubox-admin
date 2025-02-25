@@ -213,9 +213,9 @@ function usePreferences() {
     // 如果是全屏模式或者没有固定在顶部，
     const fixed
       = contentIsMaximize
-      || isFullContent.value
-      || isMobile.value
-      || !isShowHeaderNav.value;
+        || isFullContent.value
+        || isMobile.value
+        || !isShowHeaderNav.value;
 
     return {
       fixed,

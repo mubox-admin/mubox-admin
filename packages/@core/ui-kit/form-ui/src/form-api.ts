@@ -236,9 +236,9 @@ export class FormApi {
       if (key in obj) {
         obj[key]
           = !Array.isArray(obj[key])
-          && isObject(obj[key])
-          && !isDayjsObject(obj[key])
-          && !isDate(obj[key])
+            && isObject(obj[key])
+            && !isDayjsObject(obj[key])
+            && !isDate(obj[key])
             ? fieldMergeFn(obj[key], value)
             : value;
       }

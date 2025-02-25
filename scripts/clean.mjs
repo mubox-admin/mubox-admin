@@ -16,6 +16,7 @@ async function cleanTargetsRecursively(currentDir, targets) {
       if (targets.includes(item)) {
         // 匹配到目标目录或文件时直接删除
         await fs.rm(itemPath, { force: true, recursive: true });
+        // eslint-disable-next-line no-console
         console.log(`Deleted: ${itemPath}`);
       }
       const stat = await fs.lstat(itemPath);
@@ -41,12 +42,14 @@ async function cleanTargetsRecursively(currentDir, targets) {
     cleanupTargets.push('pnpm-lock.yaml');
   }
 
+  // eslint-disable-next-line no-console
   console.log(
     `Starting cleanup of targets: ${cleanupTargets.join(', ')} from root: ${rootDir}`,
   );
 
   try {
     await cleanTargetsRecursively(rootDir, cleanupTargets);
+    // eslint-disable-next-line no-console
     console.log('Cleanup process completed.');
   }
   catch (error) {
