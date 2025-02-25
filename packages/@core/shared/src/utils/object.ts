@@ -109,20 +109,6 @@ export function getObjectLevel(obj: Record<string, string>) {
   return res;
 }
 
-/**
- * 将对象按值进行排序
- * @param obj 传入对象
- * @param ascending 是否升序
- */
-export function sortObjectKeys(obj: Record<string, number>, ascending: boolean = true) {
-  return Object.keys(obj)
-    .sort((a, b) => ascending ? obj[a] - obj[b] : obj[b] - obj[a])
-    .reduce((previous, current) => {
-      previous[current] = obj[current];
-      return previous;
-    }, {} as Record<string, number>);
-}
-
 export function bindMethods<T extends object>(instance: T): void {
   const prototype = Object.getPrototypeOf(instance);
   const propertyNames = Object.getOwnPropertyNames(prototype);

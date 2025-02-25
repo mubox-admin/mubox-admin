@@ -10,10 +10,12 @@ export default function fileCarry(bytes: number, precision = 2) {
   const carry = isWindowsOs() ? 1024 : 1000;
   let index = 0;
   if (bytes < carry)
-    return bytes + unit[index];
+    return `${bytes}B`;
   while (bytes >= carry) {
     bytes /= carry;
     index++;
+    if (index === 4)
+      break;
   }
   return bytes.toFixed(precision) + unit[index];
 }

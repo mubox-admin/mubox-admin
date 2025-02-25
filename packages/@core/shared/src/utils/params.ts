@@ -8,6 +8,8 @@ export function getParamsMap(url: string) {
   const paramsMap: Record<string, string | number> = {};
   const match = [...url.matchAll(reg)];
   match.forEach(([, k, v]) => {
+    if (!k || !v)
+      return;
     Object.assign(paramsMap, { [k]: Number.isNaN(+v) ? v : +v });
   });
   return paramsMap;
@@ -22,7 +24,8 @@ export function getParamsMap(url: string) {
 export function getParam(key: string, url: string) {
   const r = new RegExp(`(\\?|#|&)${key}=([^&#]*)(&|#|$)`);
   const m = url || location.href.match(r);
-  return decodeURI(!m ? '' : m[2]);
+  const _url = !m ? '' : m[2];
+  return _url ? decodeURI(_url) : '';
 }
 
 /**
